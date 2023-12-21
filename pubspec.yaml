@@ -1,0 +1,68 @@
+name: seo_web
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.1 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  retrofit: ^4.0.3
+  auto_route: ^6.1.0
+  flutter_bloc: ^8.1.2
+  flutter_riverpod: ^2.3.4
+  regexed_validator: ^2.0.0+1
+  dio: ^5.1.1
+  equatable: ^2.0.5
+  provider: ^6.0.5
+  json_annotation: ^4.8.1
+  decimal: ^2.3.3
+  flutter_secure_storage: ^9.0.0
+  rxdart: ^0.27.7
+  elementary: ^3.0.0
+  elementary_helper: ^1.0.1
+  freezed_annotation: ^2.4.1
+  tele_web_app:
+    git: https://github.com/yeikel16/tele_web_app.git
+
+
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+  build_runner: ^2.3.3
+  auto_route_generator: ^6.1.0
+  flutter_launcher_icons: "^0.13.0"
+  retrofit_generator: ^8.0.6
+  json_serializable: ^6.7.1
+  freezed: ^2.4.6
+  elementary_test: ^2.0.0
+
+
+
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/auth/e-commerce-logo.png"
+  min_sdk_android: 21
+
+flutter:
+
+
+  uses-material-design: true
+
+  fonts:
+    - family: Lexend
+      fonts:
+        - asset: fonts/Lexend-Regular.ttf
+        - asset: fonts/Lexend-Bold.ttf
+          weight: 700
+
