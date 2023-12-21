@@ -1,6 +1,4 @@
 import 'package:seo_web/feature/data/data_source/remote_data_source/auth/i_auth_data_source.dart';
-import 'package:seo_web/feature/data/model/auth/auth_request_dto.dart';
-import 'package:seo_web/feature/data/model/auth/free_token_request_dto.dart';
 import 'package:seo_web/feature/data/services/auth/auth_service.dart';
 import 'package:seo_web/feature/domain/repository/i_local_repository.dart';
 
@@ -14,28 +12,27 @@ class AuthDataSource implements IAuthDataSource {
   });
 
   @override
-  Future<void> authorize(String token) async {
-    final response = await authService.authorize(
-      request: AuthRequestDto(accessToken: token),
-    );
+  Future<(String, String)> authorize() async {
+    final response = await authService.authorize();
     await localRepository.setAccessToken(response.accessToken);
     await localRepository.setRefreshToken(response.refreshToken);
+    return (response.accessToken, response.refreshToken);
   }
 
   @override
-  Future<void> updateToken() async {
+  Future<(String, String)> updateToken() async {
     final token = await localRepository.getRefreshToken();
 
     if (token.isEmpty) {
-      await authorize(token);
-      return;
+      final tokens = await authorize();
+      return tokens;
     }
 
-    final response = await authService.freeToken(
-      request: FreeTokenRequestDto(refreshToken: token),
-    );
+    final response = await authService.refresh();
 
     await localRepository.setAccessToken(response.accessToken);
     await localRepository.setRefreshToken(response.refreshToken);
+
+    return (response.accessToken, response.refreshToken);
   }
 }

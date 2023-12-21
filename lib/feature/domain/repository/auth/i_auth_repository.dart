@@ -1,4 +1,4 @@
 abstract interface class IAuthRepository {
-  Future<void> authorize(String token);
-  Future<void> updateToken();
+  Future<(String, String)> authorize();
+  Future<(String, String)> updateToken();
 }

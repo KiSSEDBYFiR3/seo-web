@@ -3,51 +3,60 @@ import 'package:elementary_helper/elementary_helper.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/domain/managers/cart/i_cart_manager.dart';
+import 'package:seo_web/feature/domain/managers/favorites/i_favorites_manager.dart';
 import 'package:seo_web/feature/domain/managers/products/i_products_manager.dart';
+import 'package:seo_web/feature/domain/providers/cart/cart_provider.dart';
+import 'package:seo_web/feature/domain/providers/favorites/favorites_provider.dart';
 
 abstract interface class ICatalogModel extends ElementaryModel {
   Future<void> deleteFromCart({required ProductEntity product});
   Future<void> getCart();
   Future<void> addToCart({required ProductEntity product});
+
   EntityStateNotifier<CartEntity?> get cartState;
   EntityStateNotifier<List<ProductEntity>> get productsState;
+
   Future<void> getAllProducts();
+
   Future<void> deleteFromFavorites({required ProductEntity product});
   Future<void> getFavorites();
   Future<void> addToFavorites({required ProductEntity product});
 }
 
-final class CatalogModel extends ElementaryModel implements ICatalogModel {
-  final ICartManager _cartManager;
-  final IProductsManager _productsManager;
+final class CatalogModel extends ElementaryModel
+    with FavoritesProvider, CartProvider
+    implements ICatalogModel {
+  final IProductsManager productsManager;
+  final IFavoritesManager favoritesManager;
+  @override
+  final ICartManager cartManager;
 
   CatalogModel({
-    required ICartManager cartManager,
-    required IProductsManager productsManager,
-  })  : _cartManager = cartManager,
-        _productsManager = productsManager;
+    required this.cartManager,
+    required this.favoritesManager,
+    required this.productsManager,
+  });
 
   @override
   Future<void> addToCart({required ProductEntity product}) async =>
-      await _cartManager.addToCart(product: product);
+      await cartManager.addToCart(product: product);
 
   @override
-  EntityStateNotifier<CartEntity?> get cartState => _cartManager.cartState;
+  EntityStateNotifier<CartEntity?> get cartState => cartManager.cartState;
 
   @override
   Future<void> deleteFromCart({required ProductEntity product}) async =>
-      await _cartManager.deleteFromCart(product: product);
+      await cartManager.deleteFromCart(product: product);
 
   @override
-  Future<void> getCart() async => await _cartManager.getCart();
+  Future<void> getCart() async => await cartManager.getCart();
 
   @override
-  Future<void> getAllProducts() async =>
-      await _productsManager.getAllProducts();
+  Future<void> getAllProducts() async => await productsManager.getAllProducts();
 
   @override
   EntityStateNotifier<List<ProductEntity>> get productsState =>
-      _productsManager.productsState;
+      productsManager.productsState;
 
   @override
   void init() async {
@@ -60,23 +69,5 @@ final class CatalogModel extends ElementaryModel implements ICatalogModel {
     productsState.dispose();
     cartState.dispose();
     super.dispose();
-  }
-
-  @override
-  Future<void> addToFavorites({required ProductEntity product}) {
-    // TODO: implement addToFavorites
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> deleteFromFavorites({required ProductEntity product}) {
-    // TODO: implement deleteFromFavorites
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> getFavorites() {
-    // TODO: implement getFavorites
-    throw UnimplementedError();
   }
 }

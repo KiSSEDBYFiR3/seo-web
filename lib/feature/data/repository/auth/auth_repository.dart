@@ -6,9 +6,10 @@ class AuthRepository implements IAuthRepository {
   const AuthRepository(this._remoteDataSource);
 
   @override
-  Future<void> authorize(String token) async =>
-      await _remoteDataSource.authorize(token);
+  Future<(String, String)> authorize() async =>
+      await _remoteDataSource.authorize();
 
   @override
-  Future<void> updateToken() async => await _remoteDataSource.updateToken();
+  Future<(String, String)> updateToken() async =>
+      await _remoteDataSource.updateToken();
 }

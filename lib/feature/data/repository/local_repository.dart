@@ -20,4 +20,11 @@ class LocalRepository implements ILocalAuthRepository {
   @override
   Future<void> setRefreshToken(String token) async =>
       await _localDataSource.setRefreshToken(token);
+
+  @override
+  Future<void> setUuid(String uuid) async =>
+      await _localDataSource.setUuid(uuid);
+
+  @override
+  Future<String> getUuid() async => await _localDataSource.getUuid();
 }

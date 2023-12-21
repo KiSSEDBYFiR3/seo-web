@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen_widget_model.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/catalog_screen_widget_model.dart';
 import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen_widget_model.dart';
 
 @RoutePage(name: 'HomeRoute')
@@ -14,7 +15,7 @@ class HomeScreen extends StatelessWidget {
     return AutoTabsScaffold(
       lazyLoad: false,
       routes: [
-        CatalogRoute(wmFactory: cartWMFactory),
+        CatalogRoute(wmFactory: catalogWMFactory),
         CartRoute(wmFactory: cartWMFactory),
         FavoritesRoute(wmFactory: favoritesWMFactory)
       ],

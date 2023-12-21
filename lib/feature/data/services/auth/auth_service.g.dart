@@ -19,12 +19,11 @@ class _AuthService implements AuthService {
   String? baseUrl;
 
   @override
-  Future<AuthResponseDto> authorize({required AuthRequestDto request}) async {
+  Future<AuthResponseDto> authorize() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(await compute(serializeAuthRequestDto, request));
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<AuthResponseDto>(Options(
       method: 'POST',
@@ -47,13 +46,11 @@ class _AuthService implements AuthService {
   }
 
   @override
-  Future<FreeTokenResponseDto> freeToken(
-      {required FreeTokenRequestDto request}) async {
+  Future<FreeTokenResponseDto> refresh() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(await compute(serializeFreeTokenRequestDto, request));
+    final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<FreeTokenResponseDto>(Options(
       method: 'POST',
@@ -62,7 +59,7 @@ class _AuthService implements AuthService {
     )
             .compose(
               _dio.options,
-              '/auth/free_token/',
+              '/auth/refresh/',
               queryParameters: queryParameters,
               data: _data,
             )

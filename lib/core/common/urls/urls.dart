@@ -1,6 +1,9 @@
 sealed class Urls {
+  static const mainUrl = 'http://127.0.0.1/';
+
   static const auth = '/auth/';
-  static const freeToken = '/auth/free_token/';
+
+  static const refresh = '/auth/refresh/';
 
   static const favorites = '/favorites/';
 

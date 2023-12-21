@@ -21,6 +21,14 @@ class LocalAuthDataSource implements ILocalAuthDataSource {
       await _secureStorage.write(key: 'access_token', value: token);
 
   @override
-  Future<void> setRefreshToken(String token) =>
-      _secureStorage.write(key: 'refresh_token', value: token);
+  Future<void> setRefreshToken(String token) async =>
+      await _secureStorage.write(key: 'refresh_token', value: token);
+
+  @override
+  Future<void> setUuid(String uuid) async =>
+      await _secureStorage.write(key: 'uuid', value: uuid);
+
+  @override
+  Future<String> getUuid() async =>
+      await _secureStorage.read(key: 'uuid') ?? '';
 }

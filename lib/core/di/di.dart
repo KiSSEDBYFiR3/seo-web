@@ -1,5 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:seo_web/core/common/utils/configure_uuid.dart';
+import 'package:seo_web/core/di/configure_dio.dart';
+import 'package:seo_web/core/interceptors/uuid_interceptor.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:seo_web/feature/data/data_source/local_data_source/i_local_data_source.dart';
 import 'package:seo_web/feature/data/data_source/local_data_source/local_data_source.dart';
@@ -36,22 +40,45 @@ import 'package:seo_web/feature/domain/repository/i_local_repository.dart';
 import 'package:seo_web/feature/domain/repository/auth/i_auth_repository.dart';
 import 'package:seo_web/feature/domain/repository/order/i_order_repository.dart';
 import 'package:seo_web/feature/domain/repository/products/i_products_repository.dart';
+import 'package:seo_web/feature/presentation/bloc/cart/cart_bloc.dart';
+import 'package:seo_web/feature/presentation/bloc/favorites/favorites_bloc.dart';
+import 'package:seo_web/feature/presentation/screens/cart/cart_screen_model.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/catalog_screen_model.dart';
+import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen_model.dart';
 import 'package:seo_web/main.dart';
 
 final IDiContainer diContainer = DiContainer();
 
 abstract class IDiContainer {
-  MyApp createMyApp();
-  IAuthRepository createAuthRepository();
+  Widget createApp();
+  Future<void> configureDependencies();
 }
 
 class DiContainer implements IDiContainer {
+  late final Dio _dio;
+  DiContainer();
+
   @override
-  MyApp createMyApp() => MyApp(
+  Future<void> configureDependencies() async {
+    final localRepository = _createLocalRepository();
+    final authRemoteRepository = _createAuthRepository();
+
+    final uuid = await configureUuid(localRepository);
+    final uuidInterceptor = UUIDInterceptor(uuid);
+
+    _dio = await configureDio(
+      [uuidInterceptor],
+      authRemoteRepository,
+      localRepository,
+    );
+  }
+
+  @override
+  Widget createApp() => App(
         appRouter: _createAppRouter(),
       );
-  @override
-  IAuthRepository createAuthRepository() => AuthRepository(
+
+  IAuthRepository _createAuthRepository() => AuthRepository(
         _createAuthDataSource(),
       );
 
@@ -71,18 +98,39 @@ class DiContainer implements IDiContainer {
   late final IFavoritesManager _favoritesManager =
       FavoritesManager(favoritesRepository: _createFavoritesRepository());
 
+  late final CartBloc _cartBloc = CartBloc(
+    cartManager: _cartManager,
+    favoritesManager: _favoritesManager,
+  );
+
+  late final FavoritesBloc _favoritesBloc = FavoritesBloc(
+    cartManager: _cartManager,
+    favoritesManager: _favoritesManager,
+  );
+
+  late final CatalogModel _catalogModel = CatalogModel(
+    cartManager: _cartManager,
+    favoritesManager: _favoritesManager,
+    productsManager: _productsManager,
+  );
+
+  late final FavoritesModel _favoritesModel =
+      FavoritesModel(bloc: _favoritesBloc);
+
+  late final CartModel _cartModel = CartModel(bloc: _cartBloc);
+
   IFavoritesRepository _createFavoritesRepository() =>
       FavoritesRepository(dataSource: _createFavoritesDataSource());
 
   IFavoritesDataSource _createFavoritesDataSource() =>
-      FavoritesDataSource(favoritesService: FavoritesService(_dio()));
+      FavoritesDataSource(favoritesService: FavoritesService(_dio));
 
   IProductsRepository _createProductsRepository() =>
       ProductsRepository(dataSource: _createProductsDataSource());
 
   IProductDataSource _createProductsDataSource() => ProductsDataSource(
         productsService: ProductsService(
-          _dio(),
+          _dio,
         ),
       );
 
@@ -90,13 +138,13 @@ class DiContainer implements IDiContainer {
       OrderRepository(dataSource: _buildOrderDataSource());
 
   IOrderDataSource _buildOrderDataSource() =>
-      OrderDataSource(orderService: OrderService(_dio()));
+      OrderDataSource(orderService: OrderService(_dio));
 
   ICartRepository _buildCartRepository() =>
       CartRepository(dataSource: _buildCartDataSource());
 
   ICartDataSource _buildCartDataSource() => CartDataSource(
-        cartService: CartService(_dio()),
+        cartService: CartService(_dio),
       );
 
   ILocalAuthDataSource _createLocalDataSource() => LocalAuthDataSource(
@@ -104,10 +152,9 @@ class DiContainer implements IDiContainer {
       );
 
   IAuthDataSource _createAuthDataSource() => AuthDataSource(
-        authService: AuthService(_dio()),
+        authService: AuthService(_dio),
         localRepository: _createLocalRepository(),
       );
 
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
-  Dio _dio() => Dio();
 }

@@ -1,4 +1,4 @@
-import 'package:elementary_helper/src/relations/notifier/entity_state_notifier.dart';
+import 'package:elementary_helper/elementary_helper.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/domain/managers/favorites/i_favorites_manager.dart';
 import 'package:seo_web/feature/domain/repository/favorites/i_favorites_repository.dart';

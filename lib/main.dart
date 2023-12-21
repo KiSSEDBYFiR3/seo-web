@@ -1,24 +1,39 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:seo_web/core/common/theme_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:seo_web/core/common/app/theme_provider.dart';
 import 'package:seo_web/core/common/themes.dart';
 import 'package:seo_web/core/di/di.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:developer' as dev;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final app = diContainer.createMyApp();
-  runApp(ProviderScope(child: app));
+  await diContainer.configureDependencies();
+
+  final app = diContainer.createApp();
+
+  runZonedGuarded(
+    () => runApp(
+      ThemeProvider(child: app),
+    ),
+    (error, stack) {
+      dev.log(
+        error.toString(),
+        error: error,
+        stackTrace: stack,
+      );
+    },
+  );
 }
 
-class MyApp extends ConsumerWidget {
+class App extends StatelessWidget {
   final AppRouter appRouter;
-  const MyApp({super.key, required this.appRouter});
+  const App({super.key, required this.appRouter});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
+  Widget build(BuildContext context) {
+    final themeMode = context.watch<ValueNotifier<ThemeMode>>().value;
     return MaterialApp.router(
       routerDelegate: appRouter.delegate(),
       routeInformationParser: appRouter.defaultRouteParser(),
