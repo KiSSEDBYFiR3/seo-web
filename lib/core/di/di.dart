@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:seo_web/core/common/app/dependencies_provider.dart';
 import 'package:seo_web/core/common/utils/configure_uuid.dart';
 import 'package:seo_web/core/di/configure_dio.dart';
 import 'package:seo_web/core/interceptors/uuid_interceptor.dart';
@@ -74,8 +75,13 @@ class DiContainer implements IDiContainer {
   }
 
   @override
-  Widget createApp() => App(
-        appRouter: _createAppRouter(),
+  Widget createApp() => DependenciesProvider(
+        cartModel: _cartModel,
+        catalogModel: _catalogModel,
+        favoritesModel: _favoritesModel,
+        child: App(
+          appRouter: _createAppRouter(),
+        ),
       );
 
   IAuthRepository _createAuthRepository() => AuthRepository(
