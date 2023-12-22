@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:seo_web/core/common/app/theme_provider.dart';
 import 'package:seo_web/core/common/themes.dart';
 import 'package:seo_web/core/di/di.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
@@ -15,9 +14,7 @@ void main() async {
   final app = diContainer.createApp();
 
   runZonedGuarded(
-    () => runApp(
-      ThemeProvider(child: app),
-    ),
+    () => runApp(app),
     (error, stack) {
       dev.log(
         error.toString(),

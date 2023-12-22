@@ -30,7 +30,11 @@ class DependenciesProvider extends StatelessWidget {
         ),
         Provider(
           create: (context) => favoritesModel,
-        )
+        ),
+        ChangeNotifierProvider<ValueNotifier<ThemeMode>>(
+          create: (context) => ValueNotifier(ThemeMode.system),
+          child: child,
+        ),
       ],
       child: child,
     );

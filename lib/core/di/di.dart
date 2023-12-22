@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:seo_web/core/common/app/dependencies_provider.dart';
+import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
 import 'package:seo_web/core/common/utils/configure_uuid.dart';
 import 'package:seo_web/core/di/configure_dio.dart';
 import 'package:seo_web/core/interceptors/uuid_interceptor.dart';
@@ -93,16 +94,23 @@ class DiContainer implements IDiContainer {
   ILocalAuthRepository _createLocalRepository() =>
       LocalRepository(_createLocalDataSource());
 
+  late final IErrorsBus _errorsBus = ErrorsBus();
+
   late final ICartManager _cartManager = CartManager(
     cartRepository: _buildCartRepository(),
     orderRepository: _buildOrderRepository(),
+    errorsBus: _errorsBus,
   );
 
-  late final IProductsManager _productsManager =
-      ProductsManager(productsRepository: _createProductsRepository());
+  late final IProductsManager _productsManager = ProductsManager(
+    productsRepository: _createProductsRepository(),
+    errorsBus: _errorsBus,
+  );
 
-  late final IFavoritesManager _favoritesManager =
-      FavoritesManager(favoritesRepository: _createFavoritesRepository());
+  late final IFavoritesManager _favoritesManager = FavoritesManager(
+    favoritesRepository: _createFavoritesRepository(),
+    errorsBus: _errorsBus,
+  );
 
   late final CartBloc _cartBloc = CartBloc(
     cartManager: _cartManager,

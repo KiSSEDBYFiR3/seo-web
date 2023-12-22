@@ -1,5 +1,6 @@
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:seo_web/core/exception/favorites_exception.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/domain/managers/cart/i_cart_manager.dart';
 import 'package:seo_web/feature/domain/managers/favorites/i_favorites_manager.dart';
@@ -47,27 +48,38 @@ final class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState>
       LoadFavoritesEvent event, Emitter<FavoritesState> emit) async {
     emit(LoadingState(favorites));
 
-    await _favoritesManager.getFavorites();
+    try {
+      await _favoritesManager.getFavorites();
 
-    emit(LoadedState(favorites));
+      emit(LoadedState(favorites));
+    } on FavoritesException catch (e) {
+      addErrorEvent(e.message);
+    }
   }
 
   void _onAddToFavoritesEvent(
       AddToFavoritesEvent event, Emitter<FavoritesState> emit) async {
     emit(LoadingState(favorites));
 
-    await _favoritesManager.addToFavorites(product: event.product);
+    try {
+      await _favoritesManager.addToFavorites(product: event.product);
 
-    emit(LoadedState(favorites));
+      emit(LoadedState(favorites));
+    } on FavoritesException catch (e) {
+      addErrorEvent(e.message);
+    }
   }
 
   void _onRemoveFromFavoritesEvent(
       RemoveFromFavoritesEvent event, Emitter<FavoritesState> emit) async {
     emit(LoadingState(favorites));
+    try {
+      await _favoritesManager.deleteFromFavorites(product: event.product);
 
-    await _favoritesManager.deleteFromFavorites(product: event.product);
-
-    emit(LoadedState(favorites));
+      emit(LoadedState(favorites));
+    } on FavoritesException catch (e) {
+      addErrorEvent(e.message);
+    }
   }
 
   void _onFavoritesErrorEvent(
