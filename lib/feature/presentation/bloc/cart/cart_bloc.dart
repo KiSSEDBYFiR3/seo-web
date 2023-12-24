@@ -13,6 +13,7 @@ import 'package:seo_web/feature/presentation/bloc/cart/cart_states.dart';
 
 final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
   final ICartManager cartManager;
+  @override
   final IFavoritesManager favoritesManager;
 
   CartEntity? get cart => cartManager.cartState.value.data;

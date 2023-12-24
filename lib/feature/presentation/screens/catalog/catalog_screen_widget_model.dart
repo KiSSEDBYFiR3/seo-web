@@ -108,6 +108,6 @@ final class CatalogWidgetModel extends WidgetModel<CatalogWidget, ICatalogModel>
 
   @override
   void goToCart() async {
-    await _router.navigate(CartTab());
+    await _router.navigate(const CartTab());
   }
 }

@@ -1,5 +1,5 @@
 import 'package:elementary_helper/elementary_helper.dart';
-import 'package:rxdart/src/subjects/behavior_subject.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
 import 'package:seo_web/core/exception/exceptions.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';

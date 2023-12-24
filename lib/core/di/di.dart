@@ -74,7 +74,6 @@ class DiContainer implements IDiContainer {
     return _createApp();
   }
 
-  @override
   Widget _createApp() => DependenciesProvider(
         cartModel: _cartModel,
         catalogModel: _catalogModel,

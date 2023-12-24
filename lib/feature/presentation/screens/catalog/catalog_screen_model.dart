@@ -28,6 +28,8 @@ final class CatalogModel extends ElementaryModel
     with FavoritesProvider, CartProvider
     implements ICatalogModel {
   final IProductsManager productsManager;
+
+  @override
   final IFavoritesManager favoritesManager;
   @override
   final ICartManager cartManager;

@@ -71,7 +71,6 @@ class _ProductsView extends StatelessWidget {
   final List<ProductEntity> products;
 
   const _ProductsView({
-    super.key,
     required this.wm,
     required this.products,
   });
@@ -103,7 +102,7 @@ class _ProductsView extends StatelessWidget {
                     ),
                   ),
                 )
-              : SizedBox.shrink(),
+              : const SizedBox.shrink(),
         ),
       ],
     );

@@ -35,6 +35,7 @@ class ProductsManager implements IProductsManager {
 
       _productsState.content(products);
     } catch (e) {
+      _logger.shout(e);
       _errorsBus.addException(Exceptions.getCatalogException);
       throw Exceptions.getCatalogException;
     }
