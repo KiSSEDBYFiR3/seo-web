@@ -63,10 +63,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+            keyAlias 'upload'
+            keyPassword 'seoWebPass123'
+            storeFile file('keystore.jks')
+            storePassword 'seoWebPass123'
        }
    }
    buildTypes {
