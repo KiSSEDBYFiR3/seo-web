@@ -6,9 +6,10 @@ import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen_model.dart';
+import 'package:seo_web/generated/l10n.dart';
 
 abstract interface class ICartWidgetModel
-    extends WidgetModel<CartScreen, ICartModel> {
+    extends WidgetModel<CartWidget, ICartModel> {
   ICartWidgetModel(super.model);
 
   void deleteFromCart({required ProductEntity product});
@@ -19,6 +20,8 @@ abstract interface class ICartWidgetModel
   Future<void> getFavorites();
   Future<void> addToFavorites({required ProductEntity product});
 
+  S get locale;
+
   EntityStateNotifier<CartEntity?> get cartState;
   EntityStateNotifier<List<ProductEntity>> get favoritesState;
 }
@@ -27,7 +30,7 @@ WidgetModel cartWMFactory(BuildContext context) => CartWidgetModel(
       model: context.read<ICartModel>(),
     );
 
-class CartWidgetModel extends WidgetModel<CartScreen, ICartModel>
+class CartWidgetModel extends WidgetModel<CartWidget, ICartModel>
     implements ICartWidgetModel {
   CartWidgetModel({required ICartModel model}) : super(model);
 
@@ -43,18 +46,6 @@ class CartWidgetModel extends WidgetModel<CartScreen, ICartModel>
 
   @override
   void getCart() => model.getCart();
-
-  @override
-  void initWidgetModel() {
-    super.initWidgetModel();
-    model.init();
-  }
-
-  @override
-  void dispose() {
-    model.dispose();
-    super.dispose();
-  }
 
   void showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -94,4 +85,7 @@ class CartWidgetModel extends WidgetModel<CartScreen, ICartModel>
 
   @override
   Future<void> getFavorites() async => await model.getFavorites();
+
+  @override
+  S get locale => S.of(context);
 }

@@ -1,36 +1,42 @@
 import 'package:dio/dio.dart';
-import 'package:seo_web/core/common/consts/consts.dart';
 import 'package:seo_web/feature/domain/repository/auth/i_auth_repository.dart';
-import 'package:seo_web/feature/domain/repository/i_local_repository.dart';
 
 class AuthInterceptor extends Interceptor {
   final IAuthRepository authRepository;
-  final ILocalAuthRepository localAuthRepository;
   final Dio _dio;
 
-  late String _refreshToken;
-  late String _accessToken;
+  String refreshToken;
+  String accessToken;
+  final String basicToken;
 
   AuthInterceptor({
     required this.authRepository,
-    required this.localAuthRepository,
     required Dio dio,
+    required this.accessToken,
+    required this.refreshToken,
+    required this.basicToken,
   }) : _dio = dio;
 
   Future<void> init() async {
-    await authRepository.updateToken();
+    if (accessToken.isEmpty || refreshToken.isEmpty) {
+      await authRepository.authorize();
+      return;
+    }
+    final tokens = await authRepository.updateToken();
+    accessToken = tokens.$1;
+    refreshToken = tokens.$2;
   }
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    options.headers['authorization'] = _accessToken;
+    options.headers['authorization'] = 'Bearer $accessToken';
 
-    if (options.path == '/auth/refresh/') {
-      options.headers['authorization'] = _refreshToken;
+    if (options.path == '/auth/refresh') {
+      options.headers['authorization'] = 'Bearer $refreshToken';
     }
 
-    if (options.path == '/auth/') {
-      options.headers['authorization'] = Consts.basicAuthToken;
+    if (options.path == '/auth') {
+      options.headers['authorization'] = basicToken;
     }
     super.onRequest(options, handler);
   }
@@ -39,7 +45,15 @@ class AuthInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     try {
       if (err.response?.statusCode == 401) {
-        await authRepository.updateToken();
+        if (err.requestOptions.path != '/auth/refresh') {
+          final tokens = await authRepository.updateToken();
+          accessToken = tokens.$1;
+          refreshToken = tokens.$2;
+        } else {
+          final tokens = await authRepository.authorize();
+          accessToken = tokens.$1;
+          refreshToken = tokens.$2;
+        }
         final response = await _retry(err.requestOptions);
 
         handler.resolve(response);

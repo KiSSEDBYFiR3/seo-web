@@ -1,6 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:elementary/elementary.dart';
-import 'package:flutter/material.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen.dart';
 import 'package:seo_web/feature/presentation/screens/catalog/catalog_screen.dart';
 import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen.dart';
@@ -44,26 +42,31 @@ class AppRouter extends _$AppRouter {
                   page: CatalogTab.page,
                   children: [
                     AutoRoute(
-                      page: CartRoute.page,
+                      page: CatalogRoute.page,
                       initial: true,
                     ),
                   ],
                 ),
-                AutoRoute(path: 'cart-tab', page: CartTab.page, children: [
-                  AutoRoute(
-                    page: CartRoute.page,
-                    initial: true,
-                  )
-                ]),
                 AutoRoute(
-                    path: 'favorites-tab',
-                    page: FavoritesTab.page,
-                    children: [
-                      AutoRoute(
-                        page: FavoritesRoute.page,
-                        initial: true,
-                      )
-                    ])
+                  path: 'cart-tab',
+                  page: CartTab.page,
+                  children: [
+                    AutoRoute(
+                      page: CartRoute.page,
+                      initial: true,
+                    )
+                  ],
+                ),
+                AutoRoute(
+                  path: 'favorites-tab',
+                  page: FavoritesTab.page,
+                  children: [
+                    AutoRoute(
+                      page: FavoritesRoute.page,
+                      initial: true,
+                    )
+                  ],
+                )
               ],
             ),
           ],

@@ -31,7 +31,7 @@ class _OrderService implements OrderService {
     )
         .compose(
           _dio.options,
-          '/order/',
+          '/order',
           queryParameters: queryParameters,
           data: _data,
         )

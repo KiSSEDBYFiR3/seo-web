@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seo_web/core/exception/favorites_exception.dart';
@@ -21,6 +23,8 @@ final class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState>
   EntityStateNotifier<List<ProductEntity>> get _favoritesState =>
       _favoritesManager.favoritesState;
 
+  late final StreamSubscription _favoritesChangeSubscription;
+
   FavoritesBloc({
     required this.cartManager,
     required IFavoritesManager favoritesManager,
@@ -30,17 +34,26 @@ final class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState>
     on<AddToFavoritesEvent>(_onAddToFavoritesEvent);
     on<RemoveFromFavoritesEvent>(_onRemoveFromFavoritesEvent);
     on<FavoritesErrorEvent>(_onFavoritesErrorEvent);
+    on<UpdateStateEvent>(_onUpdateStateEvent);
 
     init();
   }
 
   void init() {
-    _favoritesState.addListener(loadFavoritesEvent);
+    _favoritesChangeSubscription = _favoritesManager.favoritesChangedController
+        .listen(_onFavoritesChanged);
+
+    loadFavoritesEvent();
+  }
+
+  void _onFavoritesChanged(List<ProductEntity> products) {
+    addUpdateStateEvent(products);
   }
 
   void dispose() {
-    _favoritesState.removeListener(loadFavoritesEvent);
     _favoritesState.dispose();
+    _favoritesManager.dispose();
+    _favoritesChangeSubscription.cancel();
     cartState.dispose();
   }
 
@@ -50,11 +63,20 @@ final class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState>
 
     try {
       await _favoritesManager.getFavorites();
-
       emit(LoadedState(favorites));
     } on FavoritesException catch (e) {
       addErrorEvent(e.message);
     }
+  }
+
+  void addUpdateStateEvent(List<ProductEntity> products) {
+    add(UpdateStateEvent(products: products));
+  }
+
+  void _onUpdateStateEvent(
+      UpdateStateEvent event, Emitter<FavoritesState> emit) {
+    emit(LoadingState(favorites));
+    emit(LoadedState(event.products));
   }
 
   void _onAddToFavoritesEvent(

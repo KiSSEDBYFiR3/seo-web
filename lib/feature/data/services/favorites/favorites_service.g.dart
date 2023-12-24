@@ -92,7 +92,7 @@ class _FavoritesService implements FavoritesService {
     )
             .compose(
               _dio.options,
-              '/favorites/',
+              '/favorites',
               queryParameters: queryParameters,
               data: _data,
             )

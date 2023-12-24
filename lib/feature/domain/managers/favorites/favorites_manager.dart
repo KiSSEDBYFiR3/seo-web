@@ -1,13 +1,17 @@
 import 'package:elementary_helper/elementary_helper.dart';
+import 'package:rxdart/src/subjects/behavior_subject.dart';
 import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
 import 'package:seo_web/core/exception/exceptions.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/domain/managers/favorites/i_favorites_manager.dart';
 import 'package:seo_web/feature/domain/repository/favorites/i_favorites_repository.dart';
+import 'package:logging/logging.dart';
 
 class FavoritesManager implements IFavoritesManager {
   final IFavoritesRepository _favoritesRepository;
   final IErrorsBus _errorsBus;
+
+  Logger get _logger => Logger('Favorites');
 
   FavoritesManager({
     required IFavoritesRepository favoritesRepository,
@@ -32,8 +36,13 @@ class FavoritesManager implements IFavoritesManager {
 
       final favorites =
           await _favoritesRepository.addToFavorites(id: product.id);
+
       _favoritesState.content(favorites);
+
+      _favoritesChangedController.add(favorites);
     } catch (e) {
+      _logger.shout(e);
+
       _errorsBus.addException(Exceptions.addToFavoritesException);
       throw Exceptions.addToFavoritesException;
     }
@@ -53,7 +62,11 @@ class FavoritesManager implements IFavoritesManager {
       final favorites =
           await _favoritesRepository.deleteFromFavorites(id: product.id);
       _favoritesState.content(favorites);
+
+      _favoritesChangedController.add(favorites);
     } catch (e) {
+      _logger.shout(e);
+
       _errorsBus.addException(Exceptions.deleteFromFavoritesException);
       throw Exceptions.deleteFromFavoritesException;
     }
@@ -67,7 +80,11 @@ class FavoritesManager implements IFavoritesManager {
 
       final favorites = await _favoritesRepository.getFavorites();
       _favoritesState.content(favorites);
+
+      _favoritesChangedController.add(favorites);
     } catch (e) {
+      _logger.shout(e);
+
       _errorsBus.addException(Exceptions.getFavoritesException);
       throw Exceptions.getFavoritesException;
     }
@@ -81,6 +98,15 @@ class FavoritesManager implements IFavoritesManager {
   @override
   void dispose() {
     _favoritesState.dispose();
+    _favoritesChangedController.close();
+    favoritesChangedController.close();
     favoritesState.dispose();
   }
+
+  @override
+  BehaviorSubject<List<ProductEntity>> get favoritesChangedController =>
+      _favoritesChangedController;
+
+  final BehaviorSubject<List<ProductEntity>> _favoritesChangedController =
+      BehaviorSubject();
 }

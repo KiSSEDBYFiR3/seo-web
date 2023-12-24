@@ -32,7 +32,7 @@ class _AuthService implements AuthService {
     )
             .compose(
               _dio.options,
-              '/auth/',
+              '/auth',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -59,7 +59,7 @@ class _AuthService implements AuthService {
     )
             .compose(
               _dio.options,
-              '/auth/refresh/',
+              '/auth/refresh',
               queryParameters: queryParameters,
               data: _data,
             )

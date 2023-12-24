@@ -15,6 +15,7 @@ abstract interface class ICatalogModel extends ElementaryModel {
 
   EntityStateNotifier<CartEntity?> get cartState;
   EntityStateNotifier<List<ProductEntity>> get productsState;
+  EntityStateNotifier<List<ProductEntity>> get favoritesState;
 
   Future<void> getAllProducts();
 
@@ -36,7 +37,6 @@ final class CatalogModel extends ElementaryModel
     required this.favoritesManager,
     required this.productsManager,
   });
-
   @override
   Future<void> addToCart({required ProductEntity product}) async =>
       await cartManager.addToCart(product: product);
@@ -67,6 +67,8 @@ final class CatalogModel extends ElementaryModel
   @override
   void dispose() {
     productsState.dispose();
+    productsManager.dispose();
+    favoritesState.dispose();
     cartState.dispose();
     super.dispose();
   }

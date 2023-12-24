@@ -86,7 +86,7 @@ class _CartService implements CartService {
     )
             .compose(
               _dio.options,
-              '/cart/',
+              '/cart',
               queryParameters: queryParameters,
               data: _data,
             )

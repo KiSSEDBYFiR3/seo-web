@@ -1,9 +1,12 @@
 import 'package:elementary_helper/elementary_helper.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 
 abstract interface class ICartManager {
   EntityStateNotifier<CartEntity?> get cartState;
+
+  BehaviorSubject<CartEntity> get cartChangedController;
 
   Future<void> addToCart({required ProductEntity product});
 

@@ -10,10 +10,10 @@ part 'cart_service.g.dart';
 abstract class CartService {
   factory CartService(Dio dio, {String baseUrl}) = _CartService;
 
-  @POST(Urls.cart)
+  @POST('${Urls.cart}/')
   Future<CartDto> addToCart({@Query('id') required int id});
 
-  @DELETE(Urls.cart)
+  @DELETE('${Urls.cart}/')
   Future<CartDto> deleteFromCart({@Query('id') required int id});
 
   @GET(Urls.cart)

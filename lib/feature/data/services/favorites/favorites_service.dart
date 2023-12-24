@@ -10,10 +10,10 @@ part 'favorites_service.g.dart';
 abstract class FavoritesService {
   factory FavoritesService(Dio dio, {String baseUrl}) = _FavoritesService;
 
-  @POST(Urls.favorites)
+  @POST('${Urls.favorites}/')
   Future<List<ProductDto>> addToFavorites({@Query('id') required int id});
 
-  @DELETE(Urls.favorites)
+  @DELETE('${Urls.favorites}/')
   Future<List<ProductDto>> deleteFromFavorites({@Query('id') required int id});
 
   @GET(Urls.favorites)

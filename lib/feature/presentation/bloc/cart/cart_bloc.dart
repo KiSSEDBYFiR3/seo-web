@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seo_web/core/exception/cart_exception.dart';
@@ -10,18 +12,19 @@ import 'package:seo_web/feature/presentation/bloc/cart/cart_events.dart';
 import 'package:seo_web/feature/presentation/bloc/cart/cart_states.dart';
 
 final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
-  final ICartManager _cartManager;
+  final ICartManager cartManager;
   final IFavoritesManager favoritesManager;
 
-  CartEntity? get cart => _cartManager.cartState.value.data;
+  CartEntity? get cart => cartManager.cartState.value.data;
 
-  EntityStateNotifier<CartEntity?> get _cartState => _cartManager.cartState;
+  EntityStateNotifier<CartEntity?> get _cartState => cartManager.cartState;
+
+  late final StreamSubscription _cartChangeSubscription;
 
   CartBloc({
-    required ICartManager cartManager,
+    required this.cartManager,
     required this.favoritesManager,
-  })  : _cartManager = cartManager,
-        super(InitialCartState()) {
+  }) : super(InitialCartState()) {
     on<LoadCartEvent>(_onLoadEvent);
     on<AddToCartEvent>(_onAddToCartEvent);
     on<RemoveFromCartEvent>(_onRemoveFromCartEvent);
@@ -31,20 +34,27 @@ final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
   }
 
   void init() {
-    _cartState.addListener(loadCartEvent);
+    _cartChangeSubscription =
+        cartManager.cartChangedController.listen(_onCartChanged);
+    loadCartEvent();
   }
 
   void dispose() {
-    _cartState.removeListener(loadCartEvent);
+    _cartChangeSubscription.cancel();
     favoritesState.dispose();
     _cartState.dispose();
+    cartManager.dispose();
+  }
+
+  void _onCartChanged(CartEntity cart) {
+    addUpdateStateEvent(cart);
   }
 
   void _onLoadEvent(LoadCartEvent event, Emitter<CartState> emit) async {
     emit(LoadingState(cart));
 
     try {
-      await _cartManager.getCart();
+      await cartManager.getCart();
       emit(LoadedState(cart));
     } on CartException catch (e) {
       addErrorEvent(e.message);
@@ -55,7 +65,7 @@ final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
     emit(LoadingState(cart));
 
     try {
-      await _cartManager.addToCart(product: event.product);
+      await cartManager.addToCart(product: event.product);
 
       emit(LoadedState(cart));
     } on CartException catch (e) {
@@ -67,7 +77,7 @@ final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
       RemoveFromCartEvent event, Emitter<CartState> emit) async {
     emit(LoadingState(cart));
     try {
-      await _cartManager.deleteFromCart(product: event.product);
+      await cartManager.deleteFromCart(product: event.product);
       emit(LoadedState(cart));
     } on CartException catch (e) {
       addErrorEvent(e.message);
@@ -80,6 +90,10 @@ final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
 
   void addToCartEvent(ProductEntity product) {
     add(AddToCartEvent(product: product));
+  }
+
+  void addUpdateStateEvent(CartEntity cart) {
+    add(UpdateStateEvent(cart: cart));
   }
 
   void removeFromCartEvent(ProductEntity product) {

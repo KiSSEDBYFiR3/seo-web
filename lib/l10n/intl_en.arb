@@ -1,0 +1,68 @@
+{
+  "@@locale": "en",
+  "addToCart": "Add to Cart",
+  "@addToCart": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "toCart": "Go to Cart",
+  "@toCart": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "catalog": "Catalog",
+  "@catalog": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cart": "Cart",
+  "@cart": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "favorites": "Favorites",
+  "@favorites": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search": "Search",
+  "@search": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "toCatalog": "Go to Catalog",
+  "@toCatalog": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emtpyCart": "There is nothing in your cart yet",
+  "@emtpyCart": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emtpyFavorites": "There is nothing here yet",
+  "@emtpyFavorites": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emtpyCatalog": "There is nothing here yet",
+  "@emtpyCatalog": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sortProduct": "Sort",
+  "@sortProduct": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "ascPrice": "Ascending price",
+  "@ascPrice": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "dscPrice": "Descending price",
+  "@dscPrice": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

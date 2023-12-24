@@ -1,0 +1,68 @@
+{
+  "@@locale": "ru",
+  "addToCart": "Добавить в Корзину",
+  "@addToCart": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "toCart": "Перейти в Корзину",
+  "@toCart": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "catalog": "Каталог",
+  "@catalog": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cart": "Корзина",
+  "@cart": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "favorites": "Избранное",
+  "@favorites": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "search": "Поиск",
+  "@search": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "toCatalog": "Перейти в Каталог",
+  "@toCatalog": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emtpyCart": "В вашей корзине пока ничего нет",
+  "@emtpyCart": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emtpyFavorites": "Здесь пока ничего нет",
+  "@emtpyFavorites": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emtpyCatalog": "Здесь пока ничего нет",
+  "@emtpyCatalog": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sortProduct": "Сортировать",
+  "@sortProduct": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "ascPrice": "По возростанию цены",
+  "@ascPrice": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "dscPrice": "По убыванию цены",
+  "@dscPrice": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:decimal/decimal.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:seo_web/core/common/utils/json.dart';
 
@@ -13,7 +12,7 @@ part 'product_dto.g.dart';
 )
 class ProductDto {
   final int id;
-  final Decimal price;
+  final num price;
   final String title;
   final String description;
   final String category;

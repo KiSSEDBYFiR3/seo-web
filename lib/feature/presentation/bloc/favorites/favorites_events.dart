@@ -19,6 +19,15 @@ final class AddToFavoritesEvent extends FavoritesEvent {
   List<Object?> get props => [product];
 }
 
+final class UpdateStateEvent extends FavoritesEvent {
+  final List<ProductEntity> products;
+
+  const UpdateStateEvent({required this.products});
+
+  @override
+  List<Object?> get props => [products];
+}
+
 final class RemoveFromFavoritesEvent extends FavoritesEvent {
   final ProductEntity product;
 

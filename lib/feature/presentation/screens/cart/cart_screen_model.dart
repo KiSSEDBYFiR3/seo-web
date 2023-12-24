@@ -5,13 +5,20 @@ import 'package:elementary_helper/elementary_helper.dart';
 import 'package:seo_web/core/exception/cart_exception.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
+import 'package:seo_web/feature/domain/managers/favorites/i_favorites_manager.dart';
+import 'package:seo_web/feature/domain/providers/favorites/favorites_provider.dart';
 import 'package:seo_web/feature/presentation/bloc/cart/cart_bloc.dart';
 import 'package:seo_web/feature/presentation/bloc/cart/cart_states.dart';
 
-final class CartModel extends ElementaryModel implements ICartModel {
+final class CartModel extends ElementaryModel
+    with FavoritesProvider
+    implements ICartModel {
   final CartBloc _bloc;
 
-  CartModel({required CartBloc bloc}) : _bloc = bloc;
+  CartModel({
+    required CartBloc bloc,
+    required this.favoritesManager,
+  }) : _bloc = bloc;
 
   late final StreamSubscription<CartState> _blocSubscription;
 
@@ -35,7 +42,7 @@ final class CartModel extends ElementaryModel implements ICartModel {
 
   @override
   void init() {
-    _blocSubscription = _bloc.stream.listen(_parseStates);
+    _bloc.stream.listen(_parseStates);
     super.init();
   }
 
@@ -69,6 +76,9 @@ final class CartModel extends ElementaryModel implements ICartModel {
 
   @override
   Future<void> getFavorites() async => await _bloc.getFavorites();
+
+  @override
+  final IFavoritesManager favoritesManager;
 }
 
 abstract interface class ICartModel extends ElementaryModel {

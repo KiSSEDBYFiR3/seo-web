@@ -32,7 +32,7 @@ class _ProductsService implements ProductsService {
     )
             .compose(
               _dio.options,
-              '/products/',
+              '/products',
               queryParameters: queryParameters,
               data: _data,
             )

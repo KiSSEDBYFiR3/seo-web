@@ -52,8 +52,7 @@ import 'package:seo_web/main.dart';
 final IDiContainer diContainer = DiContainer();
 
 abstract class IDiContainer {
-  Widget createApp();
-  Future<void> configureDependencies();
+  Future<Widget> configureDependencies();
 }
 
 class DiContainer implements IDiContainer {
@@ -61,22 +60,22 @@ class DiContainer implements IDiContainer {
   DiContainer();
 
   @override
-  Future<void> configureDependencies() async {
+  Future<Widget> configureDependencies() async {
     final localRepository = _createLocalRepository();
-    final authRemoteRepository = _createAuthRepository();
 
     final uuid = await configureUuid(localRepository);
     final uuidInterceptor = UUIDInterceptor(uuid);
 
     _dio = await configureDio(
       [uuidInterceptor],
-      authRemoteRepository,
+      _createAuthRepository,
       localRepository,
     );
+    return _createApp();
   }
 
   @override
-  Widget createApp() => DependenciesProvider(
+  Widget _createApp() => DependenciesProvider(
         cartModel: _cartModel,
         catalogModel: _catalogModel,
         favoritesModel: _favoritesModel,
@@ -85,8 +84,8 @@ class DiContainer implements IDiContainer {
         ),
       );
 
-  IAuthRepository _createAuthRepository() => AuthRepository(
-        _createAuthDataSource(),
+  IAuthRepository _createAuthRepository(Dio dio) => AuthRepository(
+        _createAuthDataSource(dio),
       );
 
   AppRouter _createAppRouter() => AppRouter();
@@ -100,7 +99,7 @@ class DiContainer implements IDiContainer {
     cartRepository: _buildCartRepository(),
     orderRepository: _buildOrderRepository(),
     errorsBus: _errorsBus,
-  );
+  )..init();
 
   late final IProductsManager _productsManager = ProductsManager(
     productsRepository: _createProductsRepository(),
@@ -122,16 +121,20 @@ class DiContainer implements IDiContainer {
     favoritesManager: _favoritesManager,
   );
 
-  late final CatalogModel _catalogModel = CatalogModel(
+  late final ICatalogModel _catalogModel = CatalogModel(
     cartManager: _cartManager,
     favoritesManager: _favoritesManager,
     productsManager: _productsManager,
   );
 
-  late final FavoritesModel _favoritesModel =
-      FavoritesModel(bloc: _favoritesBloc);
+  late final IFavoritesModel _favoritesModel = FavoritesModel(
+    bloc: _favoritesBloc,
+  );
 
-  late final CartModel _cartModel = CartModel(bloc: _cartBloc);
+  late final ICartModel _cartModel = CartModel(
+    bloc: _cartBloc,
+    favoritesManager: _favoritesManager,
+  );
 
   IFavoritesRepository _createFavoritesRepository() =>
       FavoritesRepository(dataSource: _createFavoritesDataSource());
@@ -165,10 +168,13 @@ class DiContainer implements IDiContainer {
         secureStorage: _secureStorage,
       );
 
-  IAuthDataSource _createAuthDataSource() => AuthDataSource(
-        authService: AuthService(_dio),
+  IAuthDataSource _createAuthDataSource(Dio dio) => AuthDataSource(
+        authService: AuthService(dio),
         localRepository: _createLocalRepository(),
       );
-
-  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(
+    aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+    ),
+  );
 }

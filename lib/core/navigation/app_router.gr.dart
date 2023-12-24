@@ -46,33 +46,21 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     FavoritesRoute.name: (routeData) {
-      final args = routeData.argsAs<FavoritesRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: FavoritesScreen(
-          args.wmFactory,
-          key: args.key,
-        ),
+        child: const FavoritesScreen(),
       );
     },
     CatalogRoute.name: (routeData) {
-      final args = routeData.argsAs<CatalogRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: CatalogScreen(
-          args.wmFactory,
-          key: args.key,
-        ),
+        child: const CatalogScreen(),
       );
     },
     CartRoute.name: (routeData) {
-      final args = routeData.argsAs<CartRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: CartScreen(
-          args.wmFactory,
-          key: args.key,
-        ),
+        child: const CartScreen(),
       );
     },
   };
@@ -150,122 +138,42 @@ class HomeRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [FavoritesScreen]
-class FavoritesRoute extends PageRouteInfo<FavoritesRouteArgs> {
-  FavoritesRoute({
-    required WidgetModel<ElementaryWidget<IWidgetModel>, ElementaryModel>
-            Function(BuildContext)
-        wmFactory,
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
+class FavoritesRoute extends PageRouteInfo<void> {
+  const FavoritesRoute({List<PageRouteInfo>? children})
+      : super(
           FavoritesRoute.name,
-          args: FavoritesRouteArgs(
-            wmFactory: wmFactory,
-            key: key,
-          ),
           initialChildren: children,
         );
 
   static const String name = 'FavoritesRoute';
 
-  static const PageInfo<FavoritesRouteArgs> page =
-      PageInfo<FavoritesRouteArgs>(name);
-}
-
-class FavoritesRouteArgs {
-  const FavoritesRouteArgs({
-    required this.wmFactory,
-    this.key,
-  });
-
-  final WidgetModel<ElementaryWidget<IWidgetModel>, ElementaryModel> Function(
-      BuildContext) wmFactory;
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'FavoritesRouteArgs{wmFactory: $wmFactory, key: $key}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
 /// [CatalogScreen]
-class CatalogRoute extends PageRouteInfo<CatalogRouteArgs> {
-  CatalogRoute({
-    required WidgetModel<ElementaryWidget<IWidgetModel>, ElementaryModel>
-            Function(BuildContext)
-        wmFactory,
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
+class CatalogRoute extends PageRouteInfo<void> {
+  const CatalogRoute({List<PageRouteInfo>? children})
+      : super(
           CatalogRoute.name,
-          args: CatalogRouteArgs(
-            wmFactory: wmFactory,
-            key: key,
-          ),
           initialChildren: children,
         );
 
   static const String name = 'CatalogRoute';
 
-  static const PageInfo<CatalogRouteArgs> page =
-      PageInfo<CatalogRouteArgs>(name);
-}
-
-class CatalogRouteArgs {
-  const CatalogRouteArgs({
-    required this.wmFactory,
-    this.key,
-  });
-
-  final WidgetModel<ElementaryWidget<IWidgetModel>, ElementaryModel> Function(
-      BuildContext) wmFactory;
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'CatalogRouteArgs{wmFactory: $wmFactory, key: $key}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
 /// [CartScreen]
-class CartRoute extends PageRouteInfo<CartRouteArgs> {
-  CartRoute({
-    required WidgetModel<ElementaryWidget<IWidgetModel>, ElementaryModel>
-            Function(BuildContext)
-        wmFactory,
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
+class CartRoute extends PageRouteInfo<void> {
+  const CartRoute({List<PageRouteInfo>? children})
+      : super(
           CartRoute.name,
-          args: CartRouteArgs(
-            wmFactory: wmFactory,
-            key: key,
-          ),
           initialChildren: children,
         );
 
   static const String name = 'CartRoute';
 
-  static const PageInfo<CartRouteArgs> page = PageInfo<CartRouteArgs>(name);
-}
-
-class CartRouteArgs {
-  const CartRouteArgs({
-    required this.wmFactory,
-    this.key,
-  });
-
-  final WidgetModel<ElementaryWidget<IWidgetModel>, ElementaryModel> Function(
-      BuildContext) wmFactory;
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'CartRouteArgs{wmFactory: $wmFactory, key: $key}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }

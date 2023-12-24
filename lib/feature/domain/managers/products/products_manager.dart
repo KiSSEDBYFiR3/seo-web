@@ -1,4 +1,5 @@
 import 'package:elementary_helper/elementary_helper.dart';
+import 'package:logging/logging.dart';
 import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
 import 'package:seo_web/core/exception/exceptions.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
@@ -8,6 +9,8 @@ import 'package:seo_web/feature/domain/repository/products/i_products_repository
 class ProductsManager implements IProductsManager {
   final IProductsRepository _productsRepository;
   final IErrorsBus _errorsBus;
+
+  Logger get _logger => Logger('Catalog');
 
   ProductsManager({
     required IProductsRepository productsRepository,

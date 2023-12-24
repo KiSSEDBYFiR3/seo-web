@@ -66,6 +66,7 @@ final class FavoritesModel extends ElementaryModel implements IFavoritesModel {
   void dispose() {
     _favoritesBlocSubscription.cancel();
     cartState.dispose();
+    _bloc.dispose();
     favoritesState.dispose();
     super.dispose();
   }
