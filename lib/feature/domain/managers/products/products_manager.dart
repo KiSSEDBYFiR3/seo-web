@@ -1,5 +1,6 @@
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:logging/logging.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
 import 'package:seo_web/core/exception/exceptions.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
@@ -22,21 +23,34 @@ class ProductsManager implements IProductsManager {
         _allProductCategoryName = allProductsCategoryName;
 
   @override
-  EntityStateNotifier<List<ProductEntity>> get productsState => _productsState;
+  EntityStateNotifier<List<ProductEntity>> get productsState =>
+      _selectedCategoryProductsState;
 
-  final EntityStateNotifier<List<ProductEntity>> _productsState =
+  final EntityStateNotifier<List<ProductEntity>>
+      _selectedCategoryProductsState = EntityStateNotifier();
+
+  @override
+  EntityStateNotifier<List<String>> get categoriesState => _categoriesState;
+
+  final EntityStateNotifier<List<String>> _categoriesState =
       EntityStateNotifier();
+
+  final BehaviorSubject<List<ProductEntity>> _productsState = BehaviorSubject();
+
+  @override
+  BehaviorSubject<ProductEntity> get selectedProductController =>
+      _selectedProductController;
+
+  final BehaviorSubject<ProductEntity> _selectedProductController =
+      BehaviorSubject();
 
   @override
   Future<void> getAllProducts() async {
     try {
-      final oldProducts = _productsState.value.data ?? [];
-
-      _productsState.loading(oldProducts);
-
       final products = await _productsRepository.getAllProducts();
 
-      _productsState.content(products);
+      _productsState.add(products);
+      getCategories();
     } catch (e) {
       _logger.shout(e);
       _errorsBus.addException(Exceptions.getCatalogException);
@@ -45,13 +59,16 @@ class ProductsManager implements IProductsManager {
   }
 
   @override
-  List<String> getCategories() {
-    final products = _productsState.value.data;
+  void getCategories() {
+    final products = _productsState.valueOrNull;
+
     if (products == null) {
-      return [];
+      return;
     }
 
     List<String> categories = [];
+
+    categoriesState.loading(categories);
 
     categories.add(_allProductCategoryName);
 
@@ -59,36 +76,53 @@ class ProductsManager implements IProductsManager {
 
     categories.addAll(foundCategories);
 
-    return categories;
+    categoriesState.content(categories);
   }
 
   @override
-  ProductEntity? findProductById(int id) {
-    final products = _productsState.value.data;
+  void findProductById(int id) {
+    final products = _productsState.valueOrNull;
     if (products == null) {
-      return null;
+      return;
     }
 
-    return products.firstWhere((element) => element.id == id);
+    final product = products.firstWhere((element) => element.id == id);
+
+    _selectedProductController.add(product);
   }
 
   @override
-  List<ProductEntity> findProductsByCategory(String category) {
-    final products = _productsState.value.data;
+  void findProductsByCategory(String category) {
+    final products = _productsState.valueOrNull;
     if (products == null) {
-      return [];
+      return;
     }
+
+    _selectedCategoryProductsState.loading([]);
+
+    _selectedCategoryName.add(category);
 
     if (category == _allProductCategoryName) {
-      return products;
+      _selectedCategoryProductsState.content(products);
+      return;
     }
 
-    return products.where((e) => e.category == category).toList();
+    final foundProducts =
+        products.where((e) => e.category == category).toList();
+
+    _selectedCategoryProductsState.content(foundProducts);
   }
 
   @override
   void dispose() {
-    _productsState.dispose();
+    _productsState.close();
+    _selectedProductController.close();
+    selectedProductController.close();
+    selectedCategoryName.close();
+    selectedCategoryName.close();
+
+    _categoriesState.dispose();
+    categoriesState.dispose();
 
     productsState.dispose();
   }
@@ -97,4 +131,9 @@ class ProductsManager implements IProductsManager {
   void init() async {
     await getAllProducts();
   }
+
+  @override
+  BehaviorSubject<String> get selectedCategoryName => _selectedCategoryName;
+
+  final BehaviorSubject<String> _selectedCategoryName = BehaviorSubject();
 }

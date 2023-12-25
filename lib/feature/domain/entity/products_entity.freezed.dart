@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _ProductEntity {
+mixin _$ProductEntity {
   int get id => throw _privateConstructorUsedError;
   Decimal get price => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
@@ -93,11 +93,11 @@ class _$ProductEntityCopyWithImpl<$Res, $Val extends ProductEntity>
 }
 
 /// @nodoc
-abstract class _$$$ProductEntityImplCopyWith<$Res>
+abstract class _$$$$ProductEntityImplCopyWith<$Res>
     implements $ProductEntityCopyWith<$Res> {
-  factory _$$$ProductEntityImplCopyWith(_$$ProductEntityImpl value,
-          $Res Function(_$$ProductEntityImpl) then) =
-      __$$$ProductEntityImplCopyWithImpl<$Res>;
+  factory _$$$$ProductEntityImplCopyWith(_$$$ProductEntityImpl value,
+          $Res Function(_$$$ProductEntityImpl) then) =
+      __$$$$ProductEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -110,11 +110,11 @@ abstract class _$$$ProductEntityImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$$ProductEntityImplCopyWithImpl<$Res>
-    extends _$ProductEntityCopyWithImpl<$Res, _$$ProductEntityImpl>
-    implements _$$$ProductEntityImplCopyWith<$Res> {
-  __$$$ProductEntityImplCopyWithImpl(
-      _$$ProductEntityImpl _value, $Res Function(_$$ProductEntityImpl) _then)
+class __$$$$ProductEntityImplCopyWithImpl<$Res>
+    extends _$ProductEntityCopyWithImpl<$Res, _$$$ProductEntityImpl>
+    implements _$$$$ProductEntityImplCopyWith<$Res> {
+  __$$$$ProductEntityImplCopyWithImpl(
+      _$$$ProductEntityImpl _value, $Res Function(_$$$ProductEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -127,7 +127,7 @@ class __$$$ProductEntityImplCopyWithImpl<$Res>
     Object? category = null,
     Object? image = null,
   }) {
-    return _then(_$$ProductEntityImpl(
+    return _then(_$$$ProductEntityImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -158,8 +158,8 @@ class __$$$ProductEntityImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$$ProductEntityImpl implements _$ProductEntity {
-  _$$ProductEntityImpl(
+class _$$$ProductEntityImpl implements _$$ProductEntity {
+  _$$$ProductEntityImpl(
       {required this.id,
       required this.price,
       required this.title,
@@ -189,7 +189,7 @@ class _$$ProductEntityImpl implements _$ProductEntity {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$$ProductEntityImpl &&
+            other is _$$$ProductEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.price, price) || other.price == price) &&
             (identical(other.title, title) || other.title == title) &&
@@ -207,19 +207,19 @@ class _$$ProductEntityImpl implements _$ProductEntity {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$$ProductEntityImplCopyWith<_$$ProductEntityImpl> get copyWith =>
-      __$$$ProductEntityImplCopyWithImpl<_$$ProductEntityImpl>(
+  _$$$$ProductEntityImplCopyWith<_$$$ProductEntityImpl> get copyWith =>
+      __$$$$ProductEntityImplCopyWithImpl<_$$$ProductEntityImpl>(
           this, _$identity);
 }
 
-abstract class _$ProductEntity implements ProductEntity {
-  factory _$ProductEntity(
+abstract class _$$ProductEntity implements ProductEntity {
+  factory _$$ProductEntity(
       {required final int id,
       required final Decimal price,
       required final String title,
       required final String description,
       required final String category,
-      required final String image}) = _$$ProductEntityImpl;
+      required final String image}) = _$$$ProductEntityImpl;
 
   @override
   int get id;
@@ -235,6 +235,6 @@ abstract class _$ProductEntity implements ProductEntity {
   String get image;
   @override
   @JsonKey(ignore: true)
-  _$$$ProductEntityImplCopyWith<_$$ProductEntityImpl> get copyWith =>
+  _$$$$ProductEntityImplCopyWith<_$$$ProductEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

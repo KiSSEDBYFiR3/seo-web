@@ -1,4 +1,5 @@
 import 'package:elementary_helper/elementary_helper.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 
 abstract interface class IProductsManager {
@@ -6,11 +7,17 @@ abstract interface class IProductsManager {
 
   Future<void> getAllProducts();
 
-  List<String> getCategories();
+  void getCategories();
 
-  ProductEntity? findProductById(int id);
+  void findProductById(int id);
 
-  List<ProductEntity> findProductsByCategory(String category);
+  void findProductsByCategory(String category);
+
+  EntityStateNotifier<List<String>> get categoriesState;
+
+  BehaviorSubject<ProductEntity> get selectedProductController;
+
+  BehaviorSubject<String> get selectedCategoryName;
 
   void init();
 

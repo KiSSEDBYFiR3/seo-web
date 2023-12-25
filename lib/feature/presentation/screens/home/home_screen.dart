@@ -1,7 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:elementary/elementary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:seo_web/core/icons/bottom_bar_icons.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
+import 'package:seo_web/feature/presentation/screens/home/home_screen_widget_model.dart';
 
 @RoutePage(name: 'HomeRoute')
 class HomeScreen extends StatelessWidget {
@@ -9,12 +13,32 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return const HomeWidget(homeScreenWMFactory);
+  }
+}
+
+class HomeWidget extends ElementaryWidget<IHomeScreenWidgetModel> {
+  const HomeWidget(super.wmFactory, {super.key});
+
+  @override
+  Widget build(IHomeScreenWidgetModel wm) {
     return AutoTabsScaffold(
+      backgroundColor: Colors.white,
+      appBarBuilder: (context, tabsRouter) => AppBar(
+        toolbarHeight: 0,
+        elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarDividerColor: Colors.white,
+          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+        ),
+      ),
       lazyLoad: false,
       routes: const [
         CatalogTab(
           children: [
-            CatalogRoute(),
+            CategoriesRoute(),
           ],
         ),
         CartTab(
@@ -56,13 +80,13 @@ class HomeScreen extends StatelessWidget {
         ),
         items: [
           _BottomNavigationBarItem(
-            icon: Icons.list,
+            icon: BottomBarIcons.catalog,
           ),
           _BottomNavigationBarItem(
-            icon: Icons.shopping_cart_checkout_rounded,
+            icon: BottomBarIcons.cart,
           ),
           _BottomNavigationBarItem(
-            icon: Icons.favorite,
+            icon: BottomBarIcons.favorites,
           ),
         ],
       ),

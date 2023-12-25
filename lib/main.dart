@@ -11,18 +11,20 @@ import 'dart:developer' as dev;
 import 'package:seo_web/generated/l10n.dart';
 
 void main() async {
-  runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    final app = await diContainer.configureDependencies();
-
-    runApp(app);
-  }, (error, stack) {
+  runZonedGuarded(_run, (error, stack) {
     dev.log(
       error.toString(),
       error: error,
       stackTrace: stack,
     );
   });
+}
+
+void _run() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final app = await diContainer.configureDependencies();
+  runApp(app);
 }
 
 class App extends StatelessWidget {

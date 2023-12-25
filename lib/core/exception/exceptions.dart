@@ -1,9 +1,6 @@
-import 'package:seo_web/core/exception/cart_exception.dart';
-import 'package:seo_web/core/exception/catalog_exception.dart';
-import 'package:seo_web/core/exception/favorites_exception.dart';
-import 'package:seo_web/core/exception/order_exception.dart';
+import 'package:seo_web/core/exception/app_exceptions.dart';
 
-class Exceptions {
+abstract final class Exceptions {
   static const addToFavoritesException =
       FavoritesException('Возникла ошибка при добавлении товара в избранное');
 

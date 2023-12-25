@@ -30,6 +30,21 @@
     "type": "text",
     "placeholders": {}
   },
+   "categories": "Categories",
+  "@categories": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "productCart": "Product card",
+  "@productCart": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "allProducts": "All goods",
+  "@allProducts": {
+    "type": "text",
+    "placeholders": {}
+  },
   "toCatalog": "Go to Catalog",
   "@toCatalog": {
     "type": "text",

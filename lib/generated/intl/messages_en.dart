@@ -23,9 +23,11 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "addToCart": MessageLookupByLibrary.simpleMessage("Add to Cart"),
+        "allProducts": MessageLookupByLibrary.simpleMessage("All goods"),
         "ascPrice": MessageLookupByLibrary.simpleMessage("Ascending price"),
         "cart": MessageLookupByLibrary.simpleMessage("Cart"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catalog"),
+        "categories": MessageLookupByLibrary.simpleMessage("Categories"),
         "dscPrice": MessageLookupByLibrary.simpleMessage("Descending price"),
         "emtpyCart": MessageLookupByLibrary.simpleMessage(
             "There is nothing in your cart yet"),
@@ -34,6 +36,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "emtpyFavorites":
             MessageLookupByLibrary.simpleMessage("There is nothing here yet"),
         "favorites": MessageLookupByLibrary.simpleMessage("Favorites"),
+        "productCart": MessageLookupByLibrary.simpleMessage("Product card"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "sortProduct": MessageLookupByLibrary.simpleMessage("Sort"),
         "toCart": MessageLookupByLibrary.simpleMessage("Go to Cart"),

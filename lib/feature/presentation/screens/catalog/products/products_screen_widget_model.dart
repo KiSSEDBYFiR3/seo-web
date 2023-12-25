@@ -3,18 +3,19 @@ import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
-import 'package:seo_web/feature/presentation/screens/catalog/catalog_screen_model.dart';
-import 'package:seo_web/feature/presentation/screens/catalog/catalog_screen.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/products/products_screen_model.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/products/products_screen.dart';
 import 'package:seo_web/generated/l10n.dart';
 
 import 'dart:developer' as dev;
 
-abstract interface class ICatalogWidgetModel
-    extends WidgetModel<CatalogWidget, ICatalogModel> {
-  ICatalogWidgetModel({required ICatalogModel model}) : super(model);
+abstract interface class IProductsWidgetModel
+    extends WidgetModel<ProductsWidget, IProductsModel> {
+  IProductsWidgetModel({required IProductsModel model}) : super(model);
   Future<void> getCart();
   EntityStateNotifier<CartEntity?> get cartState;
   EntityStateNotifier<List<ProductEntity>> get productsState;
@@ -30,16 +31,21 @@ abstract interface class ICatalogWidgetModel
 
   void goToCart();
 
+  void goBack();
+
+  BehaviorSubject<String> get selectedCategoryName;
+
   bool isInFavorites(ProductEntity product);
   bool isInCart(ProductEntity product);
 }
 
-CatalogWidgetModel catalogWMFactory(BuildContext context) =>
-    CatalogWidgetModel(model: context.read<ICatalogModel>());
+IProductsWidgetModel catalogWMFactory(BuildContext context) =>
+    ProductsWidgetModel(model: context.read<IProductsModel>());
 
-final class CatalogWidgetModel extends WidgetModel<CatalogWidget, ICatalogModel>
-    implements ICatalogWidgetModel {
-  CatalogWidgetModel({required ICatalogModel model}) : super(model);
+final class ProductsWidgetModel
+    extends WidgetModel<ProductsWidget, IProductsModel>
+    implements IProductsWidgetModel {
+  ProductsWidgetModel({required IProductsModel model}) : super(model);
 
   List<ProductEntity>? get _favorites => model.favoritesState.value.data;
   CartEntity? get _cart => model.cartState.value.data;
@@ -64,9 +70,6 @@ final class CatalogWidgetModel extends WidgetModel<CatalogWidget, ICatalogModel>
 
   @override
   void dispose() {
-    productsState.dispose();
-    favoritesState.dispose();
-    cartState.dispose();
     super.dispose();
   }
 
@@ -80,7 +83,7 @@ final class CatalogWidgetModel extends WidgetModel<CatalogWidget, ICatalogModel>
 
   @override
   bool isInCart(ProductEntity product) {
-    return _cart?.products.contains(product) ?? false;
+    return _cart?.offers.any((element) => element.id == product.id) ?? false;
   }
 
   @override
@@ -110,4 +113,11 @@ final class CatalogWidgetModel extends WidgetModel<CatalogWidget, ICatalogModel>
   void goToCart() async {
     await _router.navigate(const CartTab());
   }
+
+  @override
+  BehaviorSubject<String> get selectedCategoryName =>
+      model.selectedCategoryName;
+
+  @override
+  void goBack() => _router.pop();
 }

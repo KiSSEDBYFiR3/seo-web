@@ -94,7 +94,7 @@ final class FavoritesWidgetModel
 
   @override
   bool isInCart(ProductEntity product) {
-    return _cart?.products.contains(product) ?? false;
+    return _cart?.offers.any((element) => element.id == product.id) ?? false;
   }
 
   @override

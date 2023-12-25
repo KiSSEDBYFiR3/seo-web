@@ -110,6 +110,36 @@ class S {
     );
   }
 
+  /// `Categories`
+  String get categories {
+    return Intl.message(
+      'Categories',
+      name: 'categories',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Product card`
+  String get productCart {
+    return Intl.message(
+      'Product card',
+      name: 'productCart',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All goods`
+  String get allProducts {
+    return Intl.message(
+      'All goods',
+      name: 'allProducts',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Go to Catalog`
   String get toCatalog {
     return Intl.message(

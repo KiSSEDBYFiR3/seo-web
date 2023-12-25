@@ -30,6 +30,21 @@
     "type": "text",
     "placeholders": {}
   },
+  "categories": "Категории",
+  "@categories": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "productCart": "Карточка товара",
+  "@productCart": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "allProducts": "Все товары",
+  "@allProducts": {
+    "type": "text",
+    "placeholders": {}
+  },
   "toCatalog": "Перейти в Каталог",
   "@toCatalog": {
     "type": "text",

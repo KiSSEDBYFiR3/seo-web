@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'products_entity.freezed.dart';
 
 @freezed
-class ProductEntity with _ProductEntity {
+class ProductEntity with _$ProductEntity {
   factory ProductEntity({
     required int id,
     required Decimal price,
@@ -12,5 +12,5 @@ class ProductEntity with _ProductEntity {
     required String description,
     required String category,
     required String image,
-  }) = _$ProductEntity;
+  }) = _$$ProductEntity;
 }

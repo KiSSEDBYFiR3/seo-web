@@ -51,16 +51,22 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const FavoritesScreen(),
       );
     },
-    CatalogRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const CatalogScreen(),
-      );
-    },
     CartRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const CartScreen(),
+      );
+    },
+    CategoriesRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const CategoriesScreen(),
+      );
+    },
+    ProductsRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ProductsScreen(),
       );
     },
   };
@@ -151,20 +157,6 @@ class FavoritesRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [CatalogScreen]
-class CatalogRoute extends PageRouteInfo<void> {
-  const CatalogRoute({List<PageRouteInfo>? children})
-      : super(
-          CatalogRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'CatalogRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
 /// [CartScreen]
 class CartRoute extends PageRouteInfo<void> {
   const CartRoute({List<PageRouteInfo>? children})
@@ -174,6 +166,34 @@ class CartRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'CartRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CategoriesScreen]
+class CategoriesRoute extends PageRouteInfo<void> {
+  const CategoriesRoute({List<PageRouteInfo>? children})
+      : super(
+          CategoriesRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CategoriesRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ProductsScreen]
+class ProductsRoute extends PageRouteInfo<void> {
+  const ProductsRoute({List<PageRouteInfo>? children})
+      : super(
+          ProductsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ProductsRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

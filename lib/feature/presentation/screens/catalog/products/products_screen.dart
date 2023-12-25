@@ -5,35 +5,49 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
-import 'package:seo_web/feature/presentation/screens/catalog/catalog_screen_widget_model.dart';
-import 'package:seo_web/feature/presentation/widgets/mobile_product_cart.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/products/products_screen_widget_model.dart';
+import 'package:seo_web/feature/presentation/widgets/mobile_product_card.dart';
 
-@RoutePage(name: 'CatalogRoute')
-class CatalogScreen extends StatelessWidget {
-  const CatalogScreen({super.key});
+@RoutePage(name: 'ProductsRoute')
+class ProductsScreen extends StatelessWidget {
+  const ProductsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const CatalogWidget(catalogWMFactory);
+    return const ProductsWidget(catalogWMFactory);
   }
 }
 
-class CatalogWidget extends ElementaryWidget<ICatalogWidgetModel> {
-  const CatalogWidget(super.wmFactory, {super.key});
+class ProductsWidget extends ElementaryWidget<IProductsWidgetModel> {
+  const ProductsWidget(super.wmFactory, {super.key});
 
   @override
-  Widget build(ICatalogWidgetModel wm) {
+  Widget build(IProductsWidgetModel wm) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: wm.goBack,
+          child: const Icon(
+            Icons.arrow_back_ios,
+            size: 18,
+          ),
+        ),
         toolbarHeight: 48,
         centerTitle: true,
-        title: Text(
-          wm.locale.catalog,
-          style: AppTypography.inter18w700,
+        title: StreamBuilder<String>(
+          stream: wm.selectedCategoryName,
+          builder: (context, snapshot) {
+            return Text(
+              snapshot.data?.toUpperCase() ?? wm.locale.allProducts,
+              style: AppTypography.montserrat18w700,
+            );
+          },
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 16),
+        padding: const EdgeInsets.only(top: 12),
         child: EntityStateNotifierBuilder(
           listenableEntityState: wm.productsState,
           builder: (context, products) {
@@ -67,7 +81,7 @@ class CatalogWidget extends ElementaryWidget<ICatalogWidgetModel> {
 }
 
 class _ProductsView extends StatelessWidget {
-  final ICatalogWidgetModel wm;
+  final IProductsWidgetModel wm;
   final List<ProductEntity> products;
 
   const _ProductsView({

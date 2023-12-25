@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
-import 'package:seo_web/core/exception/favorites_exception.dart';
+import 'package:seo_web/core/exception/app_exceptions.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/presentation/bloc/favorites/favorites_bloc.dart';
@@ -79,7 +79,7 @@ final class FavoritesModel extends ElementaryModel implements IFavoritesModel {
           FavoritesException(state.message),
           state.favorites,
         ),
-      InitialFavoritesState() => getCart()
+      InitialFavoritesState() => getFavorites()
     };
   }
 }

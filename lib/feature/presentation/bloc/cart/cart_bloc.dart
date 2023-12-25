@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:seo_web/core/exception/cart_exception.dart';
+import 'package:seo_web/core/exception/app_exceptions.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/domain/managers/cart/i_cart_manager.dart';
@@ -38,10 +38,11 @@ final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
   void init() {
     _cartChangeSubscription =
         cartManager.cartChangedController.listen(_onCartChanged);
-    loadCartEvent();
   }
 
   void _onUpdateStateEvent(UpdateStateEvent event, Emitter<CartState> emit) {
+    emit(LoadingState(event.cart));
+
     emit(LoadedState(event.cart));
   }
 

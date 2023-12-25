@@ -46,8 +46,10 @@ import 'package:seo_web/feature/domain/repository/products/i_products_repository
 import 'package:seo_web/feature/presentation/bloc/cart/cart_bloc.dart';
 import 'package:seo_web/feature/presentation/bloc/favorites/favorites_bloc.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen_model.dart';
-import 'package:seo_web/feature/presentation/screens/catalog/catalog_screen_model.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/categories/categories_screen_model.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/products/products_screen_model.dart';
 import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen_model.dart';
+import 'package:seo_web/feature/presentation/screens/home/home_screen_model.dart';
 import 'package:seo_web/main.dart';
 
 final IDiContainer diContainer = DiContainer();
@@ -76,9 +78,11 @@ class DiContainer implements IDiContainer {
   }
 
   Widget _createApp() => DependenciesProvider(
+        homeModel: _homeModel,
         cartModel: _cartModel,
-        catalogModel: _catalogModel,
+        catalogModel: _catalogModel(),
         favoritesModel: _favoritesModel,
+        categoriesModel: _categoriesModel,
         child: App(
           appRouter: _createAppRouter(),
         ),
@@ -122,9 +126,15 @@ class DiContainer implements IDiContainer {
     favoritesManager: _favoritesManager,
   );
 
-  late final ICatalogModel _catalogModel = CatalogModel(
-    cartManager: _cartManager,
-    favoritesManager: _favoritesManager,
+  IProductsModel _catalogModel() => ProductsModel(
+        cartManager: _cartManager,
+        favoritesManager: _favoritesManager,
+        productsManager: _productsManager,
+      );
+
+  late final IHomeModel _homeModel = HomeModel(errorsBus: _errorsBus);
+
+  late final ICategoriesModel _categoriesModel = CategoriesModel(
     productsManager: _productsManager,
   );
 

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:seo_web/core/exception/auth_exception.dart';
+import 'package:seo_web/core/exception/app_exceptions.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/auth/i_auth_data_source.dart';
 import 'package:seo_web/feature/data/services/auth/auth_service.dart';
 import 'package:seo_web/feature/domain/repository/i_local_repository.dart';

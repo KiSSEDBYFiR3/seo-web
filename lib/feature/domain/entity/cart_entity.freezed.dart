@@ -15,9 +15,9 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _CartEntity {
+mixin _$CartEntity {
   Decimal get price => throw _privateConstructorUsedError;
-  List<ProductEntity> get products => throw _privateConstructorUsedError;
+  List<CartOfferEntity> get offers => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CartEntityCopyWith<CartEntity> get copyWith =>
@@ -30,7 +30,7 @@ abstract class $CartEntityCopyWith<$Res> {
           CartEntity value, $Res Function(CartEntity) then) =
       _$CartEntityCopyWithImpl<$Res, CartEntity>;
   @useResult
-  $Res call({Decimal price, List<ProductEntity> products});
+  $Res call({Decimal price, List<CartOfferEntity> offers});
 }
 
 /// @nodoc
@@ -47,112 +47,112 @@ class _$CartEntityCopyWithImpl<$Res, $Val extends CartEntity>
   @override
   $Res call({
     Object? price = null,
-    Object? products = null,
+    Object? offers = null,
   }) {
     return _then(_value.copyWith(
       price: null == price
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as Decimal,
-      products: null == products
-          ? _value.products
-          : products // ignore: cast_nullable_to_non_nullable
-              as List<ProductEntity>,
+      offers: null == offers
+          ? _value.offers
+          : offers // ignore: cast_nullable_to_non_nullable
+              as List<CartOfferEntity>,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$$CartEntityImplCopyWith<$Res>
+abstract class _$$$$CartEntityImplCopyWith<$Res>
     implements $CartEntityCopyWith<$Res> {
-  factory _$$$CartEntityImplCopyWith(
-          _$$CartEntityImpl value, $Res Function(_$$CartEntityImpl) then) =
-      __$$$CartEntityImplCopyWithImpl<$Res>;
+  factory _$$$$CartEntityImplCopyWith(
+          _$$$CartEntityImpl value, $Res Function(_$$$CartEntityImpl) then) =
+      __$$$$CartEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Decimal price, List<ProductEntity> products});
+  $Res call({Decimal price, List<CartOfferEntity> offers});
 }
 
 /// @nodoc
-class __$$$CartEntityImplCopyWithImpl<$Res>
-    extends _$CartEntityCopyWithImpl<$Res, _$$CartEntityImpl>
-    implements _$$$CartEntityImplCopyWith<$Res> {
-  __$$$CartEntityImplCopyWithImpl(
-      _$$CartEntityImpl _value, $Res Function(_$$CartEntityImpl) _then)
+class __$$$$CartEntityImplCopyWithImpl<$Res>
+    extends _$CartEntityCopyWithImpl<$Res, _$$$CartEntityImpl>
+    implements _$$$$CartEntityImplCopyWith<$Res> {
+  __$$$$CartEntityImplCopyWithImpl(
+      _$$$CartEntityImpl _value, $Res Function(_$$$CartEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? price = null,
-    Object? products = null,
+    Object? offers = null,
   }) {
-    return _then(_$$CartEntityImpl(
+    return _then(_$$$CartEntityImpl(
       price: null == price
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as Decimal,
-      products: null == products
-          ? _value._products
-          : products // ignore: cast_nullable_to_non_nullable
-              as List<ProductEntity>,
+      offers: null == offers
+          ? _value._offers
+          : offers // ignore: cast_nullable_to_non_nullable
+              as List<CartOfferEntity>,
     ));
   }
 }
 
 /// @nodoc
 
-class _$$CartEntityImpl implements _$CartEntity {
-  _$$CartEntityImpl(
-      {required this.price, required final List<ProductEntity> products})
-      : _products = products;
+class _$$$CartEntityImpl implements _$$CartEntity {
+  _$$$CartEntityImpl(
+      {required this.price, required final List<CartOfferEntity> offers})
+      : _offers = offers;
 
   @override
   final Decimal price;
-  final List<ProductEntity> _products;
+  final List<CartOfferEntity> _offers;
   @override
-  List<ProductEntity> get products {
-    if (_products is EqualUnmodifiableListView) return _products;
+  List<CartOfferEntity> get offers {
+    if (_offers is EqualUnmodifiableListView) return _offers;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_products);
+    return EqualUnmodifiableListView(_offers);
   }
 
   @override
   String toString() {
-    return 'CartEntity(price: $price, products: $products)';
+    return 'CartEntity(price: $price, offers: $offers)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$$CartEntityImpl &&
+            other is _$$$CartEntityImpl &&
             (identical(other.price, price) || other.price == price) &&
-            const DeepCollectionEquality().equals(other._products, _products));
+            const DeepCollectionEquality().equals(other._offers, _offers));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, price, const DeepCollectionEquality().hash(_products));
+      runtimeType, price, const DeepCollectionEquality().hash(_offers));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$$CartEntityImplCopyWith<_$$CartEntityImpl> get copyWith =>
-      __$$$CartEntityImplCopyWithImpl<_$$CartEntityImpl>(this, _$identity);
+  _$$$$CartEntityImplCopyWith<_$$$CartEntityImpl> get copyWith =>
+      __$$$$CartEntityImplCopyWithImpl<_$$$CartEntityImpl>(this, _$identity);
 }
 
-abstract class _$CartEntity implements CartEntity {
-  factory _$CartEntity(
+abstract class _$$CartEntity implements CartEntity {
+  factory _$$CartEntity(
       {required final Decimal price,
-      required final List<ProductEntity> products}) = _$$CartEntityImpl;
+      required final List<CartOfferEntity> offers}) = _$$$CartEntityImpl;
 
   @override
   Decimal get price;
   @override
-  List<ProductEntity> get products;
+  List<CartOfferEntity> get offers;
   @override
   @JsonKey(ignore: true)
-  _$$$CartEntityImplCopyWith<_$$CartEntityImpl> get copyWith =>
+  _$$$$CartEntityImplCopyWith<_$$$CartEntityImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

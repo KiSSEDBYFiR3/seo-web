@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen.dart';
-import 'package:seo_web/feature/presentation/screens/catalog/catalog_screen.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/categories/categories_screen.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/products/products_screen.dart';
 import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen.dart';
 import 'package:seo_web/feature/presentation/screens/home/home_screen.dart';
 part 'app_router.gr.dart';
@@ -42,8 +43,12 @@ class AppRouter extends _$AppRouter {
                   page: CatalogTab.page,
                   children: [
                     AutoRoute(
-                      page: CatalogRoute.page,
+                      page: CategoriesRoute.page,
                       initial: true,
+                    ),
+                    AutoRoute(
+                      page: ProductsRoute.page,
+                      path: 'products',
                     ),
                   ],
                 ),

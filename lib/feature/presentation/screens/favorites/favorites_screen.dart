@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen_widget_model.dart';
-import 'package:seo_web/feature/presentation/widgets/mobile_product_cart.dart';
+import 'package:seo_web/feature/presentation/widgets/mobile_product_card.dart';
 
 @RoutePage(name: 'FavoritesRoute')
 class FavoritesScreen extends StatelessWidget {
@@ -24,16 +24,18 @@ class FavoritesWidget extends ElementaryWidget<IFavoritesWidgetModel> {
   @override
   Widget build(IFavoritesWidgetModel wm) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
         toolbarHeight: 48,
         centerTitle: true,
         title: Text(
-          wm.locale.favorites,
-          style: AppTypography.inter18w700,
+          wm.locale.favorites.toUpperCase(),
+          style: AppTypography.montserrat18w700,
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 16),
+        padding: const EdgeInsets.only(top: 12),
         child: EntityStateNotifierBuilder(
           listenableEntityState: wm.favoritesState,
           builder: (context, products) {

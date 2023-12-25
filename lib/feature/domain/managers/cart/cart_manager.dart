@@ -2,7 +2,9 @@ import 'package:elementary_helper/elementary_helper.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
 import 'package:seo_web/core/exception/exceptions.dart';
+import 'package:seo_web/feature/data/model/cart/mapper/cart_mapper.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
+import 'package:seo_web/feature/domain/entity/cart_offer_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/domain/managers/cart/i_cart_manager.dart';
 import 'package:seo_web/feature/domain/repository/cart/i_cart_repository.dart';
@@ -35,15 +37,23 @@ class CartManager implements ICartManager {
     try {
       final oldCart = _cartState.value.data;
 
-      final oldProducts = oldCart?.products ?? [];
+      final oldOffers = oldCart?.offers ?? [];
 
-      final newProducts = <ProductEntity>[];
+      List<CartOfferEntity> newOffers = [];
 
-      newProducts.addAll(oldProducts);
+      newOffers.addAll(oldOffers);
 
-      newProducts.add(product);
+      newOffers.add(
+        CartOfferEntity(
+          id: product.id,
+          count: 1,
+          product: product,
+        ),
+      );
 
-      final appendedCart = oldCart?.copyWith(products: newProducts);
+      newOffers = recalculateOffers(newOffers);
+
+      final appendedCart = oldCart?.copyWith(offers: newOffers);
 
       _cartState.loading(appendedCart);
 
@@ -77,20 +87,21 @@ class CartManager implements ICartManager {
     try {
       final oldCart = _cartState.value.data;
 
-      final oldProducts = oldCart?.products;
+      final oldOffers = oldCart?.offers;
 
-      final newProducts = <ProductEntity>[];
+      List<CartOfferEntity> newOffers = [];
 
-      newProducts.addAll(oldProducts ?? []);
+      newOffers.addAll(oldOffers ?? []);
 
-      final index =
-          newProducts.indexWhere((element) => element.id == product.id);
+      final index = newOffers.indexWhere((element) => element.id == product.id);
 
       if (index != -1) {
-        newProducts.removeAt(index);
+        newOffers.removeAt(index);
       }
 
-      final reducedCart = oldCart?.copyWith(products: oldProducts ?? []);
+      newOffers = recalculateOffers(newOffers);
+
+      final reducedCart = oldCart?.copyWith(offers: newOffers);
 
       _cartState.loading(reducedCart);
 

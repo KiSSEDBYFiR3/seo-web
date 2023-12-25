@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen.dart';
@@ -16,14 +18,19 @@ abstract interface class ICartWidgetModel
   void getCart();
   void addToCart({required ProductEntity product});
 
+  Future<void> onFavoriteTap(ProductEntity product);
   Future<void> deleteFromFavorites({required ProductEntity product});
   Future<void> getFavorites();
   Future<void> addToFavorites({required ProductEntity product});
+
+  void goToCatalog();
 
   S get locale;
 
   EntityStateNotifier<CartEntity?> get cartState;
   EntityStateNotifier<List<ProductEntity>> get favoritesState;
+
+  bool isInFavorites(ProductEntity product);
 }
 
 WidgetModel cartWMFactory(BuildContext context) => CartWidgetModel(
@@ -34,11 +41,21 @@ class CartWidgetModel extends WidgetModel<CartWidget, ICartModel>
     implements ICartWidgetModel {
   CartWidgetModel({required ICartModel model}) : super(model);
 
+  List<ProductEntity>? get _favorites => model.favoritesState.value.data;
+
+  StackRouter get _router => AutoRouter.of(context);
+
   @override
   void addToCart({required ProductEntity product}) =>
       model.addToCart(product: product);
+
   @override
   EntityStateNotifier<CartEntity?> get cartState => model.cartState;
+
+  @override
+  bool isInFavorites(ProductEntity product) {
+    return _favorites?.contains(product) ?? false;
+  }
 
   @override
   void deleteFromCart({required ProductEntity product}) =>
@@ -46,30 +63,6 @@ class CartWidgetModel extends WidgetModel<CartWidget, ICartModel>
 
   @override
   void getCart() => model.getCart();
-
-  void showErrorSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 2),
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20))),
-        backgroundColor: Theme.of(context).colorScheme.error,
-        content: SizedBox(
-          child: Center(
-            child: Text(
-              message,
-              style: TextStyle(
-                fontFamily: "Lexend",
-                fontWeight: FontWeight.w500,
-                fontSize: 17,
-                color: Theme.of(context).colorScheme.onError,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Future<void> addToFavorites({required ProductEntity product}) async =>
@@ -88,4 +81,17 @@ class CartWidgetModel extends WidgetModel<CartWidget, ICartModel>
 
   @override
   S get locale => S.of(context);
+
+  @override
+  void goToCatalog() async {
+    _router.navigate(const CatalogTab());
+  }
+
+  @override
+  Future<void> onFavoriteTap(ProductEntity product) {
+    final isFavorite = isInFavorites(product);
+    return isFavorite
+        ? model.deleteFromFavorites(product: product)
+        : model.addToFavorites(product: product);
+  }
 }

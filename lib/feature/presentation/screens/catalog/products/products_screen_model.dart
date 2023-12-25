@@ -1,5 +1,6 @@
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/domain/managers/cart/i_cart_manager.dart';
@@ -8,7 +9,7 @@ import 'package:seo_web/feature/domain/managers/products/i_products_manager.dart
 import 'package:seo_web/feature/domain/providers/cart/cart_provider.dart';
 import 'package:seo_web/feature/domain/providers/favorites/favorites_provider.dart';
 
-abstract interface class ICatalogModel extends ElementaryModel {
+abstract interface class IProductsModel extends ElementaryModel {
   Future<void> deleteFromCart({required ProductEntity product});
   Future<void> getCart();
   Future<void> addToCart({required ProductEntity product});
@@ -17,6 +18,8 @@ abstract interface class ICatalogModel extends ElementaryModel {
   EntityStateNotifier<List<ProductEntity>> get productsState;
   EntityStateNotifier<List<ProductEntity>> get favoritesState;
 
+  BehaviorSubject<String> get selectedCategoryName;
+
   Future<void> getAllProducts();
 
   Future<void> deleteFromFavorites({required ProductEntity product});
@@ -24,9 +27,9 @@ abstract interface class ICatalogModel extends ElementaryModel {
   Future<void> addToFavorites({required ProductEntity product});
 }
 
-final class CatalogModel extends ElementaryModel
+final class ProductsModel extends ElementaryModel
     with FavoritesProvider, CartProvider
-    implements ICatalogModel {
+    implements IProductsModel {
   final IProductsManager productsManager;
 
   @override
@@ -34,7 +37,7 @@ final class CatalogModel extends ElementaryModel
   @override
   final ICartManager cartManager;
 
-  CatalogModel({
+  ProductsModel({
     required this.cartManager,
     required this.favoritesManager,
     required this.productsManager,
@@ -61,17 +64,6 @@ final class CatalogModel extends ElementaryModel
       productsManager.productsState;
 
   @override
-  void init() async {
-    await getAllProducts();
-    super.init();
-  }
-
-  @override
-  void dispose() {
-    productsState.dispose();
-    productsManager.dispose();
-    favoritesState.dispose();
-    cartState.dispose();
-    super.dispose();
-  }
+  BehaviorSubject<String> get selectedCategoryName =>
+      productsManager.selectedCategoryName;
 }

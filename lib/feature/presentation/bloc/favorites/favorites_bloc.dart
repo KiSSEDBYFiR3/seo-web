@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:seo_web/core/exception/favorites_exception.dart';
+import 'package:seo_web/core/exception/app_exceptions.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/domain/managers/cart/i_cart_manager.dart';
 import 'package:seo_web/feature/domain/managers/favorites/i_favorites_manager.dart';
@@ -75,6 +75,8 @@ final class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState>
 
   void _onUpdateStateEvent(
       UpdateStateEvent event, Emitter<FavoritesState> emit) {
+    emit(LoadingState(event.products));
+
     emit(LoadedState(event.products));
   }
 
