@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:seo_web/core/common/app/dependencies_provider.dart';
+import 'package:seo_web/core/common/consts/consts.dart';
 import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
 import 'package:seo_web/core/common/utils/configure_uuid.dart';
 import 'package:seo_web/core/di/configure_dio.dart';
@@ -103,6 +104,7 @@ class DiContainer implements IDiContainer {
   late final IProductsManager _productsManager = ProductsManager(
     productsRepository: _createProductsRepository(),
     errorsBus: _errorsBus,
+    allProductsCategoryName: Consts.allProductsCategoryName,
   );
 
   late final IFavoritesManager _favoritesManager = FavoritesManager(

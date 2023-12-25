@@ -6,6 +6,12 @@ abstract interface class IProductsManager {
 
   Future<void> getAllProducts();
 
+  List<String> getCategories();
+
+  ProductEntity? findProductById(int id);
+
+  List<ProductEntity> findProductsByCategory(String category);
+
   void init();
 
   void dispose();

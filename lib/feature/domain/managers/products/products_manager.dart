@@ -9,14 +9,17 @@ import 'package:seo_web/feature/domain/repository/products/i_products_repository
 class ProductsManager implements IProductsManager {
   final IProductsRepository _productsRepository;
   final IErrorsBus _errorsBus;
+  final String _allProductCategoryName;
 
   Logger get _logger => Logger('Catalog');
 
   ProductsManager({
     required IProductsRepository productsRepository,
     required IErrorsBus errorsBus,
+    required String allProductsCategoryName,
   })  : _productsRepository = productsRepository,
-        _errorsBus = errorsBus;
+        _errorsBus = errorsBus,
+        _allProductCategoryName = allProductsCategoryName;
 
   @override
   EntityStateNotifier<List<ProductEntity>> get productsState => _productsState;
@@ -39,6 +42,48 @@ class ProductsManager implements IProductsManager {
       _errorsBus.addException(Exceptions.getCatalogException);
       throw Exceptions.getCatalogException;
     }
+  }
+
+  @override
+  List<String> getCategories() {
+    final products = _productsState.value.data;
+    if (products == null) {
+      return [];
+    }
+
+    List<String> categories = [];
+
+    categories.add(_allProductCategoryName);
+
+    final foundCategories = products.map((e) => e.category).toSet().toList();
+
+    categories.addAll(foundCategories);
+
+    return categories;
+  }
+
+  @override
+  ProductEntity? findProductById(int id) {
+    final products = _productsState.value.data;
+    if (products == null) {
+      return null;
+    }
+
+    return products.firstWhere((element) => element.id == id);
+  }
+
+  @override
+  List<ProductEntity> findProductsByCategory(String category) {
+    final products = _productsState.value.data;
+    if (products == null) {
+      return [];
+    }
+
+    if (category == _allProductCategoryName) {
+      return products;
+    }
+
+    return products.where((e) => e.category == category).toList();
   }
 
   @override

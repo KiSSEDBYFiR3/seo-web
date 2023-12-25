@@ -75,7 +75,6 @@ final class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState>
 
   void _onUpdateStateEvent(
       UpdateStateEvent event, Emitter<FavoritesState> emit) {
-    emit(LoadingState(favorites));
     emit(LoadedState(event.products));
   }
 

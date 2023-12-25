@@ -30,6 +30,7 @@ final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
     on<AddToCartEvent>(_onAddToCartEvent);
     on<RemoveFromCartEvent>(_onRemoveFromCartEvent);
     on<CartErrorEvent>(_onCartErrorEvent);
+    on<UpdateStateEvent>(_onUpdateStateEvent);
 
     init();
   }
@@ -38,6 +39,10 @@ final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
     _cartChangeSubscription =
         cartManager.cartChangedController.listen(_onCartChanged);
     loadCartEvent();
+  }
+
+  void _onUpdateStateEvent(UpdateStateEvent event, Emitter<CartState> emit) {
+    emit(LoadedState(event.cart));
   }
 
   void dispose() {
