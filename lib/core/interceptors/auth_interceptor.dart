@@ -19,7 +19,9 @@ class AuthInterceptor extends Interceptor {
 
   Future<void> init() async {
     if (accessToken.isEmpty || refreshToken.isEmpty) {
-      await authRepository.authorize();
+      final tokens = await authRepository.authorize();
+      accessToken = tokens.$1;
+      refreshToken = tokens.$2;
       return;
     }
     final tokens = await authRepository.updateToken();

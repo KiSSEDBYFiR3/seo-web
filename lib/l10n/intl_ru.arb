@@ -1,11 +1,11 @@
 {
   "@@locale": "ru",
-  "addToCart": "Добавить в Корзину",
+  "addToCart": "Добавить",
   "@addToCart": {
     "type": "text",
     "placeholders": {}
   },
-  "toCart": "Перейти в Корзину",
+  "toCart": "В Корзину",
   "@toCart": {
     "type": "text",
     "placeholders": {}

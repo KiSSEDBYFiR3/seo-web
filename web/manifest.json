@@ -1,6 +1,6 @@
 {
-    "name": "seo_web",
-    "short_name": "seo_web",
+    "name": "Seo Web",
+    "short_name": "Seo Web",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
