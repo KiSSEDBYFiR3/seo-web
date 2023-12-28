@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter    
   flutter_localizations:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter 
 
   cupertino_icons: ^1.0.2
   retrofit: ^4.0.3
@@ -39,12 +41,15 @@ dependencies:
   flutter_svg: ^2.0.9
   tele_web_app:
     git: https://github.com/yeikel16/tele_web_app.git
+  mockito: ^5.4.4
 
 dependency_overrides:
   meta: ^1.11.0
   
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
 
@@ -56,6 +61,7 @@ dev_dependencies:
   json_serializable: ^6.7.1
   freezed: ^2.4.6
   elementary_test: ^2.0.0
+
 
 
 

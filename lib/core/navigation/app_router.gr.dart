@@ -51,10 +51,10 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const FavoritesScreen(),
       );
     },
-    CartRoute.name: (routeData) {
+    ProductsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const CartScreen(),
+        child: const ProductsScreen(),
       );
     },
     CategoriesRoute.name: (routeData) {
@@ -63,10 +63,10 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const CategoriesScreen(),
       );
     },
-    ProductsRoute.name: (routeData) {
+    CartRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const ProductsScreen(),
+        child: const CartScreen(),
       );
     },
   };
@@ -157,15 +157,15 @@ class FavoritesRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [CartScreen]
-class CartRoute extends PageRouteInfo<void> {
-  const CartRoute({List<PageRouteInfo>? children})
+/// [ProductsScreen]
+class ProductsRoute extends PageRouteInfo<void> {
+  const ProductsRoute({List<PageRouteInfo>? children})
       : super(
-          CartRoute.name,
+          ProductsRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'CartRoute';
+  static const String name = 'ProductsRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -185,15 +185,15 @@ class CategoriesRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ProductsScreen]
-class ProductsRoute extends PageRouteInfo<void> {
-  const ProductsRoute({List<PageRouteInfo>? children})
+/// [CartScreen]
+class CartRoute extends PageRouteInfo<void> {
+  const CartRoute({List<PageRouteInfo>? children})
       : super(
-          ProductsRoute.name,
+          CartRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'ProductsRoute';
+  static const String name = 'CartRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

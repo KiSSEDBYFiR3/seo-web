@@ -64,3 +64,13 @@ List<CartOfferEntity> recalculateOffers(List<CartOfferEntity> offerEntities) {
 
   return offers;
 }
+
+int calcOffersCount(List<CartOfferEntity> offers) {
+  int offersCount = 0;
+
+  for (var index = 0; index < offers.length; index++) {
+    offersCount += offers[index].count;
+  }
+
+  return offersCount;
+}
