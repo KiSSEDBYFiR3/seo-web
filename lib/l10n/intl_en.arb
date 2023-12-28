@@ -20,6 +20,21 @@
     "type": "text",
     "placeholders": {}
   },
+  "basketPrice": "Price",
+  "@basketPrice": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "createOrder": "Checkout",
+  "@createOrder": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "offersCount": "Goods quantity",
+  "@offersCount": {
+    "type": "text",
+    "placeholders": {}
+  },
   "favorites": "Favorites",
   "@favorites": {
     "type": "text",

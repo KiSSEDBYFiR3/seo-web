@@ -38,6 +38,8 @@ final class RemoveFromCartEvent extends CartEvent {
   List<Object?> get props => [product];
 }
 
+final class CreateOrderEvent extends CartEvent {}
+
 final class CartErrorEvent extends CartEvent {
   final String message;
 

@@ -41,6 +41,9 @@ final class CartModel extends ElementaryModel
   void getCart() => _bloc.loadCartEvent();
 
   @override
+  void createOrder() => _bloc.addCreateOrderEvent();
+
+  @override
   void init() {
     _bloc.stream.listen(_parseStates);
     super.init();
@@ -85,6 +88,7 @@ abstract interface class ICartModel extends ElementaryModel {
   void deleteFromCart({required ProductEntity product});
   void getCart();
   void addToCart({required ProductEntity product});
+  void createOrder();
 
   Future<void> deleteFromFavorites({required ProductEntity product});
   Future<void> getFavorites();

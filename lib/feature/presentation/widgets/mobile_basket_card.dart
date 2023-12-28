@@ -61,16 +61,18 @@ class MobileBasketCard extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
                       Flexible(
+                        flex: 3,
                         child: Text(
                           product.title,
                           style: AppTypography.montserrat14w600,
+                          maxLines: 4,
                         ),
                       ),
                       Expanded(

@@ -3,7 +3,7 @@ import 'package:elementary/elementary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:seo_web/core/icons/bottom_bar_icons.dart';
+import 'package:seo_web/core/icons/custom_icons.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:seo_web/feature/presentation/screens/home/home_screen_widget_model.dart';
 
@@ -80,13 +80,13 @@ class HomeWidget extends ElementaryWidget<IHomeScreenWidgetModel> {
         ),
         items: [
           _BottomNavigationBarItem(
-            icon: BottomBarIcons.catalog,
+            icon: CustomIcons.catalog,
           ),
           _BottomNavigationBarItem(
-            icon: BottomBarIcons.cart,
+            icon: CustomIcons.cart,
           ),
           _BottomNavigationBarItem(
-            icon: BottomBarIcons.favorites,
+            icon: CustomIcons.favorites,
           ),
         ],
       ),

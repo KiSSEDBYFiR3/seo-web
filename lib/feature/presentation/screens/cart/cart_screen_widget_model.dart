@@ -4,6 +4,7 @@ import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
+import 'package:seo_web/feature/data/model/cart/mapper/cart_mapper.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen.dart';
@@ -17,6 +18,7 @@ abstract interface class ICartWidgetModel
   void deleteFromCart({required ProductEntity product});
   void getCart();
   void addToCart({required ProductEntity product});
+  void orderCreate();
 
   Future<void> onFavoriteTap(ProductEntity product);
   Future<void> deleteFromFavorites({required ProductEntity product});
@@ -26,6 +28,8 @@ abstract interface class ICartWidgetModel
   void goToCatalog();
 
   S get locale;
+
+  int get offersCount;
 
   EntityStateNotifier<CartEntity?> get cartState;
   EntityStateNotifier<List<ProductEntity>> get favoritesState;
@@ -44,6 +48,8 @@ class CartWidgetModel extends WidgetModel<CartWidget, ICartModel>
   List<ProductEntity>? get _favorites => model.favoritesState.value.data;
 
   StackRouter get _router => AutoRouter.of(context);
+
+  CartEntity? get _cart => model.cartState.value.data;
 
   @override
   void addToCart({required ProductEntity product}) =>
@@ -94,4 +100,10 @@ class CartWidgetModel extends WidgetModel<CartWidget, ICartModel>
         ? model.deleteFromFavorites(product: product)
         : model.addToFavorites(product: product);
   }
+
+  @override
+  void orderCreate() async => model.createOrder();
+
+  @override
+  int get offersCount => calcOffersCount(_cart?.offers ?? []);
 }

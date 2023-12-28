@@ -8,6 +8,6 @@ part 'order_service.g.dart';
 abstract class OrderService {
   factory OrderService(Dio dio, {String baseUrl}) = _OrderService;
 
-  @GET(Urls.order)
+  @POST(Urls.order)
   Future<String> createOrder();
 }

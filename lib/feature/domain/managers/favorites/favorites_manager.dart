@@ -40,8 +40,8 @@ class FavoritesManager implements IFavoritesManager {
       _favoritesState.content(favorites);
 
       _favoritesChangedController.add(favorites);
-    } catch (e) {
-      _logger.shout(e);
+    } catch (e, stackTrace) {
+      _logger.shout(e.toString(), e, stackTrace);
 
       _errorsBus.addException(Exceptions.addToFavoritesException);
       throw Exceptions.addToFavoritesException;
@@ -64,8 +64,8 @@ class FavoritesManager implements IFavoritesManager {
       _favoritesState.content(favorites);
 
       _favoritesChangedController.add(favorites);
-    } catch (e) {
-      _logger.shout(e);
+    } catch (e, stackTrace) {
+      _logger.shout(e.toString(), e, stackTrace);
 
       _errorsBus.addException(Exceptions.deleteFromFavoritesException);
       throw Exceptions.deleteFromFavoritesException;
@@ -82,8 +82,8 @@ class FavoritesManager implements IFavoritesManager {
       _favoritesState.content(favorites);
 
       _favoritesChangedController.add(favorites);
-    } catch (e) {
-      _logger.shout(e);
+    } catch (e, stackTrace) {
+      _logger.shout(e.toString(), e, stackTrace);
 
       _errorsBus.addException(Exceptions.getFavoritesException);
       throw Exceptions.getFavoritesException;

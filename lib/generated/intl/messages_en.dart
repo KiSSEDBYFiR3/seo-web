@@ -25,9 +25,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "addToCart": MessageLookupByLibrary.simpleMessage("Add to Cart"),
         "allProducts": MessageLookupByLibrary.simpleMessage("All goods"),
         "ascPrice": MessageLookupByLibrary.simpleMessage("Ascending price"),
+        "basketPrice": MessageLookupByLibrary.simpleMessage("Price"),
         "cart": MessageLookupByLibrary.simpleMessage("Cart"),
         "catalog": MessageLookupByLibrary.simpleMessage("Catalog"),
         "categories": MessageLookupByLibrary.simpleMessage("Categories"),
+        "createOrder": MessageLookupByLibrary.simpleMessage("Checkout"),
         "dscPrice": MessageLookupByLibrary.simpleMessage("Descending price"),
         "emtpyCart": MessageLookupByLibrary.simpleMessage(
             "There is nothing in your cart yet"),
@@ -36,6 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "emtpyFavorites":
             MessageLookupByLibrary.simpleMessage("There is nothing here yet"),
         "favorites": MessageLookupByLibrary.simpleMessage("Favorites"),
+        "offersCount": MessageLookupByLibrary.simpleMessage("Goods quantity"),
         "productCart": MessageLookupByLibrary.simpleMessage("Product card"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "sortProduct": MessageLookupByLibrary.simpleMessage("Sort"),

@@ -7,12 +7,19 @@ class AppTypography {
     fontFamily: 'Montserrat',
     fontWeight: FontWeight.w400,
   );
+  static const montserrat12w600 = TextStyle(
+    color: Color(0xFF09192C),
+    fontSize: 12,
+    fontFamily: 'Montserrat',
+    fontWeight: FontWeight.w600,
+  );
   static const montserrat14w600 = TextStyle(
     color: Color(0xFF09192C),
     fontSize: 14,
     fontFamily: 'Montserrat',
     fontWeight: FontWeight.w600,
   );
+
   static const montserrat16w600 = TextStyle(
     color: Color(0xFF09192C),
     fontSize: 16,

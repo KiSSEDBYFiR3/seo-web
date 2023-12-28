@@ -31,6 +31,7 @@ final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
     on<RemoveFromCartEvent>(_onRemoveFromCartEvent);
     on<CartErrorEvent>(_onCartErrorEvent);
     on<UpdateStateEvent>(_onUpdateStateEvent);
+    on<CreateOrderEvent>(_onCreateOrderEvent);
 
     init();
   }
@@ -64,6 +65,21 @@ final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
       await cartManager.getCart();
       emit(LoadedState(cart));
     } on CartException catch (e) {
+      addErrorEvent(e.message);
+    }
+  }
+
+  void addCreateOrderEvent() {
+    add(CreateOrderEvent());
+  }
+
+  void _onCreateOrderEvent(
+      CreateOrderEvent event, Emitter<CartState> emit) async {
+    emit(LoadedState(cart));
+    try {
+      await cartManager.createOrder();
+      loadCartEvent();
+    } on OrderException catch (e) {
       addErrorEvent(e.message);
     }
   }

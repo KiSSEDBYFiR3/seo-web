@@ -51,8 +51,8 @@ class ProductsManager implements IProductsManager {
 
       _productsState.add(products);
       getCategories();
-    } catch (e) {
-      _logger.shout(e);
+    } catch (e, stackTrace) {
+      _logger.shout(e.toString(), e, stackTrace);
       _errorsBus.addException(Exceptions.getCatalogException);
       throw Exceptions.getCatalogException;
     }

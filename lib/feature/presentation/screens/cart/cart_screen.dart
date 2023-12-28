@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:decimal/decimal.dart';
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:seo_web/core/common/colors/colors.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
+import 'package:seo_web/core/common/utils/currency_extension.dart';
 import 'package:seo_web/feature/domain/entity/cart_offer_entity.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen_widget_model.dart';
 import 'package:seo_web/feature/presentation/widgets/mobile_basket_card.dart';
@@ -25,6 +27,21 @@ class CartWidget extends ElementaryWidget<ICartWidgetModel> {
   @override
   Widget build(ICartWidgetModel wm) {
     return Scaffold(
+      floatingActionButton: EntityStateNotifierBuilder(
+        listenableEntityState: wm.cartState,
+        builder: (context, cart) {
+          if (cart == null || cart.offers.isEmpty) {
+            return const SizedBox.shrink();
+          }
+          return _OrderFloatingBar(
+            createOrder: wm.orderCreate,
+            locale: wm.locale,
+            price: cart.price,
+            offersCount: wm.offersCount,
+          );
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
@@ -124,6 +141,94 @@ class _EmptyPageWidget extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class _OrderFloatingBar extends StatelessWidget {
+  final S locale;
+  final VoidCallback createOrder;
+  final Decimal price;
+  final int offersCount;
+  const _OrderFloatingBar({
+    super.key,
+    required this.locale,
+    required this.createOrder,
+    required this.price,
+    required this.offersCount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height / 6;
+    return Container(
+      height: height,
+      color: AppColors.orderFloatingBarColot,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 8,
+          left: 16,
+          right: 16,
+          bottom: 16,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${locale.offersCount}:',
+                        style: AppTypography.montserrat12w600,
+                      ),
+                      Text(
+                        offersCount.toString(),
+                        style: AppTypography.montserrat12w600,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${locale.basketPrice}:',
+                        style: AppTypography.montserrat12w600,
+                      ),
+                      Text(
+                        price.toPrice(),
+                        style: AppTypography.montserrat12w600,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const Spacer(),
+            Expanded(
+              flex: 2,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: createOrder,
+                child: Container(
+                  color: AppColors.buttonColor,
+                  child: Center(
+                    child: Text(
+                      locale.createOrder,
+                      style: AppTypography.montserrat16w600
+                          .copyWith(color: AppColors.onButtonColor),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

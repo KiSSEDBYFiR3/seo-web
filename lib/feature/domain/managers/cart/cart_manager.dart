@@ -61,8 +61,8 @@ class CartManager implements ICartManager {
       _cartState.content(cart);
 
       _cartChangedController.add(cart);
-    } catch (e) {
-      _logger.shout(e);
+    } catch (e, stackTrace) {
+      _logger.shout(e.toString(), e, stackTrace);
 
       _errorsBus.addException(Exceptions.addToCartException);
 
@@ -74,8 +74,8 @@ class CartManager implements ICartManager {
   Future<void> createOrder() async {
     try {
       await _orderRepository.createOrder();
-    } catch (e) {
-      _logger.shout(e);
+    } catch (e, stackTrace) {
+      _logger.shout(e.toString(), e, stackTrace);
 
       _errorsBus.addException(Exceptions.orderException);
       throw Exceptions.orderException;
@@ -109,8 +109,9 @@ class CartManager implements ICartManager {
       _cartState.content(cart);
 
       _cartChangedController.add(cart);
-    } catch (e) {
-      _logger.shout(e);
+    } catch (e, stackTrace) {
+      _logger.shout(e.toString(), e, stackTrace);
+
       _errorsBus.addException(Exceptions.deleteFromCartException);
       throw Exceptions.deleteFromCartException;
     }
@@ -126,8 +127,8 @@ class CartManager implements ICartManager {
       _cartState.content(cart);
 
       _cartChangedController.add(cart);
-    } catch (e) {
-      _logger.shout(e);
+    } catch (e, stackTrace) {
+      _logger.shout(e.toString(), e, stackTrace);
 
       _errorsBus.addException(Exceptions.getCartException);
       throw Exceptions.getCartException;

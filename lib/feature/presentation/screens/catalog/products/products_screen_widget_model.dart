@@ -37,6 +37,10 @@ abstract interface class IProductsWidgetModel
 
   bool isInFavorites(ProductEntity product);
   bool isInCart(ProductEntity product);
+
+  void unfocus();
+
+  TextEditingController get searchController;
 }
 
 IProductsWidgetModel catalogWMFactory(BuildContext context) =>
@@ -63,14 +67,68 @@ final class ProductsWidgetModel
   Future<void> getCart() async => await model.getCart();
 
   @override
-  EntityStateNotifier<List<ProductEntity>> get productsState =>
-      model.productsState;
+  EntityStateNotifier<List<ProductEntity>> get productsState => _productsState;
+
+  final EntityStateNotifier<List<ProductEntity>> _productsState =
+      EntityStateNotifier();
 
   StackRouter get _router => AutoRouter.of(context);
 
   @override
+  void unfocus() {
+    FocusScope.of(context).unfocus();
+  }
+
+  @override
+  void initWidgetModel() {
+    super.initWidgetModel();
+    _addState();
+
+    model.productsState.addListener(_productsStateListner);
+    searchController.addListener(_searchListner);
+  }
+
+  @override
   void dispose() {
+    searchController.dispose();
+    model.productsState.removeListener(_productsStateListner);
+    searchController.removeListener(_searchListner);
+
     super.dispose();
+  }
+
+  void _addState() {
+    final modelProducts = model.productsState.value.data;
+
+    if (_productsState.value.data == null &&
+        modelProducts?.isNotEmpty == true) {
+      _productsState.content(modelProducts ?? []);
+    }
+  }
+
+  void _productsStateListner() {
+    _productsState.content(model.productsState.value.data ?? []);
+  }
+
+  void _searchListner() {
+    final text = searchController.text;
+
+    final products = model.productsState.value.data ?? [];
+
+    if (text.isEmpty) {
+      _productsState.content(products);
+      return;
+    }
+    _productsState.loading(products);
+
+    final foundProducts = products
+        .where(
+          (element) =>
+              element.title.toLowerCase().contains(text) ||
+              element.description.toLowerCase().contains(text),
+        )
+        .toList();
+    _productsState.content(foundProducts);
   }
 
   @override
@@ -120,4 +178,7 @@ final class ProductsWidgetModel
 
   @override
   void goBack() => _router.pop();
+
+  @override
+  final TextEditingController searchController = TextEditingController();
 }

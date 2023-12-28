@@ -90,6 +90,36 @@ class S {
     );
   }
 
+  /// `Price`
+  String get basketPrice {
+    return Intl.message(
+      'Price',
+      name: 'basketPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checkout`
+  String get createOrder {
+    return Intl.message(
+      'Checkout',
+      name: 'createOrder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Goods quantity`
+  String get offersCount {
+    return Intl.message(
+      'Goods quantity',
+      name: 'offersCount',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Favorites`
   String get favorites {
     return Intl.message(

@@ -11,13 +11,16 @@ import 'dart:developer' as dev;
 import 'package:seo_web/generated/l10n.dart';
 
 void main() async {
-  runZonedGuarded(_run, (error, stack) {
-    dev.log(
-      error.toString(),
-      error: error,
-      stackTrace: stack,
-    );
-  });
+  runZonedGuarded(
+    _run,
+    (error, stack) {
+      dev.log(
+        error.toString(),
+        error: error,
+        stackTrace: stack,
+      );
+    },
+  );
 }
 
 void _run() async {

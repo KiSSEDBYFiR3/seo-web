@@ -25,9 +25,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "addToCart": MessageLookupByLibrary.simpleMessage("Добавить"),
         "allProducts": MessageLookupByLibrary.simpleMessage("Все товары"),
         "ascPrice": MessageLookupByLibrary.simpleMessage("По возростанию цены"),
+        "basketPrice": MessageLookupByLibrary.simpleMessage("Цена"),
         "cart": MessageLookupByLibrary.simpleMessage("Корзина"),
         "catalog": MessageLookupByLibrary.simpleMessage("Каталог"),
         "categories": MessageLookupByLibrary.simpleMessage("Категории"),
+        "createOrder": MessageLookupByLibrary.simpleMessage("Оформить заказ"),
         "dscPrice": MessageLookupByLibrary.simpleMessage("По убыванию цены"),
         "emtpyCart": MessageLookupByLibrary.simpleMessage(
             "В вашей корзине пока ничего нет"),
@@ -36,6 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "emtpyFavorites":
             MessageLookupByLibrary.simpleMessage("Здесь пока ничего нет"),
         "favorites": MessageLookupByLibrary.simpleMessage("Избранное"),
+        "offersCount": MessageLookupByLibrary.simpleMessage("Число товаров"),
         "productCart": MessageLookupByLibrary.simpleMessage("Карточка товара"),
         "search": MessageLookupByLibrary.simpleMessage("Поиск"),
         "sortProduct": MessageLookupByLibrary.simpleMessage("Сортировать"),

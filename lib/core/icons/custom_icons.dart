@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-abstract final class BottomBarIcons {
-  BottomBarIcons._();
+abstract final class CustomIcons {
+  CustomIcons._();
 
   static const _fontFamily = 'BottomBarIcons';
 
