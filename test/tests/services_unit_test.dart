@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/auth/auth_data_source.dart';
@@ -22,11 +23,14 @@ import 'package:seo_web/feature/data/services/favorites/favorites_service.dart';
 import 'package:seo_web/feature/data/services/order/order_service.dart';
 import 'package:seo_web/feature/data/services/products/products_service.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
-import 'package:seo_web/feature/domain/entity/cart_offer_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
+import 'package:seo_web/feature/domain/managers/cart/i_cart_manager.dart';
+import 'package:seo_web/feature/domain/managers/favorites/i_favorites_manager.dart';
+import 'package:seo_web/feature/domain/managers/products/i_products_manager.dart';
 
-import '../mocks/data_data.dart';
+import '../mocks/data.dart';
 import '../mocks/data_sources.mocks.dart';
+import '../mocks/managers_mocks.dart';
 import '../mocks/repositories.mocks.dart';
 import '../mocks/services.mocks.dart';
 
@@ -49,6 +53,10 @@ void main() {
   late CartRepository cartRepository;
   late ProductsRepository productsRepository;
 
+  late ICartManager cartManager;
+  late IFavoritesManager favoritesManager;
+  late IProductsManager productsManager;
+
   setUpAll(() {
     /// Services init
     authMock = MockAuthService();
@@ -70,6 +78,16 @@ void main() {
     favoritesRepository = MockFavoritesRepository();
     cartRepository = MockCartRepository();
     productsRepository = MockProductsRepository();
+
+    /// Managers init
+    cartManager = MockCartManager(
+      repository: cartRepository,
+      orderRepository: orderRepository,
+    );
+
+    favoritesManager = MockFavoritesManager(repository: favoritesRepository);
+
+    productsManager = MockProductsManager(repository: productsRepository);
 
     /// Services stubs
     when(authMock.authorize()).thenAnswer((_) => Future(
@@ -388,6 +406,181 @@ void main() {
       expect(favoritesDeleteResponse, const TypeMatcher<List<ProductEntity>>());
       expect(favoritesDeleteResponse.length,
           equals(favoritesDeleteDtoResponse.length));
+    });
+  });
+  group('Managers tests', () {
+    test('Test getProducts adds products to productsState', () async {
+      final products = await productsRepository.getAllProducts();
+
+      await productsManager.getAllProducts();
+
+      final managerProducts = productsManager.productsState.value.data;
+
+      expect(managerProducts, products);
+    });
+
+    test('Test findPoductById adds nothing to selectedProductId', () async {
+      await productsManager.getAllProducts();
+
+      productsManager.findProductById(1);
+
+      final selectedProductId =
+          productsManager.selectedProductController.valueOrNull?.id;
+
+      expect(selectedProductId, equals(null));
+    });
+
+    test('Test findProductById adds product to selectedProductId', () async {
+      await productsManager.getAllProducts();
+
+      productsManager.findProductById(2);
+
+      final selectedProductId =
+          productsManager.selectedProductController.valueOrNull?.id;
+
+      expect(selectedProductId, equals(2));
+    });
+
+    test('Test findProductsByCategory returns list of products', () async {
+      await productsManager.getAllProducts();
+
+      productsManager.findProductsByCategory("men's clothing");
+
+      final products = productsManager.productsState.value.data ?? [];
+
+      expect(products.length, equals(2));
+    });
+
+    test('Test findProductsByCategory returns empty list', () async {
+      await productsManager.getAllProducts();
+
+      productsManager.findProductsByCategory("wrong category");
+
+      final products = productsManager.productsState.value.data ?? [];
+
+      expect(products.isEmpty, isTrue);
+    });
+
+    test('Test getCategories returns list of unique categories', () async {
+      await productsManager.getAllProducts();
+
+      productsManager.getCategories();
+
+      final categories = productsManager.categoriesState.value.data ?? [];
+
+      expect(categories.length, equals(1));
+    });
+
+    test('Test getCart adds to cartState', () async {
+      final cart = await cartRepository.getCart();
+
+      await cartManager.getCart();
+
+      final managerCart = cartManager.cartState.value.data;
+      final cartChanged = cartManager.cartChangedController.valueOrNull;
+
+      expect(managerCart, cart);
+      expect(cartChanged, cart);
+    });
+
+    test('Test addToCart adds products to cartState', () async {
+      final cart = await cartRepository.addToCart(id: 1);
+
+      await cartManager.addToCart(
+        product: ProductEntity(
+          id: 1,
+          price: Decimal.zero,
+          title: 'title',
+          description: 'description',
+          category: 'category',
+          image: '',
+        ),
+      );
+
+      final managerCart = cartManager.cartState.value.data;
+      final cartChanged = cartManager.cartChangedController.valueOrNull;
+
+      expect(managerCart, cart);
+      expect(cartChanged, cart);
+    });
+
+    test('Test deleteFromCart removes products from cartState', () async {
+      final cart = await cartRepository.deleteFromCart(id: 1);
+
+      await cartManager.deleteFromCart(
+        product: ProductEntity(
+          id: 1,
+          price: Decimal.zero,
+          title: 'title',
+          description: 'description',
+          category: 'category',
+          image: '',
+        ),
+      );
+
+      final managerCart = cartManager.cartState.value.data;
+      final cartChanged = cartManager.cartChangedController.valueOrNull;
+
+      expect(managerCart, cart);
+      expect(cartChanged, cart);
+    });
+
+    test('Test getFavorites adds to favoritesState', () async {
+      final favorites = await favoritesRepository.getFavorites();
+
+      await favoritesManager.getFavorites();
+
+      final managerFavorites = favoritesManager.favoritesState.value.data;
+      final favoritesChanged =
+          favoritesManager.favoritesChangedController.valueOrNull;
+
+      expect(managerFavorites, favorites);
+      expect(favoritesChanged, favorites);
+    });
+
+    test('Test addToFavorites adds product to favoritesState', () async {
+      final favorites = await favoritesRepository.addToFavorites(id: 1);
+
+      await favoritesManager.addToFavorites(
+        product: ProductEntity(
+          id: 1,
+          price: Decimal.zero,
+          title: 'title',
+          description: 'description',
+          category: 'category',
+          image: 'image',
+        ),
+      );
+
+      final managerFavorites = favoritesManager.favoritesState.value.data;
+      final favoritesChanged =
+          favoritesManager.favoritesChangedController.valueOrNull;
+
+      expect(managerFavorites, favorites);
+      expect(favoritesChanged, favorites);
+    });
+
+    test('Test deleteFromFavorites removes product from favoritesState',
+        () async {
+      final favorites = await favoritesRepository.deleteFromFavorites(id: 1);
+
+      await favoritesManager.deleteFromFavorites(
+        product: ProductEntity(
+          id: 1,
+          price: Decimal.zero,
+          title: 'title',
+          description: 'description',
+          category: 'category',
+          image: 'image',
+        ),
+      );
+
+      final managerFavorites = favoritesManager.favoritesState.value.data;
+      final favoritesChanged =
+          favoritesManager.favoritesChangedController.valueOrNull;
+
+      expect(managerFavorites, favorites);
+      expect(favoritesChanged, favorites);
     });
   });
 }

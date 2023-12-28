@@ -86,7 +86,15 @@ class ProductsManager implements IProductsManager {
       return;
     }
 
-    final product = products.firstWhere((element) => element.id == id);
+    final product = products
+        .where(
+          (element) => element.id == id,
+        )
+        .firstOrNull;
+
+    if (product == null) {
+      return;
+    }
 
     _selectedProductController.add(product);
   }
