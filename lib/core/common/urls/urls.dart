@@ -1,5 +1,5 @@
 sealed class Urls {
-  static const mainUrl = 'http://127.0.0.1:8888/';
+  static const mainUrl = 'http://10.0.2.2:8888/';
 
   static const auth = '/auth';
 

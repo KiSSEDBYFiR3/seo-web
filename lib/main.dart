@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:provider/provider.dart';
 import 'package:seo_web/core/common/themes.dart';
 import 'package:seo_web/core/di/di.dart';
@@ -23,7 +22,6 @@ void main() async {
 
 void _run() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setUrlStrategy(PathUrlStrategy());
 
   final app = await diContainer.configureDependencies();
   runApp(app);
