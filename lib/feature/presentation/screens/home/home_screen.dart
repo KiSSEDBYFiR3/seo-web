@@ -25,6 +25,7 @@ class HomeWidget extends ElementaryWidget<IHomeScreenWidgetModel> {
     return AutoTabsScaffold(
       backgroundColor: Colors.white,
       appBarBuilder: (context, tabsRouter) => AppBar(
+        leading: const SizedBox.shrink(),
         toolbarHeight: 0,
         elevation: 0,
         systemOverlayStyle: const SystemUiOverlayStyle(

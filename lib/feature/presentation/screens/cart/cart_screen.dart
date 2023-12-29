@@ -47,6 +47,7 @@ class CartWidget extends ElementaryWidget<ICartWidgetModel> {
         elevation: 0,
         toolbarHeight: 48,
         centerTitle: true,
+        leading: const SizedBox.shrink(),
         title: Text(
           wm.locale.cart.toUpperCase(),
           style: AppTypography.montserrat18w700,

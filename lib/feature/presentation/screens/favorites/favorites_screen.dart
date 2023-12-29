@@ -7,6 +7,7 @@ import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen_widget_model.dart';
 import 'package:seo_web/feature/presentation/widgets/mobile_product_card.dart';
+import 'package:seo_web/feature/presentation/widgets/web_product_card.dart';
 
 @RoutePage(name: 'FavoritesRoute')
 class FavoritesScreen extends StatelessWidget {
@@ -33,6 +34,7 @@ class FavoritesWidget extends ElementaryWidget<IFavoritesWidgetModel> {
           wm.locale.favorites.toUpperCase(),
           style: AppTypography.montserrat18w700,
         ),
+        leading: const SizedBox.shrink(),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 12),
@@ -79,34 +81,59 @@ class _ProductsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverGrid.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
-          itemCount: products.length,
-          itemBuilder: (context, index) => !kIsWeb
-              ? EntityStateNotifierBuilder(
-                  listenableEntityState: wm.cartState,
-                  builder: (context, _) => EntityStateNotifierBuilder(
-                    listenableEntityState: wm.favoritesState,
-                    builder: (context, _) => SizedBox(
-                      height: 350,
-                      child: MobileProductCart(
+    return LayoutBuilder(
+      builder: (context, constraints) => CustomScrollView(
+        slivers: [
+          if (constraints.maxWidth < 1000)
+            SliverGrid.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemCount: products.length,
+              itemBuilder: (context, index) => EntityStateNotifierBuilder(
+                listenableEntityState: wm.cartState,
+                builder: (context, _) => EntityStateNotifierBuilder(
+                  listenableEntityState: wm.favoritesState,
+                  builder: (context, _) => LayoutBuilder(
+                    builder: (context, constraints) {
+                      return MobileProductCart(
                         key: ValueKey('product-${products[index].id}'),
                         product: products[index],
                         isFavorite: wm.isInFavorites(products[index]),
                         isInCart: wm.isInCart(products[index]),
                         onCartButtonTap: () => wm.onCartTap(products[index]),
                         onFavoritesTap: () => wm.onFavoriteTap(products[index]),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                )
-              : const SizedBox.shrink(),
-        ),
-      ],
+                ),
+              ),
+            ),
+          if (constraints.maxWidth >= 650)
+            SliverList.builder(
+              itemCount: products.length,
+              itemBuilder: (context, index) => EntityStateNotifierBuilder(
+                listenableEntityState: wm.cartState,
+                builder: (context, _) => EntityStateNotifierBuilder(
+                  listenableEntityState: wm.favoritesState,
+                  builder: (context, _) => LayoutBuilder(
+                    builder: (context, constraints) {
+                      return WebProductCard(
+                        key: ValueKey('product-${products[index].id}'),
+                        product: products[index],
+                        isFavorite: wm.isInFavorites(products[index]),
+                        isInCart: wm.isInCart(products[index]),
+                        onCartButtonTap: () => wm.onCartTap(products[index]),
+                        onFavoritesTap: () => wm.onFavoriteTap(products[index]),
+                        locale: wm.locale,
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

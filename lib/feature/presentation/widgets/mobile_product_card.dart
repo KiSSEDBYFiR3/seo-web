@@ -43,6 +43,8 @@ class MobileProductCart extends StatelessWidget {
                   imageUrl: product.image,
                   imageBuilder: (context, imageProvider) {
                     return Container(
+                      height: size.width * 0.4,
+                      width: size.width * 0.4,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: imageProvider,

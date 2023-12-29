@@ -38,7 +38,7 @@ class MobileBasketCard extends StatelessWidget {
                 imageUrl: product.image,
                 imageBuilder: (context, imageProvider) {
                   return Container(
-                    width: size.width * 0.4,
+                    height: 100,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: imageProvider,

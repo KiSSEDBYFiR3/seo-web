@@ -31,6 +31,7 @@ class CategoriesWidget extends ElementaryWidget<ICategoriesScreenWidgetModel> {
           wm.locale.categories.toUpperCase(),
           style: AppTypography.montserrat18w700,
         ),
+        leading: const SizedBox.shrink(),
       ),
       body: _CategiriesView(wm: wm),
     );
