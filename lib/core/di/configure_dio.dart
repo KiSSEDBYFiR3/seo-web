@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:seo_web/core/common/consts/consts.dart';
-import 'package:seo_web/core/common/urls/urls.dart';
 import 'package:seo_web/core/interceptors/auth_interceptor.dart';
 import 'package:seo_web/feature/domain/repository/auth/i_auth_repository.dart';
 import 'package:seo_web/feature/domain/repository/i_local_repository.dart';
+
+import 'package:seo_web/core/common/urls/main_url.dart';
 
 Future<Dio> configureDio(
   List<Interceptor> interceptors,
@@ -14,8 +15,8 @@ Future<Dio> configureDio(
   final Dio dio = Dio();
   const timeout = Duration(seconds: 30);
   dio.options
+    ..baseUrl = MainUrl.url
     ..contentType = Headers.formUrlEncodedContentType
-    ..baseUrl = Urls.mainUrl
     ..connectTimeout = timeout
     ..sendTimeout = timeout
     ..receiveTimeout = timeout;

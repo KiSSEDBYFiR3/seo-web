@@ -6,7 +6,11 @@ import 'package:seo_web/core/common/themes.dart';
 import 'package:seo_web/core/di/di.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'dart:developer' as dev;
+
+import 'package:seo_web/core/common/utils/url_strategy_io.dart'
+    if (dart.library.html) 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'package:seo_web/generated/l10n.dart';
 
@@ -25,6 +29,8 @@ void main() async {
 
 void _run() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  setUrlStrategy(PathUrlStrategy());
 
   final app = await diContainer.configureDependencies();
   runApp(app);
