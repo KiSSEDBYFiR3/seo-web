@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen.dart';
 import 'package:seo_web/feature/presentation/screens/catalog/categories/categories_screen.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/product_card/product_card_screen.dart';
 import 'package:seo_web/feature/presentation/screens/catalog/products/products_screen.dart';
 import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen.dart';
 import 'package:seo_web/feature/presentation/screens/home/home_screen.dart';
@@ -50,6 +52,10 @@ class AppRouter extends _$AppRouter {
                       page: ProductsRoute.page,
                       path: 'products',
                     ),
+                    AutoRoute(
+                      page: ProductCardRoute.page,
+                      path: 'product',
+                    ),
                   ],
                 ),
                 AutoRoute(
@@ -59,7 +65,11 @@ class AppRouter extends _$AppRouter {
                     AutoRoute(
                       page: CartRoute.page,
                       initial: true,
-                    )
+                    ),
+                    AutoRoute(
+                      page: ProductCardRoute.page,
+                      path: 'product',
+                    ),
                   ],
                 ),
                 AutoRoute(
@@ -69,7 +79,11 @@ class AppRouter extends _$AppRouter {
                     AutoRoute(
                       page: FavoritesRoute.page,
                       initial: true,
-                    )
+                    ),
+                    AutoRoute(
+                      page: ProductCardRoute.page,
+                      path: 'product',
+                    ),
                   ],
                 )
               ],

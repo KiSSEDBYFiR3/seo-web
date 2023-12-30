@@ -23,6 +23,8 @@ abstract interface class IProductsModel extends ElementaryModel {
   Future<void> getAllProducts();
   Future<void> selectCategoryOnUpdate({required String category});
 
+  void onProductTap(int id);
+
   Future<void> deleteFromFavorites({required ProductEntity product});
   Future<void> getFavorites();
   Future<void> addToFavorites({required ProductEntity product});
@@ -73,4 +75,7 @@ final class ProductsModel extends ElementaryModel
     await getAllProducts();
     productsManager.findProductsByCategory(category);
   }
+
+  @override
+  void onProductTap(int id) => productsManager.findProductById(id);
 }

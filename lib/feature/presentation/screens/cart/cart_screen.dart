@@ -17,7 +17,11 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CartWidget(cartWMFactory);
+    final width = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: EdgeInsets.only(left: width > 550 ? 100 : 0),
+      child: const CartWidget(cartWMFactory),
+    );
   }
 }
 
@@ -27,20 +31,28 @@ class CartWidget extends ElementaryWidget<ICartWidgetModel> {
   @override
   Widget build(ICartWidgetModel wm) {
     return Scaffold(
-      floatingActionButton: EntityStateNotifierBuilder(
-        listenableEntityState: wm.cartState,
-        builder: (context, cart) {
-          if (cart == null || cart.offers.isEmpty) {
-            return const SizedBox.shrink();
-          }
-          return _OrderFloatingBar(
-            createOrder: wm.orderCreate,
-            locale: wm.locale,
-            price: cart.price,
-            offersCount: wm.offersCount,
-          );
-        },
-      ),
+      floatingActionButton: LayoutBuilder(builder: (context, constraints) {
+        return EntityStateNotifierBuilder(
+          listenableEntityState: wm.cartState,
+          builder: (context, cart) {
+            if (cart == null || cart.offers.isEmpty) {
+              return const SizedBox.shrink();
+            }
+            return Padding(
+              padding: EdgeInsets.only(
+                right: constraints.maxWidth > 550 ? 300 : 0,
+                left: constraints.maxWidth > 550 ? 200 : 0,
+              ),
+              child: _OrderFloatingBar(
+                createOrder: wm.orderCreate,
+                locale: wm.locale,
+                price: cart.price,
+                offersCount: wm.offersCount,
+              ),
+            );
+          },
+        );
+      }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       backgroundColor: Colors.white,
       appBar: AppBar(

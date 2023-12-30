@@ -50,8 +50,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "productCart": "Карточка товара",
-  "@productCart": {
+  "productCard": "Карточка товара",
+  "@productCard": {
     "type": "text",
     "placeholders": {}
   },

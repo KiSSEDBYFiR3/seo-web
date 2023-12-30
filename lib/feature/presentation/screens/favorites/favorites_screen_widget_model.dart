@@ -1,7 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:seo_web/core/di/dependencies.dart';
+import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen.dart';
@@ -30,6 +33,7 @@ abstract interface class IFavoritesWidgetModel
   Future<void> onCartTap(ProductEntity product);
 
   void onFavoriteTap(ProductEntity product);
+  Future<void> onProductTap(int id);
 
   EntityStateNotifier<CartEntity?> get cartState;
   EntityStateNotifier<List<ProductEntity>> get favoritesState;
@@ -37,7 +41,7 @@ abstract interface class IFavoritesWidgetModel
 
 FavoritesWidgetModel favoritesWMFactory(BuildContext context) =>
     FavoritesWidgetModel(
-      model: context.read<IFavoritesModel>(),
+      model: context.read<Dependencies>().favoritesModel,
     );
 
 final class FavoritesWidgetModel
@@ -47,6 +51,8 @@ final class FavoritesWidgetModel
 
   List<ProductEntity>? get _favorites => model.favoritesState.value.data;
   CartEntity? get _cart => model.cartState.value.data;
+
+  StackRouter get _router => AutoRouter.of(context);
 
   @override
   Future<void> addToCart({required ProductEntity product}) async =>
@@ -95,6 +101,12 @@ final class FavoritesWidgetModel
   @override
   bool isInCart(ProductEntity product) {
     return _cart?.offers.any((element) => element.id == product.id) ?? false;
+  }
+
+  @override
+  Future<void> onProductTap(int id) async {
+    model.selectProduct(id);
+    await _router.push(ProductCardRoute(id: id));
   }
 
   @override

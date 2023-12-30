@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:seo_web/core/exception/app_exceptions.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
+import 'package:seo_web/feature/domain/managers/products/i_products_manager.dart';
+import 'package:seo_web/feature/domain/providers/products/product_select_provider.dart';
 import 'package:seo_web/feature/presentation/bloc/favorites/favorites_bloc.dart';
 import 'package:seo_web/feature/presentation/bloc/favorites/favorites_states.dart';
 
@@ -17,14 +19,21 @@ abstract interface class IFavoritesModel extends ElementaryModel {
   void getFavorites();
   void addToFavorites({required ProductEntity product});
 
+  void selectProduct(int id);
+
   EntityStateNotifier<CartEntity?> get cartState;
   EntityStateNotifier<List<ProductEntity>> get favoritesState;
 }
 
-final class FavoritesModel extends ElementaryModel implements IFavoritesModel {
+final class FavoritesModel extends ElementaryModel
+    with ProductSelectorProvider
+    implements IFavoritesModel {
   final FavoritesBloc _bloc;
 
-  FavoritesModel({required FavoritesBloc bloc}) : _bloc = bloc;
+  FavoritesModel({
+    required FavoritesBloc bloc,
+    required this.productsManager,
+  }) : _bloc = bloc;
 
   @override
   Future<void> addToCart({required ProductEntity product}) async =>
@@ -66,7 +75,6 @@ final class FavoritesModel extends ElementaryModel implements IFavoritesModel {
   @override
   void dispose() {
     _favoritesBlocSubscription.cancel();
-
     // On web back button navigation can cause an already disposed error
     if (!kIsWeb) {
       cartState.dispose();
@@ -87,4 +95,7 @@ final class FavoritesModel extends ElementaryModel implements IFavoritesModel {
       InitialFavoritesState() => getFavorites()
     };
   }
+
+  @override
+  final IProductsManager productsManager;
 }

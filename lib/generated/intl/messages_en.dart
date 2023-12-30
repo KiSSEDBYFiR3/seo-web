@@ -39,7 +39,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("There is nothing here yet"),
         "favorites": MessageLookupByLibrary.simpleMessage("Favorites"),
         "offersCount": MessageLookupByLibrary.simpleMessage("Goods quantity"),
-        "productCart": MessageLookupByLibrary.simpleMessage("Product card"),
+        "productCard": MessageLookupByLibrary.simpleMessage("Product card"),
         "search": MessageLookupByLibrary.simpleMessage("Search"),
         "sortProduct": MessageLookupByLibrary.simpleMessage("Sort"),
         "toCart": MessageLookupByLibrary.simpleMessage("Go to Cart"),

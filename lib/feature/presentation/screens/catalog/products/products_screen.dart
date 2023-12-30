@@ -22,7 +22,11 @@ class ProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ProductsWidget(catalogWMFactory);
+    final width = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: EdgeInsets.only(left: width > 550 ? 100 : 0),
+      child: const ProductsWidget(catalogWMFactory),
+    );
   }
 }
 
@@ -81,7 +85,7 @@ class ProductsWidget extends ElementaryWidget<IProductsWidgetModel> {
             loadingBuilder: (context, products) {
               if (products == null || products.isEmpty) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator.adaptive(),
                 );
               }
               return _ProductsView(wm: wm, products: products);
@@ -89,7 +93,7 @@ class ProductsWidget extends ElementaryWidget<IProductsWidgetModel> {
             errorBuilder: (context, _, products) {
               if (products == null || products.isEmpty) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator.adaptive(),
                 );
               }
               return _ProductsView(wm: wm, products: products);
@@ -137,7 +141,8 @@ class _ProductsView extends StatelessWidget {
                   listenableEntityState: wm.favoritesState,
                   builder: (context, _) => LayoutBuilder(
                     builder: (context, constraints) {
-                      return MobileProductCart(
+                      return MobileProductCard(
+                        onProductTap: () => wm.onProductTap(products[index].id),
                         key: ValueKey('product-${products[index].id}'),
                         product: products[index],
                         isFavorite: wm.isInFavorites(products[index]),
@@ -160,6 +165,7 @@ class _ProductsView extends StatelessWidget {
                   builder: (context, _) => LayoutBuilder(
                     builder: (context, constraints) {
                       return WebProductCard(
+                        onProductTap: () => wm.onProductTap(products[index].id),
                         key: ValueKey('product-${products[index].id}'),
                         product: products[index],
                         isFavorite: wm.isInFavorites(products[index]),

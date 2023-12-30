@@ -3,6 +3,7 @@ import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:seo_web/core/di/dependencies.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:seo_web/feature/data/model/cart/mapper/cart_mapper.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
@@ -38,7 +39,7 @@ abstract interface class ICartWidgetModel
 }
 
 WidgetModel cartWMFactory(BuildContext context) => CartWidgetModel(
-      model: context.read<ICartModel>(),
+      model: context.read<Dependencies>().cartModel,
     );
 
 class CartWidgetModel extends WidgetModel<CartWidget, ICartModel>

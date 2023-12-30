@@ -151,10 +151,10 @@ class S {
   }
 
   /// `Product card`
-  String get productCart {
+  String get productCard {
     return Intl.message(
       'Product card',
-      name: 'productCart',
+      name: 'productCard',
       desc: '',
       args: [],
     );

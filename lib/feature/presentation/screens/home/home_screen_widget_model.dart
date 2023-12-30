@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:elementary/elementary.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:seo_web/core/di/dependencies.dart';
 import 'package:seo_web/core/exception/app_exceptions.dart';
 import 'package:seo_web/feature/presentation/screens/home/home_screen.dart';
 import 'package:seo_web/feature/presentation/screens/home/home_screen_model.dart';
@@ -14,11 +16,12 @@ abstract interface class IHomeScreenWidgetModel
     required IHomeModel model,
   }) : super(model);
 
+  void onNavigationItemTap(int value, TabsRouter tabsRouter);
   S get locale;
 }
 
 IHomeScreenWidgetModel homeScreenWMFactory(BuildContext context) =>
-    HomeScreenWidgetModel(model: context.read<IHomeModel>());
+    HomeScreenWidgetModel(model: context.read<Dependencies>().homeModel);
 
 final class HomeScreenWidgetModel extends WidgetModel<HomeWidget, IHomeModel>
     implements IHomeScreenWidgetModel {
@@ -68,4 +71,18 @@ final class HomeScreenWidgetModel extends WidgetModel<HomeWidget, IHomeModel>
 
   @override
   S get locale => S.of(context);
+
+  @override
+  void onNavigationItemTap(int value, TabsRouter tabsRouter) {
+    if (tabsRouter.activeIndex != value) {
+      tabsRouter.setActiveIndex(value);
+      return;
+    }
+
+    final childRouter = tabsRouter.childControllers[value];
+
+    if (childRouter is StackRouter) {
+      childRouter.popUntilRoot();
+    }
+  }
 }

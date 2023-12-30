@@ -12,7 +12,11 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CategoriesWidget(categoriesScreenWMFactory);
+    final width = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: EdgeInsets.only(left: width > 550 ? 100 : 0),
+      child: const CategoriesWidget(categoriesScreenWMFactory),
+    );
   }
 }
 
@@ -67,7 +71,9 @@ class _CategiriesView extends StatelessWidget {
           },
           loadingBuilder: (context, categories) {
             if (categories == null || categories.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
             }
             return _CategoriesList(
               categories: categories,

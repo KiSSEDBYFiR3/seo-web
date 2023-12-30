@@ -59,6 +59,7 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: ProductsScreen(
+          key: args.key,
           category: args.category,
         ),
       );
@@ -73,6 +74,18 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const CartScreen(),
+      );
+    },
+    ProductCardRoute.name: (routeData) {
+      final queryParams = routeData.queryParams;
+      final args = routeData.argsAs<ProductCardRouteArgs>(
+          orElse: () => ProductCardRouteArgs(id: queryParams.optInt('id')));
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: ProductCardScreen(
+          key: args.key,
+          id: args.id,
+        ),
       );
     },
   };
@@ -166,11 +179,13 @@ class FavoritesRoute extends PageRouteInfo<void> {
 /// [ProductsScreen]
 class ProductsRoute extends PageRouteInfo<ProductsRouteArgs> {
   ProductsRoute({
+    Key? key,
     String? category,
     List<PageRouteInfo>? children,
   }) : super(
           ProductsRoute.name,
           args: ProductsRouteArgs(
+            key: key,
             category: category,
           ),
           rawQueryParams: {'category': category},
@@ -185,14 +200,17 @@ class ProductsRoute extends PageRouteInfo<ProductsRouteArgs> {
 
 class ProductsRouteArgs {
   const ProductsRouteArgs({
+    this.key,
     this.category,
   });
+
+  final Key? key;
 
   final String? category;
 
   @override
   String toString() {
-    return 'ProductsRouteArgs{category: $category}';
+    return 'ProductsRouteArgs{key: $key, category: $category}';
   }
 }
 
@@ -222,4 +240,43 @@ class CartRoute extends PageRouteInfo<void> {
   static const String name = 'CartRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ProductCardScreen]
+class ProductCardRoute extends PageRouteInfo<ProductCardRouteArgs> {
+  ProductCardRoute({
+    Key? key,
+    int? id,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ProductCardRoute.name,
+          args: ProductCardRouteArgs(
+            key: key,
+            id: id,
+          ),
+          rawQueryParams: {'id': id},
+          initialChildren: children,
+        );
+
+  static const String name = 'ProductCardRoute';
+
+  static const PageInfo<ProductCardRouteArgs> page =
+      PageInfo<ProductCardRouteArgs>(name);
+}
+
+class ProductCardRouteArgs {
+  const ProductCardRouteArgs({
+    this.key,
+    this.id,
+  });
+
+  final Key? key;
+
+  final int? id;
+
+  @override
+  String toString() {
+    return 'ProductCardRouteArgs{key: $key, id: $id}';
+  }
 }

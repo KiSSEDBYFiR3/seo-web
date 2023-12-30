@@ -6,6 +6,7 @@ import 'package:seo_web/core/common/consts/consts.dart';
 import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
 import 'package:seo_web/core/common/utils/configure_uuid.dart';
 import 'package:seo_web/core/di/configure_dio.dart';
+import 'package:seo_web/core/di/dependencies.dart';
 import 'package:seo_web/core/interceptors/uuid_interceptor.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:seo_web/feature/data/data_source/local_data_source/i_local_data_source.dart';
@@ -47,6 +48,7 @@ import 'package:seo_web/feature/presentation/bloc/cart/cart_bloc.dart';
 import 'package:seo_web/feature/presentation/bloc/favorites/favorites_bloc.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen_model.dart';
 import 'package:seo_web/feature/presentation/screens/catalog/categories/categories_screen_model.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/product_card/product_card_screen_model.dart';
 import 'package:seo_web/feature/presentation/screens/catalog/products/products_screen_model.dart';
 import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen_model.dart';
 import 'package:seo_web/feature/presentation/screens/home/home_screen_model.dart';
@@ -78,11 +80,14 @@ class DiContainer implements IDiContainer {
   }
 
   Widget _createApp() => DependenciesProvider(
-        homeModel: _homeModel,
-        cartModel: _cartModel,
-        catalogModel: _catalogModel(),
-        favoritesModel: _favoritesModel,
-        categoriesModel: _categoriesModel,
+        dependencies: Dependencies(
+          homeModel: _homeModel,
+          cartModel: _cartModel,
+          catalogModel: _catalogModel(),
+          favoritesModel: _favoritesModel,
+          categoriesModel: _categoriesModel,
+          productModel: _productModel(),
+        ),
         child: App(
           appRouter: _createAppRouter(),
         ),
@@ -132,6 +137,12 @@ class DiContainer implements IDiContainer {
         productsManager: _productsManager,
       );
 
+  IProductModel _productModel() => ProductModel(
+        productsManager: _productsManager,
+        cartManager: _cartManager,
+        favoritesManager: _favoritesManager,
+      );
+
   late final IHomeModel _homeModel = HomeModel(errorsBus: _errorsBus);
 
   late final ICategoriesModel _categoriesModel = CategoriesModel(
@@ -139,10 +150,12 @@ class DiContainer implements IDiContainer {
   );
 
   late final IFavoritesModel _favoritesModel = FavoritesModel(
+    productsManager: _productsManager,
     bloc: _favoritesBloc,
   );
 
   late final ICartModel _cartModel = CartModel(
+    productsManager: _productsManager,
     bloc: _cartBloc,
     favoritesManager: _favoritesManager,
   );

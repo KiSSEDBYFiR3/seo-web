@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  static const surfaceColor = Colors.white;
+  static const onSurfaceColor = Color(0xFF09192C);
   static const descriptionColor = Color.fromARGB(255, 180, 179, 179);
   static const sortingPersistentHeaderColor =
       Color.fromARGB(255, 238, 242, 247);

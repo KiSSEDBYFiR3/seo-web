@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:seo_web/core/common/consts/consts.dart';
+import 'package:seo_web/core/di/dependencies.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
@@ -42,6 +43,8 @@ abstract interface class IProductsWidgetModel
   bool isInFavorites(ProductEntity product);
   bool isInCart(ProductEntity product);
 
+  void onProductTap(int id);
+
   void unfocus();
 
   TextEditingController get searchController;
@@ -52,7 +55,7 @@ IProductsWidgetModel catalogWMFactory(
   String? category,
 }) =>
     ProductsWidgetModel(
-      model: context.read<IProductsModel>(),
+      model: context.read<Dependencies>().catalogModel,
       category: category,
     );
 
@@ -212,4 +215,12 @@ final class ProductsWidgetModel
 
   @override
   final String? category;
+
+  @override
+  void onProductTap(int id) {
+    _router.push(ProductCardRoute(
+      id: id,
+    ));
+    model.onProductTap(id);
+  }
 }

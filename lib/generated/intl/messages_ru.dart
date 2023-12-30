@@ -39,7 +39,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Здесь пока ничего нет"),
         "favorites": MessageLookupByLibrary.simpleMessage("Избранное"),
         "offersCount": MessageLookupByLibrary.simpleMessage("Число товаров"),
-        "productCart": MessageLookupByLibrary.simpleMessage("Карточка товара"),
+        "productCard": MessageLookupByLibrary.simpleMessage("Карточка товара"),
         "search": MessageLookupByLibrary.simpleMessage("Поиск"),
         "sortProduct": MessageLookupByLibrary.simpleMessage("Сортировать"),
         "toCart": MessageLookupByLibrary.simpleMessage("В Корзину"),

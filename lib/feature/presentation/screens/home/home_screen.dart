@@ -22,74 +22,100 @@ class HomeWidget extends ElementaryWidget<IHomeScreenWidgetModel> {
 
   @override
   Widget build(IHomeScreenWidgetModel wm) {
-    return AutoTabsScaffold(
-      backgroundColor: Colors.white,
-      appBarBuilder: (context, tabsRouter) => AppBar(
-        leading: const SizedBox.shrink(),
-        toolbarHeight: 0,
-        elevation: 0,
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          systemNavigationBarDividerColor: Colors.white,
-          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          statusBarBrightness: Brightness.light, // For iOS (dark icons)
-        ),
-      ),
-      lazyLoad: false,
-      routes: const [
-        CatalogTab(
-          children: [
-            CategoriesRoute(),
-          ],
-        ),
-        CartTab(
-          children: [
-            CartRoute(),
-          ],
-        ),
-        FavoritesTab(
-          children: [
-            FavoritesRoute(),
-          ],
-        )
-      ],
-      homeIndex: 0,
-      bottomNavigationBuilder: (context, tabsRouter) => CupertinoTabBar(
+    return LayoutBuilder(
+      builder: (context, constraints) => AutoTabsScaffold(
         backgroundColor: Colors.white,
-        height: kBottomNavigationBarHeight - 12,
-        inactiveColor: Colors.black,
-        activeColor: const Color(0xff322cfe),
-        currentIndex: tabsRouter.activeIndex,
-        onTap: (value) {
-          if (tabsRouter.activeIndex != value) {
-            tabsRouter.setActiveIndex(value);
-            return;
-          }
-
-          final childRouter = tabsRouter.childControllers[value];
-
-          if (childRouter is StackRouter) {
-            childRouter.popUntilRoot();
-          }
-        },
-        border: const Border(
-          top: BorderSide(
-            color: Colors.transparent,
-
-            width: 0.0, // 0.0 means one physical pixel
+        appBarBuilder: (context, tabsRouter) => AppBar(
+          leading: const SizedBox.shrink(),
+          toolbarHeight: 0,
+          elevation: 0,
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            systemNavigationBarDividerColor: Colors.white,
+            statusBarIconBrightness:
+                Brightness.dark, // For Android (dark icons)
+            statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
         ),
-        items: [
-          _BottomNavigationBarItem(
-            icon: CustomIcons.catalog,
+        lazyLoad: false,
+        routes: const [
+          CatalogTab(
+            children: [
+              CategoriesRoute(),
+            ],
           ),
-          _BottomNavigationBarItem(
-            icon: CustomIcons.cart,
+          CartTab(
+            children: [
+              CartRoute(),
+            ],
           ),
-          _BottomNavigationBarItem(
-            icon: CustomIcons.favorites,
-          ),
+          FavoritesTab(
+            children: [
+              FavoritesRoute(),
+            ],
+          )
         ],
+        homeIndex: 0,
+        bottomNavigationBuilder: (context, tabsRouter) {
+          return constraints.maxWidth <= 550
+              ? CupertinoTabBar(
+                  backgroundColor: Colors.white,
+                  height: kBottomNavigationBarHeight - 12,
+                  inactiveColor: Colors.black,
+                  activeColor: const Color(0xff322cfe),
+                  currentIndex: tabsRouter.activeIndex,
+                  onTap: (value) => wm.onNavigationItemTap(value, tabsRouter),
+                  border: const Border(
+                    top: BorderSide(
+                      color: Colors.transparent,
+
+                      width: 0.0, // 0.0 means one physical pixel
+                    ),
+                  ),
+                  items: [
+                    _BottomNavigationBarItem(icon: CustomIcons.catalog),
+                    _BottomNavigationBarItem(icon: CustomIcons.cart),
+                    _BottomNavigationBarItem(icon: CustomIcons.favorites),
+                  ],
+                )
+              : const SizedBox.shrink();
+        },
+        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+        floatingActionButtonBuilder: (context, tabsRouter) {
+          return constraints.maxWidth >= 550
+              ? SizedBox(
+                  width: 50,
+                  child: NavigationRail(
+                    groupAlignment: -0.5,
+                    extended: false,
+                    backgroundColor: Colors.white,
+                    selectedIndex: tabsRouter.activeIndex,
+                    destinations: [
+                      NavigationRailDestination(
+                        label: Text(wm.locale.catalog),
+                        icon: const _NavigationBarIcon(
+                          icon: CustomIcons.catalog,
+                        ),
+                      ),
+                      NavigationRailDestination(
+                        label: Text(wm.locale.cart),
+                        icon: const _NavigationBarIcon(
+                          icon: CustomIcons.cart,
+                        ),
+                      ),
+                      NavigationRailDestination(
+                        label: Text(wm.locale.favorites),
+                        icon: const _NavigationBarIcon(
+                          icon: CustomIcons.favorites,
+                        ),
+                      ),
+                    ],
+                    onDestinationSelected: (value) =>
+                        wm.onNavigationItemTap(value, tabsRouter),
+                  ),
+                )
+              : const SizedBox();
+        },
       ),
     );
   }

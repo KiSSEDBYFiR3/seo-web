@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:seo_web/core/common/colors/colors.dart';
 import 'package:seo_web/core/common/themes.dart';
 import 'package:seo_web/core/di/di.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
@@ -43,6 +44,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeMode = context.watch<ValueNotifier<ThemeMode>>().value;
     return MaterialApp.router(
+      color: AppColors.surfaceColor,
       localizationsDelegates: const [
         S.delegate,
         AppLocalizations.delegate, // Add this line

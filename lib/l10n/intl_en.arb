@@ -50,8 +50,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "productCart": "Product card",
-  "@productCart": {
+  "productCard": "Product card",
+  "@productCard": {
     "type": "text",
     "placeholders": {}
   },
