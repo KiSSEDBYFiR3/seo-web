@@ -69,6 +69,9 @@ class ProductCardWidget extends ElementaryWidget<IProductWidgetModel> {
                   Expanded(
                     flex: 1,
                     child: Stack(
+                      fit: constraints.maxWidth > 550
+                          ? StackFit.loose
+                          : StackFit.expand,
                       children: [
                         CachedNetworkImage(
                           imageUrl: product.image,

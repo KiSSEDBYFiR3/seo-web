@@ -93,6 +93,9 @@ final class CartModel extends ElementaryModel
 
   @override
   final IProductsManager productsManager;
+
+  @override
+  void onProductTap(int id) => productsManager.findProductById(id);
 }
 
 abstract interface class ICartModel extends ElementaryModel {
@@ -106,6 +109,8 @@ abstract interface class ICartModel extends ElementaryModel {
   Future<void> deleteFromFavorites({required ProductEntity product});
   Future<void> getFavorites();
   Future<void> addToFavorites({required ProductEntity product});
+
+  void onProductTap(int id);
 
   EntityStateNotifier<CartEntity?> get cartState;
   EntityStateNotifier<List<ProductEntity>> get favoritesState;

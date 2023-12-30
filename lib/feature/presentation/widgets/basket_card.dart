@@ -15,11 +15,13 @@ class BasketCard extends StatelessWidget {
     required this.isFavorite,
     required this.deleteFromCart,
     required this.onFavoritesTap,
+    required this.onProductTap,
   });
 
   final ProductEntity product;
   final void Function({required ProductEntity product}) deleteFromCart;
   final Future<void> Function(ProductEntity) onFavoritesTap;
+  final Future<void> Function(int id) onProductTap;
 
   final bool isFavorite;
 
@@ -32,98 +34,101 @@ class BasketCard extends StatelessWidget {
 
     final imageFlex = size.width >= 550 ? 2 : 1;
     final descpriptionFlex = size.width >= 550 ? 3 : 2;
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: boxWidth,
-        maxHeight: boxHeight,
-      ),
-      child: Row(
-        mainAxisAlignment: size.width <= 550
-            ? MainAxisAlignment.start
-            : MainAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: imageFlex,
-            child: CachedNetworkImage(
-              imageUrl: product.image,
-              imageBuilder: (context, imageProvider) {
-                return Container(
-                  height: imageSize,
-                  width: imageSize,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.scaleDown,
+    return GestureDetector(
+      onTap: () => onProductTap(product.id),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: boxWidth,
+          maxHeight: boxHeight,
+        ),
+        child: Row(
+          mainAxisAlignment: size.width <= 550
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: imageFlex,
+              child: CachedNetworkImage(
+                imageUrl: product.image,
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    height: imageSize,
+                    width: imageSize,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.scaleDown,
+                      ),
                     ),
+                  );
+                },
+                placeholder: (context, url) => Shimmer.fromColors(
+                  baseColor: AppColors.shimmerBaseColor,
+                  highlightColor: AppColors.shimmerHighlightColor,
+                  child: SizedBox(
+                    height: imageSize,
+                    width: imageSize,
                   ),
-                );
-              },
-              placeholder: (context, url) => Shimmer.fromColors(
-                baseColor: AppColors.shimmerBaseColor,
-                highlightColor: AppColors.shimmerHighlightColor,
-                child: SizedBox(
-                  height: imageSize,
-                  width: imageSize,
                 ),
               ),
             ),
-          ),
-          Expanded(
-            flex: descpriptionFlex,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 24, bottom: 24, left: 8, right: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 3,
-                        child: Text(
-                          product.title,
-                          style: AppTypography.montserrat14w600,
-                          maxLines: 4,
-                        ),
-                      ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: FavoritesButton(
-                            isFavorite: isFavorite,
-                            onTap: () async => await onFavoritesTap(product),
+            Expanded(
+              flex: descpriptionFlex,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 24, bottom: 24, left: 8, right: 16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          flex: 3,
+                          child: Text(
+                            product.title,
+                            style: AppTypography.montserrat14w600,
+                            maxLines: 4,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          product.price.toPrice(),
-                          style: AppTypography.montserrat14w600,
-                        ),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () => deleteFromCart(product: product),
+                        Expanded(
                           child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: SvgPicture.asset('assets/svg/delete.svg'),
+                            alignment: Alignment.topRight,
+                            child: FavoritesButton(
+                              isFavorite: isFavorite,
+                              onTap: () async => await onFavoritesTap(product),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            product.price.toPrice(),
+                            style: AppTypography.montserrat14w600,
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () => deleteFromCart(product: product),
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: SvgPicture.asset('assets/svg/delete.svg'),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

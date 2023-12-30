@@ -43,7 +43,7 @@ abstract interface class IProductsWidgetModel
   bool isInFavorites(ProductEntity product);
   bool isInCart(ProductEntity product);
 
-  void onProductTap(int id);
+  Future<void> onProductTap(int id);
 
   void unfocus();
 
@@ -217,10 +217,10 @@ final class ProductsWidgetModel
   final String? category;
 
   @override
-  void onProductTap(int id) {
-    _router.push(ProductCardRoute(
+  Future<void> onProductTap(int id) async {
+    model.onProductTap(id);
+    await _router.push(ProductCardRoute(
       id: id,
     ));
-    model.onProductTap(id);
   }
 }

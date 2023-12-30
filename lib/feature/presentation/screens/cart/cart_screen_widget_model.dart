@@ -36,6 +36,8 @@ abstract interface class ICartWidgetModel
   EntityStateNotifier<List<ProductEntity>> get favoritesState;
 
   bool isInFavorites(ProductEntity product);
+
+  Future<void> onProductTap(int id);
 }
 
 WidgetModel cartWMFactory(BuildContext context) => CartWidgetModel(
@@ -62,6 +64,16 @@ class CartWidgetModel extends WidgetModel<CartWidget, ICartModel>
   @override
   bool isInFavorites(ProductEntity product) {
     return _favorites?.contains(product) ?? false;
+  }
+
+  @override
+  Future<void> onProductTap(int id) async {
+    model.onProductTap(id);
+    await _router.push(
+      ProductCardRoute(
+        id: id,
+      ),
+    );
   }
 
   @override

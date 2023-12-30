@@ -271,6 +271,7 @@ class _CartListView extends StatelessWidget {
                 alignment:
                     width <= 550 ? Alignment.centerLeft : Alignment.center,
                 child: BasketCard(
+                  onProductTap: wm.onProductTap,
                   key: ValueKey('offer-${offer.id}'),
                   deleteFromCart: wm.deleteFromCart,
                   onFavoritesTap: wm.onFavoriteTap,
