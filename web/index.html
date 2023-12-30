@@ -1,19 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+  <html>
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+  <head>
+    <meta charset="UTF-8">
+    <title>Seo Web</title>
+    <script defer src="index.dart.js" type="application/javascript"></script>
+  
+    <style>
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+      }
+      
+      .loader-element-first {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid black;
+        border-right: 16px solid black;
+        border-bottom: 16px solid black;
+        border-left: 16px solid black;
+        width: 80px;
+        height: 10px;
+      
+        -webkit-animation: spin 2s alternate infinite;
+        animation: spin 2s alternate infinite;
+      }
+      .loader-element-second {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid black;
+        border-right: 16px solid black;
+        border-bottom: 16px solid black;
+        border-left: 16px solid black;
+        height: 10px;
+        width: 80px;
+      
+        -webkit-animation: spin 2s ease-in-out infinite;
+        animation: spin 2s ease-in-out infinite;
+      }
+      
+      @-webkit-keyframes spin {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+      
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div class="loading">
+      <div class="loader-element-first"></div>
+    </div>
+    <div class="loading">
+      <div class="loader-element-second"></div>
+    </div>
+    
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+  
+  
+    <script src="main.dart.js" type="application/javascript"></script>
+  </body>
+  
+  </html>
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
