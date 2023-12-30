@@ -284,7 +284,12 @@ class _CartListView extends StatelessWidget {
           separatorBuilder: (context, index) => const SizedBox(
             height: 8,
           ),
-        )
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(
+            height: 200,
+          ),
+        ),
       ],
     );
   }
