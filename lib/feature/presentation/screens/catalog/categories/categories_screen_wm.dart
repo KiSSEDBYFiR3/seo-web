@@ -51,7 +51,7 @@ final class CategoriesScreenWidgetModel
   Future<void> selectCategory(String category) async {
     _model.selectCategory(category);
 
-    await _router.push(const ProductsRoute());
+    await _router.push(ProductsRoute(category: category));
   }
 
   @override

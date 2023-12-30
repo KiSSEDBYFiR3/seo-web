@@ -52,9 +52,15 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
     ProductsRoute.name: (routeData) {
+      final queryParams = routeData.queryParams;
+      final args = routeData.argsAs<ProductsRouteArgs>(
+          orElse: () =>
+              ProductsRouteArgs(category: queryParams.optString('category')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const ProductsScreen(),
+        child: ProductsScreen(
+          category: args.category,
+        ),
       );
     },
     CategoriesRoute.name: (routeData) {
@@ -158,16 +164,36 @@ class FavoritesRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ProductsScreen]
-class ProductsRoute extends PageRouteInfo<void> {
-  const ProductsRoute({List<PageRouteInfo>? children})
-      : super(
+class ProductsRoute extends PageRouteInfo<ProductsRouteArgs> {
+  ProductsRoute({
+    String? category,
+    List<PageRouteInfo>? children,
+  }) : super(
           ProductsRoute.name,
+          args: ProductsRouteArgs(
+            category: category,
+          ),
+          rawQueryParams: {'category': category},
           initialChildren: children,
         );
 
   static const String name = 'ProductsRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<ProductsRouteArgs> page =
+      PageInfo<ProductsRouteArgs>(name);
+}
+
+class ProductsRouteArgs {
+  const ProductsRouteArgs({
+    this.category,
+  });
+
+  final String? category;
+
+  @override
+  String toString() {
+    return 'ProductsRouteArgs{category: $category}';
+  }
 }
 
 /// generated route for

@@ -8,8 +8,8 @@ import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/presentation/widgets/favorites_button.dart';
 import 'package:shimmer/shimmer.dart';
 
-class MobileBasketCard extends StatelessWidget {
-  const MobileBasketCard({
+class BasketCard extends StatelessWidget {
+  const BasketCard({
     super.key,
     required this.product,
     required this.isFavorite,
@@ -26,46 +26,58 @@ class MobileBasketCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return SizedBox(
-      height: 150,
+    final imageSize = size.width <= 550 ? 100.0 : 150.0;
+    final boxHeight = size.width <= 550 ? 150.0 : 200.0;
+    final boxWidth = size.width <= 550 ? size.width : size.width * 0.55;
+
+    final imageFlex = size.width >= 550 ? 2 : 1;
+    final descpriptionFlex = size.width >= 550 ? 3 : 2;
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: boxWidth,
+        maxHeight: boxHeight,
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: size.width <= 550
+            ? MainAxisAlignment.start
+            : MainAxisAlignment.center,
         children: [
           Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: CachedNetworkImage(
-                imageUrl: product.image,
-                imageBuilder: (context, imageProvider) {
-                  return Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.scaleDown,
-                      ),
+            flex: imageFlex,
+            child: CachedNetworkImage(
+              imageUrl: product.image,
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  height: imageSize,
+                  width: imageSize,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.scaleDown,
                     ),
-                  );
-                },
-                placeholder: (context, url) => Shimmer.fromColors(
-                  baseColor: AppColors.shimmerBaseColor,
-                  highlightColor: AppColors.shimmerHighlightColor,
-                  child: SizedBox(
-                    height: size.width * 0.4,
-                    width: size.width * 0.4,
                   ),
+                );
+              },
+              placeholder: (context, url) => Shimmer.fromColors(
+                baseColor: AppColors.shimmerBaseColor,
+                highlightColor: AppColors.shimmerHighlightColor,
+                child: SizedBox(
+                  height: imageSize,
+                  width: imageSize,
                 ),
               ),
             ),
           ),
           Expanded(
-            flex: 2,
+            flex: descpriptionFlex,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+              padding: const EdgeInsets.only(
+                  top: 24, bottom: 24, left: 8, right: 16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
                         flex: 3,

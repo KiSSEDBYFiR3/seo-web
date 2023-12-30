@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:seo_web/core/common/consts/consts.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
@@ -15,6 +17,8 @@ import 'dart:developer' as dev;
 
 abstract interface class IProductsWidgetModel
     extends WidgetModel<ProductsWidget, IProductsModel> {
+  String? get category;
+
   IProductsWidgetModel({required IProductsModel model}) : super(model);
   Future<void> getCart();
   EntityStateNotifier<CartEntity?> get cartState;
@@ -43,13 +47,22 @@ abstract interface class IProductsWidgetModel
   TextEditingController get searchController;
 }
 
-IProductsWidgetModel catalogWMFactory(BuildContext context) =>
-    ProductsWidgetModel(model: context.read<IProductsModel>());
+IProductsWidgetModel catalogWMFactory(
+  BuildContext context, {
+  String? category,
+}) =>
+    ProductsWidgetModel(
+      model: context.read<IProductsModel>(),
+      category: category,
+    );
 
 final class ProductsWidgetModel
     extends WidgetModel<ProductsWidget, IProductsModel>
     implements IProductsWidgetModel {
-  ProductsWidgetModel({required IProductsModel model}) : super(model);
+  ProductsWidgetModel({
+    required IProductsModel model,
+    required this.category,
+  }) : super(model);
 
   List<ProductEntity>? get _favorites => model.favoritesState.value.data;
   CartEntity? get _cart => model.cartState.value.data;
@@ -80,12 +93,27 @@ final class ProductsWidgetModel
   }
 
   @override
-  void initWidgetModel() {
+  void initWidgetModel() async {
     super.initWidgetModel();
     _addState();
-
+    if (kIsWeb) {
+      await Future.microtask(_ensurePageHasData);
+    }
     model.productsState.addListener(_productsStateListner);
     searchController.addListener(_searchListner);
+  }
+
+  Future<void> _ensurePageHasData() async {
+    final currentRoute = _router.currentChild?.route.fullPath;
+    if (currentRoute == 'products' && _productsState.value.data == null) {
+      final uri = Uri.parse(_router.currentUrl);
+      final params = uri.queryParameters['category'];
+
+      await model.selectCategoryOnUpdate(
+        category: params ?? Consts.allProductsCategoryName,
+      );
+      _addState();
+    }
   }
 
   @override
@@ -181,4 +209,7 @@ final class ProductsWidgetModel
 
   @override
   final TextEditingController searchController = TextEditingController();
+
+  @override
+  final String? category;
 }

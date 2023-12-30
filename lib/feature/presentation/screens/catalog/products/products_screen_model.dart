@@ -21,6 +21,7 @@ abstract interface class IProductsModel extends ElementaryModel {
   BehaviorSubject<String> get selectedCategoryName;
 
   Future<void> getAllProducts();
+  Future<void> selectCategoryOnUpdate({required String category});
 
   Future<void> deleteFromFavorites({required ProductEntity product});
   Future<void> getFavorites();
@@ -66,4 +67,10 @@ final class ProductsModel extends ElementaryModel
   @override
   BehaviorSubject<String> get selectedCategoryName =>
       productsManager.selectedCategoryName;
+
+  @override
+  Future<void> selectCategoryOnUpdate({required String category}) async {
+    await getAllProducts();
+    productsManager.findProductsByCategory(category);
+  }
 }

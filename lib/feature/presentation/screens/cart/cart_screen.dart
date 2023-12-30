@@ -8,7 +8,7 @@ import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/core/common/utils/currency_extension.dart';
 import 'package:seo_web/feature/domain/entity/cart_offer_entity.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen_widget_model.dart';
-import 'package:seo_web/feature/presentation/widgets/mobile_basket_card.dart';
+import 'package:seo_web/feature/presentation/widgets/basket_card.dart';
 import 'package:seo_web/generated/l10n.dart';
 
 @RoutePage(name: 'CartRoute')
@@ -246,18 +246,26 @@ class _CartListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return CustomScrollView(
       slivers: [
         SliverList.separated(
           itemCount: offers.length,
           itemBuilder: (context, index) {
             final offer = offers[index];
-            return MobileBasketCard(
-              key: ValueKey('offer-${offer.id}'),
-              deleteFromCart: wm.deleteFromCart,
-              onFavoritesTap: wm.onFavoriteTap,
-              product: offer.product,
-              isFavorite: wm.isInFavorites(offer.product),
+            return SizedBox(
+              width: width <= 550 ? width : width * 0.55,
+              child: Align(
+                alignment:
+                    width <= 550 ? Alignment.centerLeft : Alignment.center,
+                child: BasketCard(
+                  key: ValueKey('offer-${offer.id}'),
+                  deleteFromCart: wm.deleteFromCart,
+                  onFavoritesTap: wm.onFavoriteTap,
+                  product: offer.product,
+                  isFavorite: wm.isInFavorites(offer.product),
+                ),
+              ),
             );
           },
           separatorBuilder: (context, index) => const SizedBox(

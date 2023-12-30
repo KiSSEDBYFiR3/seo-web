@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:seo_web/core/exception/app_exceptions.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
@@ -65,8 +66,12 @@ final class FavoritesModel extends ElementaryModel implements IFavoritesModel {
   @override
   void dispose() {
     _favoritesBlocSubscription.cancel();
-    cartState.dispose();
-    _bloc.dispose();
+
+    // On web back button navigation can cause an already disposed error
+    if (!kIsWeb) {
+      cartState.dispose();
+      _bloc.dispose();
+    }
     favoritesState.dispose();
     super.dispose();
   }

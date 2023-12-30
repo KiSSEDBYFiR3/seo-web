@@ -84,7 +84,7 @@ class _ProductsView extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) => CustomScrollView(
         slivers: [
-          if (constraints.maxWidth < 1000)
+          if (constraints.maxWidth <= 920)
             SliverGrid.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -109,7 +109,7 @@ class _ProductsView extends StatelessWidget {
                 ),
               ),
             ),
-          if (constraints.maxWidth >= 650)
+          if (constraints.maxWidth > 920)
             SliverList.builder(
               itemCount: products.length,
               itemBuilder: (context, index) => EntityStateNotifierBuilder(

@@ -14,7 +14,11 @@ import 'package:seo_web/generated/l10n.dart';
 
 @RoutePage(name: 'ProductsRoute')
 class ProductsScreen extends StatelessWidget {
-  const ProductsScreen({super.key});
+  const ProductsScreen({
+    super.key,
+    @QueryParam() this.category,
+  });
+  final String? category;
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +37,15 @@ class ProductsWidget extends ElementaryWidget<IProductsWidgetModel> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
-          leading: LayoutBuilder(
-            builder: (context, constraints) => constraints.maxWidth < 1000
-                ? GestureDetector(
-                    onTap: wm.goBack,
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                      size: 18,
-                    ),
-                  )
-                : const SizedBox.shrink(),
-          ),
+          leading: !kIsWeb
+              ? GestureDetector(
+                  onTap: wm.goBack,
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    size: 18,
+                  ),
+                )
+              : const SizedBox.shrink(),
           toolbarHeight: 48,
           centerTitle: true,
           title: StreamBuilder<String>(
@@ -123,7 +125,7 @@ class _ProductsView extends StatelessWidget {
               controller: wm.searchController,
             ),
           ),
-          if (constraints.maxWidth < 1000)
+          if (constraints.maxWidth <= 920)
             SliverGrid.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -148,7 +150,7 @@ class _ProductsView extends StatelessWidget {
                 ),
               ),
             ),
-          if (constraints.maxWidth >= 650)
+          if (constraints.maxWidth > 920)
             SliverList.builder(
               itemCount: products.length,
               itemBuilder: (context, index) => EntityStateNotifierBuilder(

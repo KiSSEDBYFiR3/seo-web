@@ -118,6 +118,8 @@ class WebProductCard extends StatelessWidget {
                             flex: 5,
                             child: Text(
                               product.description,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
                               style: AppTypography.montserrat12w600
                                   .copyWith(color: AppColors.descriptionColor),
                             ),
