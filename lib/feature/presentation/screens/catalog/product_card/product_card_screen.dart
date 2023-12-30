@@ -136,11 +136,16 @@ class ProductCardWidget extends ElementaryWidget<IProductWidgetModel> {
                               top: 12,
                               bottom: 8,
                             ),
-                            child: Text(
-                              product.description,
-                              textAlign: TextAlign.justify,
-                              style: AppTypography.montserrat14W400.copyWith(
-                                color: AppColors.descriptionColor,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: size.width > 550 ? 400 : 0,
+                              ),
+                              child: Text(
+                                product.description,
+                                textAlign: TextAlign.justify,
+                                style: AppTypography.montserrat14W400.copyWith(
+                                  color: AppColors.descriptionColor,
+                                ),
                               ),
                             ),
                           ),
@@ -148,7 +153,8 @@ class ProductCardWidget extends ElementaryWidget<IProductWidgetModel> {
                         Expanded(
                           flex: 2,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 36),
+                            padding: EdgeInsets.symmetric(
+                                vertical: constraints.maxWidth > 550 ? 48 : 36),
                             child: GestureDetector(
                               onTap: () => wm.addToCart(product: product),
                               child: EntityStateNotifierBuilder(
