@@ -78,13 +78,6 @@ final class FavoritesWidgetModel
       model.favoritesState;
 
   @override
-  void dispose() {
-    favoritesState.dispose();
-    cartState.dispose();
-    super.dispose();
-  }
-
-  @override
   Future<void> getCart() async => await model.getCart();
 
   @override

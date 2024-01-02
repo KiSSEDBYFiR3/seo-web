@@ -171,6 +171,8 @@ class WebProductCard extends StatelessWidget {
                                           horizontal: 4,
                                         ),
                                         child: FavoritesButton(
+                                          key: ValueKey(
+                                              'favorite-button-${product.id}'),
                                           isFavorite: isFavorite,
                                           onTap: onFavoritesTap,
                                         ),

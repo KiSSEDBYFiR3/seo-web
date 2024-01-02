@@ -1,23 +1,21 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:seo_web/feature/data/data_source/remote_data_source/auth/auth_data_source.dart';
+import 'package:seo_web/core/icons/custom_icons.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/cart/cart_data_source.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/favorites/favorites_data_source.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/order/order_data_source.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/products/products_data_source.dart';
-import 'package:seo_web/feature/data/model/auth/auth_response_dto.dart';
-import 'package:seo_web/feature/data/model/auth/free_token_response_dto.dart';
 import 'package:seo_web/feature/data/model/cart/cart_dto.dart';
 import 'package:seo_web/feature/data/model/cart/mapper/cart_mapper.dart';
 import 'package:seo_web/feature/data/model/product/mapper/mapper.dart';
 import 'package:seo_web/feature/data/model/product/product_dto.dart';
-import 'package:seo_web/feature/data/repository/auth/auth_repository.dart';
 import 'package:seo_web/feature/data/repository/cart/cart_repository.dart';
 import 'package:seo_web/feature/data/repository/favorites/favorites_repository.dart';
 import 'package:seo_web/feature/data/repository/order/order_repository.dart';
 import 'package:seo_web/feature/data/repository/products/products_repository.dart';
-import 'package:seo_web/feature/data/services/auth/auth_service.dart';
 import 'package:seo_web/feature/data/services/cart/cart_service.dart';
 import 'package:seo_web/feature/data/services/favorites/favorites_service.dart';
 import 'package:seo_web/feature/data/services/order/order_service.dart';
@@ -25,7 +23,7 @@ import 'package:seo_web/feature/data/services/products/products_service.dart';
 import 'package:seo_web/feature/domain/managers/cart/i_cart_manager.dart';
 import 'package:seo_web/feature/domain/managers/favorites/i_favorites_manager.dart';
 import 'package:seo_web/feature/domain/managers/products/i_products_manager.dart';
-import 'package:seo_web/main.dart';
+import 'package:seo_web/generated/l10n.dart';
 
 import '../test/mocks/data.dart';
 import '../test/mocks/data_sources.mocks.dart';
@@ -35,19 +33,16 @@ import '../test/mocks/repositories.mocks.dart';
 import '../test/mocks/services.mocks.dart';
 
 void main() {
-  late AuthService authMock;
   late OrderService orderMock;
   late ProductsService productsMock;
   late CartService cartMock;
   late FavoritesService favoritesMock;
 
-  late AuthDataSource authDataSource;
   late OrderDataSource orderDataSource;
   late FavoritesDataSource favoritesDataSource;
   late CartDataSource cartDataSource;
   late ProductsDataSource productsDataSource;
 
-  late AuthRepository authRepository;
   late OrderRepository orderRepository;
   late FavoritesRepository favoritesRepository;
   late CartRepository cartRepository;
@@ -60,46 +55,26 @@ void main() {
 
   setUpAll(() async {
     /// Services init
-    authMock = MockAuthService();
+
     orderMock = MockOrderService();
     productsMock = MockProductsService();
     cartMock = MockCartService();
     favoritesMock = MockFavoritesService();
 
     /// Data Sources init
-    authDataSource = MockAuthDataSource();
+
     orderDataSource = MockOrderDataSource();
     favoritesDataSource = MockFavoritesDataSource();
     cartDataSource = MockCartDataSource();
     productsDataSource = MockProductsDataSource();
 
     /// Repositories init
-    authRepository = MockAuthRepository();
     orderRepository = MockOrderRepository();
     favoritesRepository = MockFavoritesRepository();
     cartRepository = MockCartRepository();
     productsRepository = MockProductsRepository();
 
-    /// Managers init
-    cartManager = MockCartManager(
-      repository: cartRepository,
-      orderRepository: orderRepository,
-    );
-
-    favoritesManager = MockFavoritesManager(repository: favoritesRepository);
-
-    productsManager = MockProductsManager(repository: productsRepository);
-
     /// Services stubs
-    when(authMock.authorize()).thenAnswer((_) => Future(
-          () => const AuthResponseDto(
-              accessToken: 'accessToken', refreshToken: 'refreshToken'),
-        ));
-    when(authMock.refresh()).thenAnswer(
-      (_) async => const FreeTokenResponseDto(
-          accessToken: 'accessToken', refreshToken: 'refreshToken'),
-    );
-
     when(cartMock.getCart()).thenAnswer(
       (_) async => CartDto.fromJson(cartStub),
     );
@@ -129,7 +104,7 @@ void main() {
     );
 
     when(productsMock.getAllProducts()).thenAnswer(
-      (_) async => productStub.map(ProductDto.fromJson).toList(),
+      (_) async => productAddedStub.map(ProductDto.fromJson).toList(),
     );
 
     when(orderMock.createOrder()).thenAnswer(
@@ -137,15 +112,6 @@ void main() {
     );
 
     /// Data Sources stubs
-    when(authDataSource.authorize()).thenAnswer((realInvocation) async {
-      final dto = await authMock.authorize();
-      return (dto.accessToken, dto.refreshToken);
-    });
-
-    when(authDataSource.updateToken()).thenAnswer((realInvocation) async {
-      final dto = await authMock.refresh();
-      return (dto.accessToken, dto.refreshToken);
-    });
 
     when(orderDataSource.createOrder())
         .thenAnswer((realInvocation) async => await orderMock.createOrder());
@@ -173,11 +139,6 @@ void main() {
             await favoritesMock.deleteFromFavorites(id: 1));
 
     /// Repositories Stubs
-    when(authRepository.authorize())
-        .thenAnswer((realInvocation) async => await authDataSource.authorize());
-
-    when(authRepository.updateToken()).thenAnswer(
-        (realInvocation) async => await authDataSource.updateToken());
 
     when(orderRepository.createOrder()).thenAnswer(
         (realInvocation) async => await orderDataSource.createOrder());
@@ -228,18 +189,27 @@ void main() {
       return dtoToCartMapper(dto);
     });
 
+    /// Managers init
+    cartManager = MockCartManager(
+      repository: cartRepository,
+      orderRepository: orderRepository,
+    )..init();
+
+    favoritesManager = MockFavoritesManager(repository: favoritesRepository)
+      ..init();
+
+    productsManager = MockProductsManager(repository: productsRepository)
+      ..init();
+
     app = await MockDiContainer(
-      authMock: authMock,
       orderMock: orderMock,
       productsMock: productsMock,
       cartMock: cartMock,
       favoritesMock: favoritesMock,
-      authDataSource: authDataSource,
       orderDataSource: orderDataSource,
       favoritesDataSource: favoritesDataSource,
       cartDataSource: cartDataSource,
       productsDataSource: productsDataSource,
-      authRepository: authRepository,
       orderRepository: orderRepository,
       favoritesRepository: favoritesRepository,
       cartRepository: cartRepository,
@@ -250,5 +220,90 @@ void main() {
     ).configureDependencies();
   });
 
-  testWidgets('Integration Test', (widgetTester) async {});
+  testWidgets('Integration Test', (widgetTester) async {
+    await widgetTester.pumpWidget(app);
+    await widgetTester.pumpAndSettle();
+
+    // finds one unique category
+    final category = find.text("Men's Clothing");
+
+    expect(category, findsOneWidget);
+
+    // opens Products Screen which has three unique products
+    await widgetTester.tap(category);
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    final widgetOne = find.byKey(const ValueKey('product-1'));
+    final widgetTwo = find.byKey(const ValueKey('product-2'));
+    final widgetThree = find.byKey(const ValueKey('product-3'));
+
+    expect(widgetOne, findsOneWidget);
+    expect(widgetTwo, findsOneWidget);
+    expect(widgetThree, findsOneWidget);
+
+    // finds favorites button and adds product to favorites
+    final toFavoritesButton = find.byKey(const ValueKey('favorite-button-1'));
+
+    expect(toFavoritesButton, findsOneWidget);
+
+    await widgetTester.tap(toFavoritesButton);
+
+    // finds favorites tab bar button and opens favorites tab with three unique products
+    final favoritesTabButton = find.byIcon(CustomIcons.favorites);
+
+    expect(favoritesTabButton, findsOneWidget);
+
+    await widgetTester.tap(favoritesTabButton);
+
+    await widgetTester.pumpAndSettle();
+    await Future.delayed(const Duration(seconds: 2));
+
+    final favoriteOne = find.byKey(const ValueKey('product-1'));
+    final favoriteTwo = find.byKey(const ValueKey('product-2'));
+    final favoriteThree = find.byKey(const ValueKey('product-3'));
+
+    expect(favoriteOne, findsOneWidget);
+    expect(favoriteTwo, findsOneWidget);
+    expect(favoriteThree, findsOneWidget);
+
+    // finds one add to cart button and ands one product to cart
+    final context = widgetTester.element(favoriteOne);
+    final locale = S.of(context);
+    final addToCart = find.text(locale.addToCart);
+
+    expect(addToCart, findsOneWidget);
+
+    await widgetTester.tap(addToCart);
+
+    // finds one cart tab button and opens cart tab which has three offers
+    final cartTabButton = find.byIcon(CustomIcons.cart);
+    expect(cartTabButton, findsOneWidget);
+
+    await widgetTester.tap(cartTabButton);
+
+    await widgetTester.pumpAndSettle();
+    await Future.delayed(const Duration(seconds: 2));
+
+    final cartOfferOne = find.byKey(const ValueKey('offer-${1}'));
+    final cartOfferTwo = find.byKey(const ValueKey('offer-${2}'));
+    final cartOfferThree = find.byKey(const ValueKey('offer-${3}'));
+
+    expect(cartOfferOne, findsOneWidget);
+    expect(cartOfferTwo, findsOneWidget);
+    expect(cartOfferThree, findsOneWidget);
+
+    // opens Product Card Screen
+    await widgetTester.tap(cartOfferOne);
+
+    await widgetTester.pumpAndSettle();
+    await Future.delayed(const Duration(seconds: 2));
+
+    final descriprion = find.text(
+        '''Your perfect pack for everyday use and walks in the forest. Stash your laptop
+              (up to 15 inches) in the padded sleeve, your everyday
+''');
+
+    expect(descriprion, findsOneWidget);
+  });
 }

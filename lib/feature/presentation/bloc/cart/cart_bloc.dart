@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seo_web/core/exception/app_exceptions.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
@@ -17,8 +15,6 @@ final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
   final IFavoritesManager favoritesManager;
 
   CartEntity? get cart => cartManager.cartState.value.data;
-
-  EntityStateNotifier<CartEntity?> get _cartState => cartManager.cartState;
 
   late final StreamSubscription _cartChangeSubscription;
 
@@ -49,8 +45,6 @@ final class CartBloc extends Bloc<CartEvent, CartState> with FavoritesProvider {
 
   void dispose() {
     _cartChangeSubscription.cancel();
-    favoritesState.dispose();
-    _cartState.dispose();
     cartManager.dispose();
   }
 

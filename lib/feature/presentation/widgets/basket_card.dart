@@ -35,6 +35,7 @@ class BasketCard extends StatelessWidget {
     final imageFlex = size.width >= 550 ? 2 : 1;
     final descpriptionFlex = size.width >= 550 ? 3 : 2;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => onProductTap(product.id),
       child: ConstrainedBox(
         constraints: BoxConstraints(
@@ -95,6 +96,7 @@ class BasketCard extends StatelessWidget {
                           child: Align(
                             alignment: Alignment.topRight,
                             child: FavoritesButton(
+                              key: ValueKey('favorite-button-${product.id}'),
                               isFavorite: isFavorite,
                               onTap: () async => await onFavoritesTap(product),
                             ),

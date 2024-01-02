@@ -89,7 +89,7 @@ class DiContainer implements IDiContainer {
           productModel: _productModel(),
         ),
         child: App(
-          appRouter: _createAppRouter(),
+          appRouter: _appRouter,
         ),
       );
 
@@ -97,7 +97,7 @@ class DiContainer implements IDiContainer {
         _createAuthDataSource(dio),
       );
 
-  AppRouter _createAppRouter() => AppRouter();
+  late final AppRouter _appRouter = AppRouter();
 
   ILocalAuthRepository _createLocalRepository() =>
       LocalRepository(_createLocalDataSource());

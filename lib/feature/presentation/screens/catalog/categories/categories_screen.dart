@@ -4,7 +4,7 @@ import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/core/common/utils/casing_extension.dart';
-import 'package:seo_web/feature/presentation/screens/catalog/categories/categories_screen_wm.dart';
+import 'package:seo_web/feature/presentation/screens/catalog/categories/categories_screen_widget_model.dart';
 
 @RoutePage(name: 'CategoriesRoute')
 class CategoriesScreen extends StatelessWidget {

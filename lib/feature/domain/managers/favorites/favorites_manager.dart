@@ -99,8 +99,6 @@ class FavoritesManager implements IFavoritesManager {
   void dispose() {
     _favoritesState.dispose();
     _favoritesChangedController.close();
-    favoritesChangedController.close();
-    favoritesState.dispose();
   }
 
   @override

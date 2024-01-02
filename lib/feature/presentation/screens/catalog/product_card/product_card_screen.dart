@@ -101,6 +101,7 @@ class ProductCardWidget extends ElementaryWidget<IProductWidgetModel> {
                             right: 5,
                             top: 5,
                             child: FavoritesButton(
+                              key: ValueKey('favorite-button-${product.id}'),
                               isFavorite: wm.isInFavorites(product),
                               onTap: () => wm.onFavoritesTap(product: product),
                             ),

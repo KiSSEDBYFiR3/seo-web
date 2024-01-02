@@ -117,6 +117,7 @@ class MobileProductCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               vertical: 4, horizontal: 4),
                           child: FavoritesButton(
+                            key: ValueKey('favorite-button-${product.id}'),
                             isFavorite: isFavorite,
                             onTap: onFavoritesTap,
                           ),

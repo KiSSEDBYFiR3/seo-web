@@ -49,7 +49,7 @@ final class CartModel extends ElementaryModel
 
   @override
   void init() {
-    _bloc.stream.listen(_parseStates);
+    _blocSubscription = _bloc.stream.listen(_parseStates);
     super.init();
   }
 

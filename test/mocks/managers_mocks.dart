@@ -34,8 +34,8 @@ class MockFavoritesManager implements IFavoritesManager {
 
   @override
   void dispose() {
-    favoritesChangedController.close();
     favoritesState.dispose();
+    favoritesChangedController.close();
   }
 
   @override
@@ -55,7 +55,9 @@ class MockFavoritesManager implements IFavoritesManager {
   }
 
   @override
-  void init() {}
+  void init() async {
+    await getFavorites();
+  }
 }
 
 class MockCartManager implements ICartManager {
@@ -86,6 +88,14 @@ class MockCartManager implements ICartManager {
     final result = await orderRepository.createOrder();
 
     if (result == 'success') {
+      final oldCart = cartState.value.data;
+      if (oldCart != null) {
+        final newCart = oldCart.copyWith(offers: []);
+        cartState.loading(newCart);
+
+        cartState.content(newCart);
+        cartChangedController.add(newCart);
+      }
       return;
     } else {
       throw const OrderException('message');
@@ -115,7 +125,9 @@ class MockCartManager implements ICartManager {
   }
 
   @override
-  void init() {}
+  void init() async {
+    getCart();
+  }
 }
 
 class MockProductsManager implements IProductsManager {
@@ -201,7 +213,10 @@ class MockProductsManager implements IProductsManager {
   }
 
   @override
-  void init() {}
+  void init() async {
+    await getAllProducts();
+    getCategories();
+  }
 
   @override
   final EntityStateNotifier<List<ProductEntity>> productsState =
