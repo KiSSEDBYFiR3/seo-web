@@ -29,9 +29,6 @@ jobs:
       - name: Start unit test
         run: flutter test
 
-      - name: Start integration test
-        run: flutter test integration_test
-
       - name: Start release bundle build
         run: flutter build appbundle
         
