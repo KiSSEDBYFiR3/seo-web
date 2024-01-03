@@ -26,10 +26,10 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-        - name: Start unit test
+      - name: Start unit test
         run: flutter test
 
-        - name: Start integration test
+      - name: Start integration test
         run: flutter test integration_test
 
       - name: Start release bundle build
