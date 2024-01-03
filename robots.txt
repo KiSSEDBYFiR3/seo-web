@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Allow: /#/catalog-tab
+Allow: /#/catalog-tab/products
+Allow: /#/catalog-tab/product?id=
+Disallow: /#/cart-tab
+Disallow: /#/favorites-tab

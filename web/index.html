@@ -5,7 +5,21 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>Seo Web</title>
+
+    <script>
+      document.querySelector('flt-glass-pane').shadowRoot.querySelector('flt-semantics-placeholder').click({force: true});
+
+      import("./scripts/botd-1.1.0.js")
+        .then((botd) => botd.load())
+        .then((botd) => botd.detect())
+        .then(function (result) {
+          if (result.bot) {
+            window.flutterWebRenderer = "html";
+          }
+        });
+    </script>
+
+   
     <script defer src="index.dart.js" type="application/javascript"></script>
   
     <style>
@@ -31,8 +45,8 @@
         width: 80px;
         height: 5px;
       
-        -webkit-animation: spin 2s alternate infinite;
-        animation: spin 2s alternate infinite;
+        -webkit-animation: spin 24s linear infinite;
+        animation: spin 24s linear infinite;
       }
       .loader-element-second {
         border: 16px solid #f3f3f3;
@@ -44,8 +58,8 @@
         height: 80px;
         width: 5px;
       
-        -webkit-animation: spin 2s alternate infinite;
-        animation: spin 2s alternate infinite;
+        -webkit-animation: spin 24s linear infinite;
+        animation: spin 24s linear infinite;
       }
       .loader-element-third {
         border: 25px solid #f3f3f3;
@@ -57,8 +71,8 @@
         height: 5px;
         width: 5px;
       
-        -webkit-animation: spin 2s alternate infinite;
-        animation: spin 2s alternate infinite;
+        -webkit-animation: spin 2s ease-in infinite;
+        animation: spin 2s ease-in infinite;
       }
       
       @-webkit-keyframes spin {
@@ -66,7 +80,7 @@
           -webkit-transform: rotate(0deg);
         }
         100% {
-          -webkit-transform: rotate(360deg);
+          -webkit-transform: rotate(6320deg);
         }
       }
       
@@ -75,7 +89,7 @@
           transform: rotate(0deg);
         }
         100% {
-          transform: rotate(360deg);
+          transform: rotate(6320deg);
         }
       }
     </style>

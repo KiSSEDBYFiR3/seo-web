@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:mockito/annotations.dart';
 import 'package:seo_web/feature/data/repository/auth/auth_repository.dart';
 import 'package:seo_web/feature/data/repository/cart/cart_repository.dart';

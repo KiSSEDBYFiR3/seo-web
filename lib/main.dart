@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:meta_seo/meta_seo.dart';
 import 'package:provider/provider.dart';
 import 'package:seo_web/core/common/colors/colors.dart';
 import 'package:seo_web/core/common/themes.dart';
+import 'package:seo_web/core/common/utils/seo_navigation_observer.dart';
 import 'package:seo_web/core/di/di.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,6 +19,9 @@ import 'package:seo_web/core/common/utils/url_strategy_io.dart'
 import 'package:seo_web/generated/l10n.dart';
 
 void main() async {
+  if (kIsWeb) {
+    MetaSEO().config();
+  }
   runZonedGuarded(
     _run,
     (error, stack) {
@@ -31,7 +37,7 @@ void main() async {
 void _run() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  setUrlStrategy(PathUrlStrategy());
+  // setUrlStrategy(PathUrlStrategy());
 
   final app = await diContainer.configureDependencies();
   runApp(app);
@@ -56,8 +62,15 @@ class App extends StatelessWidget {
         Locale('ru'), // Russian
         Locale('en'), // English
       ],
-      routerDelegate: appRouter.delegate(),
+      routerDelegate: appRouter.delegate(
+        navigatorObservers: () => [
+          SeoNavigationObserver(
+            delegate: S.delegate,
+          )
+        ],
+      ),
       routeInformationParser: appRouter.defaultRouteParser(),
+      routeInformationProvider: appRouter.routeInfoProvider(),
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,

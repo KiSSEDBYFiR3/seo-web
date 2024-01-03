@@ -3,6 +3,7 @@ import 'package:elementary/elementary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:seo_web/core/common/utils/seo_helper.dart';
 import 'package:seo_web/core/icons/custom_icons.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
 import 'package:seo_web/feature/presentation/screens/home/home_screen_widget_model.dart';
@@ -22,6 +23,11 @@ class HomeWidget extends ElementaryWidget<IHomeScreenWidgetModel> {
 
   @override
   Widget build(IHomeScreenWidgetModel wm) {
+    SEOHelper.addInfo(
+      title: 'Seo Web',
+      addLink: true,
+    );
+
     return LayoutBuilder(
       builder: (context, constraints) => AutoTabsScaffold(
         backgroundColor: Colors.white,

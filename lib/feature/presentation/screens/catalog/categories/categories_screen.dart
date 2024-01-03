@@ -1,7 +1,11 @@
+// ignore_for_file: unused_element
+
 import 'package:auto_route/annotations.dart';
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:meta_seo/meta_seo.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/core/common/utils/casing_extension.dart';
 import 'package:seo_web/feature/presentation/screens/catalog/categories/categories_screen_widget_model.dart';
@@ -25,6 +29,14 @@ class CategoriesWidget extends ElementaryWidget<ICategoriesScreenWidgetModel> {
 
   @override
   Widget build(ICategoriesScreenWidgetModel wm) {
+    if (kIsWeb) {
+      final meta = MetaSEO();
+      meta.ogTitle(ogTitle: wm.locale.categories);
+      meta.description(description: wm.locale.categories);
+      meta.keywords(
+        keywords: 'Categories, Catalog, Каталог, Категории',
+      );
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -34,6 +46,7 @@ class CategoriesWidget extends ElementaryWidget<ICategoriesScreenWidgetModel> {
         title: Text(
           wm.locale.categories.toUpperCase(),
           style: AppTypography.montserrat18w700,
+          semanticsLabel: 'Page Title: ${wm.locale.categories.toUpperCase()}',
         ),
         leading: const SizedBox.shrink(),
       ),
@@ -100,39 +113,46 @@ class _CategoriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemBuilder: (context, index) {
-        final category = categories[index];
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => selectCategory(category),
-          child: SizedBox(
-            height: 48,
-            width: size.width,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      category.toTitleCase(),
-                      style: AppTypography.montserrat16w600,
-                    ),
+    return Semantics(
+      label: 'Categories List',
+      child: ListView.separated(
+        itemBuilder: (context, index) {
+          final category = categories[index];
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => selectCategory(category),
+            child: Semantics(
+              label: category,
+              child: SizedBox(
+                height: 48,
+                width: size.width,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          category.toTitleCase(),
+                          style: AppTypography.montserrat16w600,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 18,
+                      ),
+                    ],
                   ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 18,
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-      separatorBuilder: (_, __) => const Divider(),
-      itemCount: categories.length,
+          );
+        },
+        separatorBuilder: (_, __) => const Divider(),
+        itemCount: categories.length,
+      ),
     );
   }
 }

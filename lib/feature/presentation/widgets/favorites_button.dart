@@ -14,11 +14,14 @@ class FavoritesButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: SvgPicture.asset(
-        'assets/svg/favorite.svg',
-        color: isFavorite ? Colors.red : Colors.black,
+    return Semantics(
+      label: 'Add to favorites button',
+      child: GestureDetector(
+        onTap: onTap,
+        child: SvgPicture.asset(
+          'assets/svg/favorite.svg',
+          color: isFavorite ? Colors.red : Colors.black,
+        ),
       ),
     );
   }
