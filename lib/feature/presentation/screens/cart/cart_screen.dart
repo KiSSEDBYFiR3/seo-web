@@ -1,8 +1,12 @@
+// ignore_for_file: unused_element
+
 import 'package:auto_route/auto_route.dart';
 import 'package:decimal/decimal.dart';
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:meta_seo/meta_seo.dart';
 import 'package:seo_web/core/common/colors/colors.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/core/common/utils/currency_extension.dart';
@@ -30,6 +34,14 @@ class CartWidget extends ElementaryWidget<ICartWidgetModel> {
 
   @override
   Widget build(ICartWidgetModel wm) {
+    if (kIsWeb) {
+      final meta = MetaSEO();
+      meta.ogTitle(ogTitle: wm.locale.cart);
+      meta.description(description: wm.locale.cart);
+      meta.keywords(
+        keywords: 'Cart, Basket, Checkout, Корзина, Оформить заказ',
+      );
+    }
     return Scaffold(
       floatingActionButton: LayoutBuilder(builder: (context, constraints) {
         return EntityStateNotifierBuilder(
@@ -63,6 +75,7 @@ class CartWidget extends ElementaryWidget<ICartWidgetModel> {
         title: Text(
           wm.locale.cart.toUpperCase(),
           style: AppTypography.montserrat18w700,
+          semanticsLabel: 'Page Title: ${wm.locale.cart.toUpperCase()}',
         ),
       ),
       body: Padding(

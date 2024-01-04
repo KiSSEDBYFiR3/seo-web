@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:seo_web/core/common/colors/colors.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/core/common/utils/currency_extension.dart';
+import 'package:seo_web/core/common/utils/seo_helper.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/presentation/widgets/favorites_button.dart';
 import 'package:shimmer/shimmer.dart';
@@ -34,6 +35,12 @@ class BasketCard extends StatelessWidget {
 
     final imageFlex = size.width >= 550 ? 2 : 1;
     final descpriptionFlex = size.width >= 550 ? 3 : 2;
+
+    SEOHelper.addInfo(
+      imageLink: product.image,
+      imageAlt: 'Basket Offer Product Image',
+    );
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => onProductTap(product.id),

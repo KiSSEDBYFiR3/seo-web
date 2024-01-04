@@ -42,6 +42,8 @@ dependencies:
   tele_web_app:
     git: https://github.com/yeikel16/tele_web_app.git
   mockito: ^5.4.4
+  meta_seo: ^3.0.8
+  universal_html: ^2.2.4
 
 dependency_overrides:
   meta: ^1.11.0

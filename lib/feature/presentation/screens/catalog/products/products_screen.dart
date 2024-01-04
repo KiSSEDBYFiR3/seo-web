@@ -3,6 +3,7 @@ import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:meta_seo/meta_seo.dart';
 import 'package:seo_web/core/common/colors/colors.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/core/icons/custom_icons.dart';
@@ -35,6 +36,15 @@ class ProductsWidget extends ElementaryWidget<IProductsWidgetModel> {
 
   @override
   Widget build(IProductsWidgetModel wm) {
+    if (kIsWeb) {
+      final meta = MetaSEO();
+      meta.ogTitle(ogTitle: wm.locale.allProducts);
+      meta.description(description: wm.locale.allProducts);
+      meta.keywords(
+        keywords:
+            'Catalog, Products, Product List, Список товаров, Каталог, Продукты',
+      );
+    }
     return GestureDetector(
       onTap: wm.unfocus,
       child: Scaffold(
@@ -58,6 +68,8 @@ class ProductsWidget extends ElementaryWidget<IProductsWidgetModel> {
               return Text(
                 snapshot.data?.toUpperCase() ?? wm.locale.allProducts,
                 style: AppTypography.montserrat18w700,
+                semanticsLabel:
+                    'Page Title: ${snapshot.data?.toUpperCase() ?? wm.locale.allProducts}',
               );
             },
           ),
@@ -117,69 +129,76 @@ class _ProductsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return LayoutBuilder(
-      builder: (context, constraints) => CustomScrollView(
-        slivers: [
-          SliverPersistentHeader(
-            floating: true,
-            delegate: _SearchSliverDelegate(
-              width: size.width,
-              height: size.height / 17,
-              locale: wm.locale,
-              controller: wm.searchController,
-            ),
-          ),
-          if (constraints.maxWidth <= 920)
-            SliverGrid.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+    return Semantics(
+      label: 'Products List',
+      child: LayoutBuilder(
+        builder: (context, constraints) => CustomScrollView(
+          slivers: [
+            SliverPersistentHeader(
+              floating: true,
+              delegate: _SearchSliverDelegate(
+                width: size.width,
+                height: size.height / 17,
+                locale: wm.locale,
+                controller: wm.searchController,
               ),
-              itemCount: products.length,
-              itemBuilder: (context, index) => EntityStateNotifierBuilder(
-                listenableEntityState: wm.cartState,
-                builder: (context, _) => EntityStateNotifierBuilder(
-                  listenableEntityState: wm.favoritesState,
-                  builder: (context, _) => LayoutBuilder(
-                    builder: (context, constraints) {
-                      return MobileProductCard(
-                        onProductTap: () => wm.onProductTap(products[index].id),
-                        key: ValueKey('product-${products[index].id}'),
-                        product: products[index],
-                        isFavorite: wm.isInFavorites(products[index]),
-                        isInCart: wm.isInCart(products[index]),
-                        onCartButtonTap: () => wm.onCartTap(products[index]),
-                        onFavoritesTap: () => wm.onFavoriteTap(products[index]),
-                      );
-                    },
+            ),
+            if (constraints.maxWidth <= 920)
+              SliverGrid.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemCount: products.length,
+                itemBuilder: (context, index) => EntityStateNotifierBuilder(
+                  listenableEntityState: wm.cartState,
+                  builder: (context, _) => EntityStateNotifierBuilder(
+                    listenableEntityState: wm.favoritesState,
+                    builder: (context, _) => LayoutBuilder(
+                      builder: (context, constraints) {
+                        return MobileProductCard(
+                          onProductTap: () =>
+                              wm.onProductTap(products[index].id),
+                          key: ValueKey('product-${products[index].id}'),
+                          product: products[index],
+                          isFavorite: wm.isInFavorites(products[index]),
+                          isInCart: wm.isInCart(products[index]),
+                          onCartButtonTap: () => wm.onCartTap(products[index]),
+                          onFavoritesTap: () =>
+                              wm.onFavoriteTap(products[index]),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-          if (constraints.maxWidth > 920)
-            SliverList.builder(
-              itemCount: products.length,
-              itemBuilder: (context, index) => EntityStateNotifierBuilder(
-                listenableEntityState: wm.cartState,
-                builder: (context, _) => EntityStateNotifierBuilder(
-                  listenableEntityState: wm.favoritesState,
-                  builder: (context, _) => LayoutBuilder(
-                    builder: (context, constraints) {
-                      return WebProductCard(
-                        onProductTap: () => wm.onProductTap(products[index].id),
-                        key: ValueKey('product-${products[index].id}'),
-                        product: products[index],
-                        isFavorite: wm.isInFavorites(products[index]),
-                        isInCart: wm.isInCart(products[index]),
-                        onCartButtonTap: () => wm.onCartTap(products[index]),
-                        onFavoritesTap: () => wm.onFavoriteTap(products[index]),
-                        locale: wm.locale,
-                      );
-                    },
+            if (constraints.maxWidth > 920)
+              SliverList.builder(
+                itemCount: products.length,
+                itemBuilder: (context, index) => EntityStateNotifierBuilder(
+                  listenableEntityState: wm.cartState,
+                  builder: (context, _) => EntityStateNotifierBuilder(
+                    listenableEntityState: wm.favoritesState,
+                    builder: (context, _) => LayoutBuilder(
+                      builder: (context, constraints) {
+                        return WebProductCard(
+                          onProductTap: () =>
+                              wm.onProductTap(products[index].id),
+                          key: ValueKey('product-${products[index].id}'),
+                          product: products[index],
+                          isFavorite: wm.isInFavorites(products[index]),
+                          isInCart: wm.isInCart(products[index]),
+                          onCartButtonTap: () => wm.onCartTap(products[index]),
+                          onFavoritesTap: () =>
+                              wm.onFavoriteTap(products[index]),
+                          locale: wm.locale,
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

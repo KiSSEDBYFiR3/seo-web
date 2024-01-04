@@ -4,9 +4,11 @@ import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:meta_seo/meta_seo.dart';
 import 'package:seo_web/core/common/colors/colors.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/core/common/utils/currency_extension.dart';
+import 'package:seo_web/core/common/utils/seo_helper.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/presentation/screens/catalog/product_card/product_card_screen_widget_model.dart';
 import 'package:seo_web/feature/presentation/widgets/favorites_button.dart';
@@ -38,6 +40,16 @@ class ProductCardWidget extends ElementaryWidget<IProductWidgetModel> {
 
   @override
   Widget build(IProductWidgetModel wm) {
+    if (kIsWeb) {
+      SEOHelper.addInfo(title: wm.locale.productCard);
+
+      final meta = MetaSEO();
+      meta.ogTitle(ogTitle: wm.locale.productCard);
+      meta.description(description: wm.locale.productCard);
+      meta.keywords(
+        keywords: 'Product Card, Product, Продукт, Карточка товара',
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -61,6 +73,12 @@ class ProductCardWidget extends ElementaryWidget<IProductWidgetModel> {
               child: CircularProgressIndicator.adaptive(),
             );
           }
+
+          SEOHelper.addInfo(
+            imageLink: product.image,
+            imageAlt: 'Product Image',
+          );
+
           return LayoutBuilder(
             builder: (context, constraints) => Padding(
               padding: const EdgeInsets.all(16),

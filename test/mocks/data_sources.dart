@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:mockito/annotations.dart';
 import 'package:seo_web/feature/data/data_source/local_data_source/local_data_source.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/auth/auth_data_source.dart';
