@@ -7,6 +7,8 @@
 Flutter: 3.13.8 stable
 Dart: 3.1.4
 
+[Бэкенд](https://github.com/KiSSEDBYFiR3/e-com-backend)
+
 Для запуска ввести команду `docker-compose up -d`
 
 ### Что было сделано:
