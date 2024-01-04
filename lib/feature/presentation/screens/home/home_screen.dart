@@ -3,6 +3,7 @@ import 'package:elementary/elementary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:seo_web/core/common/utils/seo_helper.dart';
 import 'package:seo_web/core/icons/custom_icons.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
@@ -23,9 +24,11 @@ class HomeWidget extends ElementaryWidget<IHomeScreenWidgetModel> {
 
   @override
   Widget build(IHomeScreenWidgetModel wm) {
+    final localeCode = Intl.getCurrentLocale();
     SEOHelper.addInfo(
       title: 'Seo Web',
       addLink: true,
+      locale: localeCode,
     );
 
     return LayoutBuilder(

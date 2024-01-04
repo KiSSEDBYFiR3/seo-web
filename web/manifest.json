@@ -1,13 +1,10 @@
 {
     "name": "Seo Web",
-    "short_name": "Seo Web",
-    "start_url": ".",
-    "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
-    "prefer_related_applications": false,
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "fullscreen",
+    "orientation": "portrait",
+    "start_url": "/",
     "icons": [
         {
             "src": "icons/Icon-192.png",

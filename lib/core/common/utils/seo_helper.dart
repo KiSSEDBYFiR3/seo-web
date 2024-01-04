@@ -5,6 +5,7 @@ abstract final class SEOHelper {
     String? title,
     String? imageLink,
     String? imageAlt,
+    String? locale,
     bool addLink = false,
   }) {
     final html.Document document = html.document;
@@ -22,6 +23,9 @@ abstract final class SEOHelper {
         } else {
           head.children[index] = html.TitleElement()..text = title;
         }
+      }
+      if (locale != null) {
+        document.documentElement?.setAttribute('lang', locale);
       }
 
       if (addLink) {

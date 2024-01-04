@@ -2,13 +2,14 @@
 <html>
 <head>
   <meta name="google-site-verification" content="apj7S2-ZIxol6KQZrSrd_y4BHw3nV-a8HyGLMmu1Y8g" />
-
+  <meta name="theme-color" content="#ffffff">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <link rel="manifest" href="manifest.json">
+  
     <meta charset="UTF-8">
 
-    <script>
-      document.querySelector('flt-glass-pane').shadowRoot.querySelector('flt-semantics-placeholder').click({force: true});
-
-      import("./scripts/botd-1.1.0.js")
+    <script type="module">
+      import("./botd-1.1.0.js")
         .then((botd) => botd.load())
         .then((botd) => botd.detect())
         .then(function (result) {
@@ -17,9 +18,6 @@
           }
         });
     </script>
-
-   
-    <script defer src="index.dart.js" type="application/javascript"></script>
   
     <div id="loading">
       <style>
@@ -74,7 +72,7 @@
           }
         }
       </style>
-      <img src="icons/Icon-128.png" alt="Loading indicator..." />
+      <img src="icons/Icon-192.png" alt="Loading indicator..." />
     </div>
 
   <base href="$FLUTTER_BASE_HREF">
@@ -87,7 +85,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="seo_web">
-  <link rel="apple-touch-icon" href="icons/Icon-128.png">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
@@ -104,24 +102,17 @@
 </head>
 <body>
   <script>
-    window.addEventListener('load', function () {
+    window.addEventListener('load', function(ev) {
       var loading = document.querySelector('#loading');
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function(engineInitializer) {
+          engineInitializer.initializeEngine().then(function(appRunner) {
+            appRunner.runApp();
+          });
         }
-      }).then(function (engineInitializer) {
-        loading.classList.add('main_done');
-        return engineInitializer.initializeEngine();
-      }).then(function (appRunner) {
-        loading.classList.add('init_done');
-        return appRunner.runApp();
-      }).then(function (app) {
-        // Wait a few milliseconds so users can see the "zoooom" animation
-        // before getting rid of the "loading" div.
-        window.setTimeout(function () {
-          loading.remove();
-        }, 200);
       });
     });
   </script>
