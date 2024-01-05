@@ -37,7 +37,7 @@ void main() async {
 void _run() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // setUrlStrategy(PathUrlStrategy());
+  setUrlStrategy(PathUrlStrategy());
 
   final app = await diContainer.configureDependencies();
   runApp(app);
