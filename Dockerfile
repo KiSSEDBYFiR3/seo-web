@@ -28,6 +28,7 @@ COPY --from=build-env /app/build/web /usr/share/nginx/html
 COPY robots.txt /usr/share/nginx/html/
 
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx/default.conf /etc/nginx/conf.d/
 
 
 EXPOSE 8080
