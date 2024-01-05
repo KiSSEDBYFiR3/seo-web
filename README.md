@@ -41,8 +41,10 @@ Dart: 3.1.4
 
 **Desktop:**
 
-![Desktop](https://github.com/KiSSEDBYFiR3/seo-web/assets/72256017/7b3b9ba3-523e-42cd-a909-ab80aad243eb)
+![Desktop](https://github.com/KiSSEDBYFiR3/seo-web/assets/72256017/95c64501-5ce4-45d8-b76d-5e2a1218a786)
+
+
 
 **Mobile:**
 
-![Mobile](https://github.com/KiSSEDBYFiR3/seo-web/assets/72256017/d63275f1-4381-46a0-aa5d-5edfdeb330ba)
+![Mobile](https://github.com/KiSSEDBYFiR3/seo-web/assets/72256017/34647e53-4635-47e0-a82d-9adb0f34aa0b)
