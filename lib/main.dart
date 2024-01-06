@@ -39,6 +39,8 @@ void _run() async {
 
   setUrlStrategy(PathUrlStrategy());
 
+  final IDiContainer diContainer = DiContainer();
+
   final app = await diContainer.configureDependencies();
   runApp(app);
 }

@@ -54,8 +54,6 @@ import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen_
 import 'package:seo_web/feature/presentation/screens/home/home_screen_model.dart';
 import 'package:seo_web/main.dart';
 
-final IDiContainer diContainer = DiContainer();
-
 abstract class IDiContainer {
   Future<Widget> configureDependencies();
 }
