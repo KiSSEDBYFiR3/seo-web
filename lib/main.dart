@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:meta_seo/meta_seo.dart';
 import 'package:provider/provider.dart';
 import 'package:seo_web/core/common/colors/colors.dart';
 import 'package:seo_web/core/common/themes.dart';
@@ -19,9 +17,6 @@ import 'package:seo_web/core/common/utils/url_strategy_io.dart'
 import 'package:seo_web/generated/l10n.dart';
 
 void main() async {
-  if (kIsWeb) {
-    MetaSEO().config();
-  }
   runZonedGuarded(
     _run,
     (error, stack) {

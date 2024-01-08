@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:meta_seo/meta_seo.dart';
 import 'package:provider/provider.dart';
 import 'package:seo_web/core/di/dependencies.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
@@ -37,6 +38,8 @@ abstract interface class IFavoritesWidgetModel
 
   EntityStateNotifier<CartEntity?> get cartState;
   EntityStateNotifier<List<ProductEntity>> get favoritesState;
+
+  MetaSEO get meta;
 }
 
 FavoritesWidgetModel favoritesWMFactory(BuildContext context) =>
@@ -124,4 +127,7 @@ final class FavoritesWidgetModel
         ? model.deleteFromFavorites(product: product)
         : model.addToFavorites(product: product);
   }
+
+  @override
+  MetaSEO get meta => context.read<Dependencies>().meta;
 }

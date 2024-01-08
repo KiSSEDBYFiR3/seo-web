@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:elementary/elementary.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:seo_web/core/common/utils/seo_helper.dart';
 import 'package:seo_web/core/di/dependencies.dart';
 import 'package:seo_web/core/exception/app_exceptions.dart';
 import 'package:seo_web/feature/presentation/screens/home/home_screen.dart';
@@ -32,6 +34,9 @@ final class HomeScreenWidgetModel extends WidgetModel<HomeWidget, IHomeModel>
   late final StreamSubscription _errorsSubscription;
   @override
   void initWidgetModel() {
+    final localeCode = Intl.getCurrentLocale();
+    SEOHelper.setCanonicalLink(href: 'http://127.0.0.1');
+    SEOHelper.setLocale(locale: localeCode);
     _errorsSubscription = model.errorsBus.errorStream.listen(_errorsListner);
     super.initWidgetModel();
   }

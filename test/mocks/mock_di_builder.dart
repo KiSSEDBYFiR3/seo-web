@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:meta_seo/meta_seo.dart';
 import 'package:seo_web/core/common/app/dependencies_provider.dart';
 import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
 import 'package:seo_web/core/di/dependencies.dart';
@@ -69,6 +71,9 @@ class MockDiContainer implements IDiContainer {
 
   @override
   Future<Widget> configureDependencies() async {
+    if (kIsWeb) {
+      _metaSeo.config();
+    }
     return _createApp();
   }
 
@@ -80,11 +85,14 @@ class MockDiContainer implements IDiContainer {
           favoritesModel: _favoritesModel,
           categoriesModel: _categoriesModel,
           productModel: _productModel(),
+          meta: _metaSeo,
         ),
         child: App(
           appRouter: _createAppRouter,
         ),
       );
+
+  late final _metaSeo = MetaSEO();
 
   late final AppRouter _createAppRouter = AppRouter();
 

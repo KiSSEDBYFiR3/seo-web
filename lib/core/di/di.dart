@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:meta_seo/meta_seo.dart';
 import 'package:seo_web/core/common/app/dependencies_provider.dart';
 import 'package:seo_web/core/common/consts/consts.dart';
 import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
@@ -74,6 +76,9 @@ class DiContainer implements IDiContainer {
       _createAuthRepository,
       localRepository,
     );
+    if (kIsWeb) {
+      _metaSeo.config();
+    }
     return _createApp();
   }
 
@@ -85,11 +90,14 @@ class DiContainer implements IDiContainer {
           favoritesModel: _favoritesModel,
           categoriesModel: _categoriesModel,
           productModel: _productModel(),
+          meta: _metaSeo,
         ),
         child: App(
           appRouter: _appRouter,
         ),
       );
+
+  late final _metaSeo = MetaSEO();
 
   IAuthRepository _createAuthRepository(Dio dio) => AuthRepository(
         _createAuthDataSource(dio),

@@ -1,3 +1,4 @@
+import 'package:meta_seo/meta_seo.dart';
 import 'package:seo_web/feature/presentation/screens/cart/cart_screen_model.dart';
 import 'package:seo_web/feature/presentation/screens/catalog/categories/categories_screen_model.dart';
 import 'package:seo_web/feature/presentation/screens/catalog/product_card/product_card_screen_model.dart';
@@ -12,6 +13,7 @@ class Dependencies {
   final ICategoriesModel categoriesModel;
   final IHomeModel homeModel;
   final IProductModel productModel;
+  final MetaSEO meta;
 
   Dependencies({
     required this.cartModel,
@@ -20,5 +22,6 @@ class Dependencies {
     required this.categoriesModel,
     required this.homeModel,
     required this.productModel,
+    required this.meta,
   });
 }

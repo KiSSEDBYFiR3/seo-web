@@ -3,6 +3,7 @@ import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:meta_seo/meta_seo.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:seo_web/core/di/dependencies.dart';
@@ -31,6 +32,8 @@ abstract interface class IProductWidgetModel
 
   bool isInFavorites(ProductEntity product);
   bool isInCart(ProductEntity product);
+
+  MetaSEO get meta;
 }
 
 IProductWidgetModel productWMFactory(BuildContext context, int id) =>
@@ -114,4 +117,7 @@ final class ProductWidgetModel
   bool isInCart(ProductEntity product) {
     return _cart?.offers.any((element) => element.id == product.id) ?? false;
   }
+
+  @override
+  MetaSEO get meta => context.read<Dependencies>().meta;
 }

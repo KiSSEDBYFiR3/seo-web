@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:meta_seo/meta_seo.dart';
 import 'package:provider/provider.dart';
 import 'package:seo_web/core/di/dependencies.dart';
 import 'package:seo_web/core/navigation/app_router.dart';
@@ -22,6 +23,8 @@ abstract interface class ICategoriesScreenWidgetModel
   Future<void> selectCategory(String category);
 
   EntityStateNotifier<List<String>> get categoriesState;
+
+  MetaSEO get meta;
 }
 
 ICategoriesScreenWidgetModel categoriesScreenWMFactory(BuildContext context) =>
@@ -57,4 +60,7 @@ final class CategoriesScreenWidgetModel
 
   @override
   S get locale => S.of(context);
+
+  @override
+  MetaSEO get meta => context.read<Dependencies>().meta;
 }

@@ -3,7 +3,6 @@ import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:meta_seo/meta_seo.dart';
 import 'package:seo_web/core/common/colors/colors.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/core/icons/custom_icons.dart';
@@ -26,7 +25,10 @@ class ProductsScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return Padding(
       padding: EdgeInsets.only(left: width > 550 ? 100 : 0),
-      child: const ProductsWidget(catalogWMFactory),
+      child: ProductsWidget(
+        catalogWMFactory,
+        key: UniqueKey(),
+      ),
     );
   }
 }
@@ -37,10 +39,9 @@ class ProductsWidget extends ElementaryWidget<IProductsWidgetModel> {
   @override
   Widget build(IProductsWidgetModel wm) {
     if (kIsWeb) {
-      final meta = MetaSEO();
-      meta.ogTitle(ogTitle: wm.locale.allProducts);
-      meta.description(description: wm.locale.allProducts);
-      meta.keywords(
+      wm.meta.ogTitle(ogTitle: wm.locale.allProducts);
+      wm.meta.description(description: wm.locale.allProducts);
+      wm.meta.keywords(
         keywords:
             'Catalog, Products, Product List, Список товаров, Каталог, Продукты',
       );

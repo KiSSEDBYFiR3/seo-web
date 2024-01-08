@@ -3,7 +3,6 @@ import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:meta_seo/meta_seo.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
 import 'package:seo_web/feature/presentation/screens/favorites/favorites_screen_widget_model.dart';
@@ -30,12 +29,8 @@ class FavoritesWidget extends ElementaryWidget<IFavoritesWidgetModel> {
   @override
   Widget build(IFavoritesWidgetModel wm) {
     if (kIsWeb) {
-      final meta = MetaSEO();
-      meta.ogTitle(ogTitle: wm.locale.favorites);
-      meta.description(description: wm.locale.favorites);
-      meta.keywords(
-        keywords: 'Избранное, Favorites, Избранные товары',
-      );
+      wm.meta.ogTitle(ogTitle: wm.locale.favorites);
+      wm.meta.description(description: wm.locale.favorites);
     }
     return Scaffold(
       backgroundColor: Colors.white,

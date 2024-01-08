@@ -5,20 +5,22 @@ import 'package:seo_web/generated/l10n.dart';
 class SeoNavigationObserver extends AutoRouteObserver {
   final AppLocalizationDelegate delegate;
 
-  SeoNavigationObserver({required this.delegate});
+  SeoNavigationObserver({
+    required this.delegate,
+  });
 
   @override
   void didChangeTabRoute(TabPageRoute route, TabPageRoute previousRoute) {
     final locale = S();
     switch (route.path) {
       case 'catalog-tab':
-        SEOHelper.addInfo(title: locale.catalog);
+        SEOHelper.addTitle(title: locale.catalog);
         break;
       case 'cart-tab':
-        SEOHelper.addInfo(title: locale.cart);
+        SEOHelper.addTitle(title: locale.cart);
         break;
       case 'favorites-tab':
-        SEOHelper.addInfo(title: locale.favorites);
+        SEOHelper.addTitle(title: locale.favorites);
         break;
     }
     super.didChangeTabRoute(route, previousRoute);

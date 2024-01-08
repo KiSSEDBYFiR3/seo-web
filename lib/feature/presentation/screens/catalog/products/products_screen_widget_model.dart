@@ -3,6 +3,7 @@ import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:meta_seo/meta_seo.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:seo_web/core/common/consts/consts.dart';
@@ -48,6 +49,8 @@ abstract interface class IProductsWidgetModel
   void unfocus();
 
   TextEditingController get searchController;
+
+  MetaSEO get meta;
 }
 
 IProductsWidgetModel catalogWMFactory(
@@ -223,4 +226,7 @@ final class ProductsWidgetModel
       id: id,
     ));
   }
+
+  @override
+  MetaSEO get meta => context.read<Dependencies>().meta;
 }

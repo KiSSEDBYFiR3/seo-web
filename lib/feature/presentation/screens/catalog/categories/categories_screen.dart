@@ -5,7 +5,6 @@ import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:meta_seo/meta_seo.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/core/common/utils/casing_extension.dart';
 import 'package:seo_web/feature/presentation/screens/catalog/categories/categories_screen_widget_model.dart';
@@ -30,10 +29,9 @@ class CategoriesWidget extends ElementaryWidget<ICategoriesScreenWidgetModel> {
   @override
   Widget build(ICategoriesScreenWidgetModel wm) {
     if (kIsWeb) {
-      final meta = MetaSEO();
-      meta.ogTitle(ogTitle: wm.locale.categories);
-      meta.description(description: wm.locale.categories);
-      meta.keywords(
+      wm.meta.ogTitle(ogTitle: wm.locale.categories);
+      wm.meta.description(description: wm.locale.categories);
+      wm.meta.keywords(
         keywords: 'Categories, Catalog, Каталог, Категории',
       );
     }

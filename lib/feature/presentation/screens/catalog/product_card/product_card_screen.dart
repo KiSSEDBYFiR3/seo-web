@@ -4,7 +4,6 @@ import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:meta_seo/meta_seo.dart';
 import 'package:seo_web/core/common/colors/colors.dart';
 import 'package:seo_web/core/common/typography/typography.dart';
 import 'package:seo_web/core/common/utils/currency_extension.dart';
@@ -30,6 +29,7 @@ class ProductCardScreen extends StatelessWidget {
       padding: EdgeInsets.only(left: width > 550 ? 100 : 0),
       child: ProductCardWidget(
         (context) => productWMFactory(context, id ?? 0),
+        key: UniqueKey(),
       ),
     );
   }
@@ -41,12 +41,11 @@ class ProductCardWidget extends ElementaryWidget<IProductWidgetModel> {
   @override
   Widget build(IProductWidgetModel wm) {
     if (kIsWeb) {
-      SEOHelper.addInfo(title: wm.locale.productCard);
+      SEOHelper.addTitle(title: wm.locale.productCard);
 
-      final meta = MetaSEO();
-      meta.ogTitle(ogTitle: wm.locale.productCard);
-      meta.description(description: wm.locale.productCard);
-      meta.keywords(
+      wm.meta.ogTitle(ogTitle: wm.locale.productCard);
+      wm.meta.description(description: wm.locale.productCard);
+      wm.meta.keywords(
         keywords: 'Product Card, Product, Продукт, Карточка товара',
       );
     }
@@ -73,8 +72,7 @@ class ProductCardWidget extends ElementaryWidget<IProductWidgetModel> {
               child: CircularProgressIndicator.adaptive(),
             );
           }
-
-          SEOHelper.addInfo(
+          SEOHelper.addImage(
             imageLink: product.image,
             imageAlt: 'Product Image',
           );
