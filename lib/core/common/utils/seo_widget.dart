@@ -45,6 +45,6 @@ class _SEOWidgetState extends State<SEOWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return child;
+    return widget.child;
   }
 }
