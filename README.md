@@ -47,4 +47,5 @@ Dart: 3.1.4
 
 **Mobile:**
 
-![Mobile](https://github.com/KiSSEDBYFiR3/seo-web/assets/72256017/34647e53-4635-47e0-a82d-9adb0f34aa0b)
+![Mobile](https://github.com/KiSSEDBYFiR3/seo-web/assets/72256017/9d2af5a7-5a03-4859-b7ee-3d0533a224db)
+
