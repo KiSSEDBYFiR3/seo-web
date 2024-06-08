@@ -50,7 +50,7 @@ abstract interface class IProductsWidgetModel
 
   TextEditingController get searchController;
 
-  MetaSEO get meta;
+  MetaSEO? get meta;
 }
 
 IProductsWidgetModel catalogWMFactory(
@@ -228,5 +228,5 @@ final class ProductsWidgetModel
   }
 
   @override
-  MetaSEO get meta => context.read<Dependencies>().meta;
+  MetaSEO? get meta => context.read<Dependencies>().meta;
 }

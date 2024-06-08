@@ -43,9 +43,9 @@ class ProductCardWidget extends ElementaryWidget<IProductWidgetModel> {
     if (kIsWeb) {
       SEOHelper.addTitle(title: wm.locale.productCard);
 
-      wm.meta.ogTitle(ogTitle: wm.locale.productCard);
-      wm.meta.description(description: wm.locale.productCard);
-      wm.meta.keywords(
+      wm.meta?.ogTitle(ogTitle: wm.locale.productCard);
+      wm.meta?.description(description: wm.locale.productCard);
+      wm.meta?.keywords(
         keywords: 'Product Card, Product, Продукт, Карточка товара',
       );
     }

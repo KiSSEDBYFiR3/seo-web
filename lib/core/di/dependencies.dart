@@ -13,7 +13,7 @@ class Dependencies {
   final ICategoriesModel categoriesModel;
   final IHomeModel homeModel;
   final IProductModel productModel;
-  final MetaSEO meta;
+  final MetaSEO? meta;
 
   Dependencies({
     required this.cartModel,

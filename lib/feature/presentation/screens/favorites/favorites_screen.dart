@@ -29,8 +29,8 @@ class FavoritesWidget extends ElementaryWidget<IFavoritesWidgetModel> {
   @override
   Widget build(IFavoritesWidgetModel wm) {
     if (kIsWeb) {
-      wm.meta.ogTitle(ogTitle: wm.locale.favorites);
-      wm.meta.description(description: wm.locale.favorites);
+      wm.meta?.ogTitle(ogTitle: wm.locale.favorites);
+      wm.meta?.description(description: wm.locale.favorites);
     }
     return Scaffold(
       backgroundColor: Colors.white,

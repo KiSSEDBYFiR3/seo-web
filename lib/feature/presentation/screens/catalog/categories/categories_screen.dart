@@ -29,9 +29,9 @@ class CategoriesWidget extends ElementaryWidget<ICategoriesScreenWidgetModel> {
   @override
   Widget build(ICategoriesScreenWidgetModel wm) {
     if (kIsWeb) {
-      wm.meta.ogTitle(ogTitle: wm.locale.categories);
-      wm.meta.description(description: wm.locale.categories);
-      wm.meta.keywords(
+      wm.meta?.ogTitle(ogTitle: wm.locale.categories);
+      wm.meta?.description(description: wm.locale.categories);
+      wm.meta?.keywords(
         keywords: 'Categories, Catalog, Каталог, Категории',
       );
     }

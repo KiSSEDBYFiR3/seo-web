@@ -77,7 +77,10 @@ class DiContainer implements IDiContainer {
       localRepository,
     );
     if (kIsWeb) {
-      _metaSeo.config();
+      _metaSeo = MetaSEO();
+      _metaSeo!.config();
+    } else {
+      _metaSeo = null;
     }
     return _createApp();
   }
@@ -97,7 +100,7 @@ class DiContainer implements IDiContainer {
         ),
       );
 
-  late final _metaSeo = MetaSEO();
+  late final MetaSEO? _metaSeo;
 
   IAuthRepository _createAuthRepository(Dio dio) => AuthRepository(
         _createAuthDataSource(dio),

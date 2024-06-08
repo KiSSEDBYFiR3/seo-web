@@ -39,9 +39,9 @@ class ProductsWidget extends ElementaryWidget<IProductsWidgetModel> {
   @override
   Widget build(IProductsWidgetModel wm) {
     if (kIsWeb) {
-      wm.meta.ogTitle(ogTitle: wm.locale.allProducts);
-      wm.meta.description(description: wm.locale.allProducts);
-      wm.meta.keywords(
+      wm.meta?.ogTitle(ogTitle: wm.locale.allProducts);
+      wm.meta?.description(description: wm.locale.allProducts);
+      wm.meta?.keywords(
         keywords:
             'Catalog, Products, Product List, Список товаров, Каталог, Продукты',
       );

@@ -33,7 +33,7 @@ abstract interface class IProductWidgetModel
   bool isInFavorites(ProductEntity product);
   bool isInCart(ProductEntity product);
 
-  MetaSEO get meta;
+  MetaSEO? get meta;
 }
 
 IProductWidgetModel productWMFactory(BuildContext context, int id) =>
@@ -119,5 +119,5 @@ final class ProductWidgetModel
   }
 
   @override
-  MetaSEO get meta => context.read<Dependencies>().meta;
+  MetaSEO? get meta => context.read<Dependencies>().meta;
 }

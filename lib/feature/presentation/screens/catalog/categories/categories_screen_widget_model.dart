@@ -24,7 +24,7 @@ abstract interface class ICategoriesScreenWidgetModel
 
   EntityStateNotifier<List<String>> get categoriesState;
 
-  MetaSEO get meta;
+  MetaSEO? get meta;
 }
 
 ICategoriesScreenWidgetModel categoriesScreenWMFactory(BuildContext context) =>
@@ -62,5 +62,5 @@ final class CategoriesScreenWidgetModel
   S get locale => S.of(context);
 
   @override
-  MetaSEO get meta => context.read<Dependencies>().meta;
+  MetaSEO? get meta => context.read<Dependencies>().meta;
 }

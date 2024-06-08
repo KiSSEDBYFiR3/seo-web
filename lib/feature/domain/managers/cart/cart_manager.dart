@@ -128,10 +128,10 @@ class CartManager implements ICartManager {
 
       _cartChangedController.add(cart);
     } catch (e, stackTrace) {
-      _logger.shout(e.toString(), e, stackTrace);
+      // _logger.shout(e.toString(), e, stackTrace);
 
-      _errorsBus.addException(Exceptions.getCartException);
-      throw Exceptions.getCartException;
+      // _errorsBus.addException(Exceptions.getCartException);
+      // throw Exceptions.getCartException;
     }
   }
 

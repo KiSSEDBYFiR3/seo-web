@@ -39,7 +39,7 @@ abstract interface class IFavoritesWidgetModel
   EntityStateNotifier<CartEntity?> get cartState;
   EntityStateNotifier<List<ProductEntity>> get favoritesState;
 
-  MetaSEO get meta;
+  MetaSEO? get meta;
 }
 
 FavoritesWidgetModel favoritesWMFactory(BuildContext context) =>
@@ -129,5 +129,5 @@ final class FavoritesWidgetModel
   }
 
   @override
-  MetaSEO get meta => context.read<Dependencies>().meta;
+  MetaSEO? get meta => context.read<Dependencies>().meta;
 }

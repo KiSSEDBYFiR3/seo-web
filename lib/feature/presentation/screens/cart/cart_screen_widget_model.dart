@@ -40,7 +40,7 @@ abstract interface class ICartWidgetModel
 
   Future<void> onProductTap(int id);
 
-  MetaSEO get meta;
+  MetaSEO? get meta;
 }
 
 WidgetModel cartWMFactory(BuildContext context) => CartWidgetModel(
@@ -124,5 +124,5 @@ class CartWidgetModel extends WidgetModel<CartWidget, ICartModel>
   int get offersCount => calcOffersCount(_cart?.offers ?? []);
 
   @override
-  MetaSEO get meta => context.read<Dependencies>().meta;
+  MetaSEO? get meta => context.read<Dependencies>().meta;
 }

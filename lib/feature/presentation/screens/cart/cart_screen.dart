@@ -34,8 +34,8 @@ class CartWidget extends ElementaryWidget<ICartWidgetModel> {
   @override
   Widget build(ICartWidgetModel wm) {
     if (kIsWeb) {
-      wm.meta.ogTitle(ogTitle: wm.locale.cart);
-      wm.meta.description(description: wm.locale.cart);
+      wm.meta?.ogTitle(ogTitle: wm.locale.cart);
+      wm.meta?.description(description: wm.locale.cart);
     }
     return Scaffold(
       floatingActionButton: LayoutBuilder(builder: (context, constraints) {
