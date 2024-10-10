@@ -72,7 +72,8 @@ class MockDiContainer implements IDiContainer {
   @override
   Future<Widget> configureDependencies() async {
     if (kIsWeb) {
-      _metaSeo.config();
+      _metaSeo = MetaSEO();
+      _metaSeo?.config();
     }
     return _createApp();
   }
@@ -92,7 +93,7 @@ class MockDiContainer implements IDiContainer {
         ),
       );
 
-  late final _metaSeo = MetaSEO();
+  MetaSEO? _metaSeo;
 
   late final AppRouter _createAppRouter = AppRouter();
 

@@ -128,10 +128,10 @@ class CartManager implements ICartManager {
 
       _cartChangedController.add(cart);
     } catch (e, stackTrace) {
-      // _logger.shout(e.toString(), e, stackTrace);
+      _logger.shout(e.toString(), e, stackTrace);
 
-      // _errorsBus.addException(Exceptions.getCartException);
-      // throw Exceptions.getCartException;
+      _errorsBus.addException(Exceptions.getCartException);
+      throw Exceptions.getCartException;
     }
   }
 
@@ -143,10 +143,8 @@ class CartManager implements ICartManager {
   @override
   void dispose() {
     _cartChangedController.close();
-    cartChangedController.close();
     _errorsBus.dispose();
     _cartState.dispose();
-    cartState.dispose();
   }
 
   @override

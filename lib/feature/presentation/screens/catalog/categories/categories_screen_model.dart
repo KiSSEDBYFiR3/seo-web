@@ -1,6 +1,5 @@
 import 'package:elementary/elementary.dart';
 import 'package:elementary_helper/elementary_helper.dart';
-import 'package:flutter/foundation.dart';
 import 'package:seo_web/feature/domain/managers/products/i_products_manager.dart';
 
 abstract interface class ICategoriesModel extends ElementaryModel {
@@ -31,14 +30,5 @@ final class CategoriesModel extends ElementaryModel
   void init() {
     productsManager.getAllProducts();
     super.init();
-  }
-
-  @override
-  void dispose() {
-    // On web back button navigation can cause an already disposed error
-    if (!kIsWeb) {
-      productsManager.dispose();
-    }
-    super.dispose();
   }
 }

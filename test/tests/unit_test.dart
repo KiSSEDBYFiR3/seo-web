@@ -1,6 +1,8 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:seo_web/core/common/consts/consts.dart';
+import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/auth/auth_data_source.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/cart/cart_data_source.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/favorites/favorites_data_source.dart';
@@ -10,7 +12,6 @@ import 'package:seo_web/feature/data/model/auth/auth_response_dto.dart';
 import 'package:seo_web/feature/data/model/auth/free_token_response_dto.dart';
 import 'package:seo_web/feature/data/model/cart/cart_dto.dart';
 import 'package:seo_web/feature/data/model/cart/mapper/cart_mapper.dart';
-import 'package:seo_web/feature/data/model/product/mapper/mapper.dart';
 import 'package:seo_web/feature/data/model/product/product_dto.dart';
 import 'package:seo_web/feature/data/repository/auth/auth_repository.dart';
 import 'package:seo_web/feature/data/repository/cart/cart_repository.dart';
@@ -24,14 +25,15 @@ import 'package:seo_web/feature/data/services/order/order_service.dart';
 import 'package:seo_web/feature/data/services/products/products_service.dart';
 import 'package:seo_web/feature/domain/entity/cart_entity.dart';
 import 'package:seo_web/feature/domain/entity/products_entity.dart';
+import 'package:seo_web/feature/domain/managers/cart/cart_manager.dart';
 import 'package:seo_web/feature/domain/managers/cart/i_cart_manager.dart';
+import 'package:seo_web/feature/domain/managers/favorites/favorites_manager.dart';
 import 'package:seo_web/feature/domain/managers/favorites/i_favorites_manager.dart';
 import 'package:seo_web/feature/domain/managers/products/i_products_manager.dart';
+import 'package:seo_web/feature/domain/managers/products/products_manager.dart';
 
 import '../mocks/data.dart';
 import '../mocks/data_sources.mocks.dart';
-import '../mocks/managers_mocks.dart';
-import '../mocks/repositories.mocks.dart';
 import '../mocks/services.mocks.dart';
 
 void main() {
@@ -56,284 +58,198 @@ void main() {
   late ICartManager cartManager;
   late IFavoritesManager favoritesManager;
   late IProductsManager productsManager;
+  late final IErrorsBus errorsBus;
 
-  setUpAll(() {
-    /// Services init
-    authMock = MockAuthService();
-    orderMock = MockOrderService();
-    productsMock = MockProductsService();
-    cartMock = MockCartService();
-    favoritesMock = MockFavoritesService();
+  setUpAll(
+    () {
+      errorsBus = ErrorsBus();
 
-    /// Data Sources init
-    authDataSource = MockAuthDataSource();
-    orderDataSource = MockOrderDataSource();
-    favoritesDataSource = MockFavoritesDataSource();
-    cartDataSource = MockCartDataSource();
-    productsDataSource = MockProductsDataSource();
+      /// Services init
+      authMock = MockAuthService();
+      orderMock = MockOrderService();
+      productsMock = MockProductsService();
+      cartMock = MockCartService();
+      favoritesMock = MockFavoritesService();
 
-    /// Repositories init
-    authRepository = MockAuthRepository();
-    orderRepository = MockOrderRepository();
-    favoritesRepository = MockFavoritesRepository();
-    cartRepository = MockCartRepository();
-    productsRepository = MockProductsRepository();
+      /// Data Sources init
+      authDataSource = MockAuthDataSource();
+      orderDataSource = MockOrderDataSource();
+      favoritesDataSource = MockFavoritesDataSource();
+      cartDataSource = MockCartDataSource();
+      productsDataSource = MockProductsDataSource();
 
-    /// Managers init
-    cartManager = MockCartManager(
-      repository: cartRepository,
-      orderRepository: orderRepository,
-    );
+      /// Repositories init
+      authRepository = AuthRepository(authDataSource);
+      orderRepository = OrderRepository(dataSource: orderDataSource);
+      favoritesRepository =
+          FavoritesRepository(dataSource: favoritesDataSource);
+      cartRepository = CartRepository(dataSource: cartDataSource);
+      productsRepository = ProductsRepository(dataSource: productsDataSource);
 
-    favoritesManager = MockFavoritesManager(repository: favoritesRepository);
-
-    productsManager = MockProductsManager(repository: productsRepository);
-
-    /// Services stubs
-    when(authMock.authorize()).thenAnswer((_) => Future(
-          () => const AuthResponseDto(
-              accessToken: 'accessToken', refreshToken: 'refreshToken'),
-        ));
-    when(authMock.refresh()).thenAnswer(
-      (_) async => const FreeTokenResponseDto(
-          accessToken: 'accessToken', refreshToken: 'refreshToken'),
-    );
-
-    when(cartMock.getCart()).thenAnswer(
-      (_) async => CartDto.fromJson(cartStub),
-    );
-
-    when(cartMock.addToCart(id: 1)).thenAnswer(
-      (_) => Future(() => CartDto.fromJson(cartAddStub)),
-    );
-
-    when(cartMock.deleteFromCart(id: 1)).thenAnswer(
-      (_) => Future(() => CartDto.fromJson(cartStub)),
-    );
-
-    when(favoritesMock.getFavorites()).thenAnswer(
-      (_) async => productStub.map(ProductDto.fromJson).toList(),
-    );
-
-    when(favoritesMock.addToFavorites(id: 1)).thenAnswer(
-      (_) => Future(
-        () => productAddedStub.map(ProductDto.fromJson).toList(),
-      ),
-    );
-
-    when(favoritesMock.deleteFromFavorites(id: 1)).thenAnswer(
-      (_) => Future(
-        () => productStub.map(ProductDto.fromJson).toList(),
-      ),
-    );
-
-    when(productsMock.getAllProducts()).thenAnswer(
-      (_) async => productStub.map(ProductDto.fromJson).toList(),
-    );
-
-    when(orderMock.createOrder()).thenAnswer(
-      (_) async => 'success',
-    );
-
-    /// Data Sources stubs
-    when(authDataSource.authorize()).thenAnswer((realInvocation) async {
-      final dto = await authMock.authorize();
-      return (dto.accessToken, dto.refreshToken);
-    });
-
-    when(authDataSource.updateToken()).thenAnswer((realInvocation) async {
-      final dto = await authMock.refresh();
-      return (dto.accessToken, dto.refreshToken);
-    });
-
-    when(orderDataSource.createOrder())
-        .thenAnswer((realInvocation) async => await orderMock.createOrder());
-
-    when(productsDataSource.getAllProducts()).thenAnswer(
-        (realInvocation) async => await productsMock.getAllProducts());
-
-    when(cartDataSource.getCart())
-        .thenAnswer((realInvocation) async => cartMock.getCart());
-
-    when(cartDataSource.addToCart(id: 1))
-        .thenAnswer((realInvocation) async => await cartMock.addToCart(id: 1));
-
-    when(cartDataSource.deleteFromCart(id: 1)).thenAnswer(
-        (realInvocation) async => await cartMock.deleteFromCart(id: 1));
-
-    when(favoritesDataSource.getFavorites()).thenAnswer(
-        (realInvocation) async => await favoritesMock.getFavorites());
-
-    when(favoritesDataSource.addToFavorites(id: 1)).thenAnswer(
-        (realInvocation) async => await favoritesMock.addToFavorites(id: 1));
-
-    when(favoritesDataSource.deleteFromFavorites(id: 1)).thenAnswer(
-        (realInvocation) async =>
-            await favoritesMock.deleteFromFavorites(id: 1));
-
-    /// Repositories Stubs
-    when(authRepository.authorize())
-        .thenAnswer((realInvocation) async => await authDataSource.authorize());
-
-    when(authRepository.updateToken()).thenAnswer(
-        (realInvocation) async => await authDataSource.updateToken());
-
-    when(orderRepository.createOrder()).thenAnswer(
-        (realInvocation) async => await orderDataSource.createOrder());
-
-    when(productsRepository.getAllProducts())
-        .thenAnswer((realInvocation) async {
-      final dtoProducts = await productsDataSource.getAllProducts();
-
-      return dtoProducts.map(dtoToProductMapper).toList();
-    });
-
-    when(favoritesRepository.getFavorites()).thenAnswer((realInvocation) async {
-      final dtoProducts = await favoritesDataSource.getFavorites();
-
-      return dtoProducts.map(dtoToProductMapper).toList();
-    });
-
-    when(favoritesRepository.addToFavorites(id: 1))
-        .thenAnswer((realInvocation) async {
-      final dtoProducts = await favoritesDataSource.addToFavorites(id: 1);
-
-      return dtoProducts.map(dtoToProductMapper).toList();
-    });
-
-    when(favoritesRepository.deleteFromFavorites(id: 1))
-        .thenAnswer((realInvocation) async {
-      final dtoProducts = await favoritesDataSource.deleteFromFavorites(id: 1);
-
-      return dtoProducts.map(dtoToProductMapper).toList();
-    });
-
-    when(cartRepository.getCart()).thenAnswer((realInvocation) async {
-      final dto = await cartDataSource.getCart();
-
-      return dtoToCartMapper(dto);
-    });
-
-    when(cartRepository.addToCart(id: 1)).thenAnswer((realInvocation) async {
-      final dto = await cartDataSource.addToCart(id: 1);
-
-      return dtoToCartMapper(dto);
-    });
-
-    when(cartRepository.deleteFromCart(id: 1))
-        .thenAnswer((realInvocation) async {
-      final dto = await cartDataSource.deleteFromCart(id: 1);
-
-      return dtoToCartMapper(dto);
-    });
-  });
-
-  group("Services return dto's", () {
-    test('Auth Requests return expected DTO', () async {
-      final responseAuth = await authMock.authorize();
-      final responseRefresh = await authMock.refresh();
-
-      expect(responseAuth.accessToken, 'accessToken');
-      expect(responseAuth.refreshToken, 'refreshToken');
-
-      expect(responseRefresh.accessToken, 'accessToken');
-      expect(responseRefresh.refreshToken, 'refreshToken');
-    });
-
-    test("Cart Requests return expected dto's", () async {
-      final responseGetCart = await cartMock.getCart();
-      final responseAddToCart = await cartMock.addToCart(id: 1);
-      final responseDeleteFromCart = await cartMock.deleteFromCart(id: 1);
-
-      expect(responseGetCart, CartDto.fromJson(cartStub));
-      expect(responseAddToCart, CartDto.fromJson(cartAddStub));
-      expect(responseDeleteFromCart, CartDto.fromJson(cartStub));
-    });
-
-    test("Favorites Requests return expected dto's", () async {
-      final responseGetFavorites = await favoritesMock.getFavorites();
-      final responseAddToFavorites = await favoritesMock.addToFavorites(id: 1);
-      final responseDeleteFromFavorites =
-          await favoritesMock.deleteFromFavorites(id: 1);
-
-      expect(
-          responseGetFavorites, productStub.map(ProductDto.fromJson).toList());
-      expect(
-        responseAddToFavorites,
-        productAddedStub.map(ProductDto.fromJson).toList(),
+      /// Managers init
+      cartManager = CartManager(
+        cartRepository: cartRepository,
+        errorsBus: errorsBus,
+        orderRepository: orderRepository,
       );
-      expect(responseDeleteFromFavorites,
-          productStub.map(ProductDto.fromJson).toList());
-    });
 
-    test("Products Requests return expected dto's", () async {
-      final responseProducts = await productsMock.getAllProducts();
+      favoritesManager = FavoritesManager(
+        favoritesRepository: favoritesRepository,
+        errorsBus: errorsBus,
+      );
 
-      expect(responseProducts, productStub.map(ProductDto.fromJson).toList());
-    });
+      productsManager = ProductsManager(
+        productsRepository: productsRepository,
+        errorsBus: errorsBus,
+        allProductsCategoryName: Consts.allProductsCategoryName,
+      );
 
-    test('Order returns success', () async {
-      final order = await orderMock.createOrder();
+      /// Services stubs
+      when(authMock.authorize()).thenAnswer(
+        (_) => Future(
+          () => const AuthResponseDto(
+            accessToken: 'accessToken',
+            refreshToken: 'refreshToken',
+          ),
+        ),
+      );
 
-      expect(order, 'success');
-    });
-  });
+      when(authMock.refresh()).thenAnswer(
+        (_) async => const FreeTokenResponseDto(
+          accessToken: 'accessToken',
+          refreshToken: 'refreshToken',
+        ),
+      );
 
-  group('Test Data Sources', () {
-    test('Auth Data Source methods return (String, String) records', () async {
-      final authResponse = await authDataSource.authorize();
-      final updateTokenResponse = await authDataSource.updateToken();
+      when(cartMock.getCart()).thenAnswer(
+        (_) async => CartDto.fromJson(cartStub),
+      );
 
-      expect(authResponse, const TypeMatcher<(String, String)>());
-      expect(updateTokenResponse, const TypeMatcher<(String, String)>());
-    });
+      when(cartMock.addToCart(id: 1)).thenAnswer(
+        (_) => Future(() => CartDto.fromJson(cartAddStub)),
+      );
 
-    test('Order Data Source returns success ', () async {
-      final orderResponse = await orderDataSource.createOrder();
+      when(cartMock.deleteFromCart(id: 1)).thenAnswer(
+        (_) => Future(() => CartDto.fromJson(cartStub)),
+      );
 
-      expect(orderResponse, 'success');
-    });
+      when(favoritesMock.getFavorites()).thenAnswer(
+        (_) async => productStub.map(ProductDto.fromJson).toList(),
+      );
 
-    test('Product Data Source returns List<ProductDto> ', () async {
-      final productResponse = await productsDataSource.getAllProducts();
+      when(favoritesMock.addToFavorites(id: 1)).thenAnswer(
+        (_) => Future(
+          () => productAddedStub.map(ProductDto.fromJson).toList(),
+        ),
+      );
 
-      expect(productResponse, const TypeMatcher<List<ProductDto>>());
-    });
+      when(favoritesMock.deleteFromFavorites(id: 1)).thenAnswer(
+        (_) => Future(
+          () => productStub.map(ProductDto.fromJson).toList(),
+        ),
+      );
 
-    test('Cart Data Source returns CartDto and expected number of products ',
+      when(productsMock.getAllProducts()).thenAnswer(
+        (_) async => productStub.map(ProductDto.fromJson).toList(),
+      );
+
+      when(orderMock.createOrder()).thenAnswer(
+        (_) async => 'success',
+      );
+
+      /// Data Sources stubs
+      when(authDataSource.authorize()).thenAnswer((realInvocation) async {
+        final dto = await authMock.authorize();
+        return (dto.accessToken, dto.refreshToken);
+      });
+
+      when(authDataSource.updateToken()).thenAnswer((realInvocation) async {
+        final dto = await authMock.refresh();
+        return (dto.accessToken, dto.refreshToken);
+      });
+
+      when(orderDataSource.createOrder())
+          .thenAnswer((realInvocation) async => await orderMock.createOrder());
+
+      when(productsDataSource.getAllProducts()).thenAnswer(
+          (realInvocation) async => await productsMock.getAllProducts());
+
+      when(cartDataSource.getCart())
+          .thenAnswer((realInvocation) async => cartMock.getCart());
+
+      when(cartDataSource.addToCart(id: 1)).thenAnswer(
+          (realInvocation) async => await cartMock.addToCart(id: 1));
+
+      when(cartDataSource.deleteFromCart(id: 1)).thenAnswer(
+          (realInvocation) async => await cartMock.deleteFromCart(id: 1));
+
+      when(favoritesDataSource.getFavorites()).thenAnswer(
+          (realInvocation) async => await favoritesMock.getFavorites());
+
+      when(favoritesDataSource.addToFavorites(id: 1)).thenAnswer(
+          (realInvocation) async => await favoritesMock.addToFavorites(id: 1));
+
+      when(favoritesDataSource.deleteFromFavorites(id: 1)).thenAnswer(
+          (realInvocation) async =>
+              await favoritesMock.deleteFromFavorites(id: 1));
+    },
+  );
+
+  group(
+    'Test Data Sources',
+    () {
+      test('Order Data Source returns success ', () async {
+        final orderResponse = await orderDataSource.createOrder();
+
+        expect(orderResponse, 'success');
+      });
+
+      test('Product Data Source returns List<ProductDto> ', () async {
+        final productResponse = await productsDataSource.getAllProducts();
+
+        expect(productResponse, const TypeMatcher<List<ProductDto>>());
+      });
+
+      test(
+        'Cart Data Source returns CartDto and expected number of products ',
         () async {
-      final cartGetResponse = await cartDataSource.getCart();
-      final cartAddResponse = await cartDataSource.addToCart(id: 1);
-      final cartDeleteResponse = await cartDataSource.deleteFromCart(id: 1);
+          final cartGetResponse = await cartDataSource.getCart();
+          final cartAddResponse = await cartDataSource.addToCart(id: 1);
+          final cartDeleteResponse = await cartDataSource.deleteFromCart(id: 1);
 
-      expect(cartGetResponse, const TypeMatcher<CartDto>());
-      expect(cartAddResponse.products.length, equals(3));
-      expect(cartDeleteResponse.products.length, equals(2));
-    });
+          expect(cartGetResponse, const TypeMatcher<CartDto>());
+          expect(cartAddResponse.products.length, equals(3));
+          expect(cartDeleteResponse.products.length, equals(2));
+        },
+      );
 
-    test(
-        'Favorites Data Source returns List<ProductDto> and expected number of products ',
-        () async {
-      final favoritesGetResponse = await favoritesDataSource.getFavorites();
-      final favoritesAddResponse =
-          await favoritesDataSource.addToFavorites(id: 1);
-      final favoritesDeleteResponse =
-          await favoritesDataSource.deleteFromFavorites(id: 1);
+      test(
+          'Favorites Data Source returns List<ProductDto> and expected number of products ',
+          () async {
+        final favoritesGetResponse = await favoritesDataSource.getFavorites();
+        final favoritesAddResponse =
+            await favoritesDataSource.addToFavorites(id: 1);
+        final favoritesDeleteResponse =
+            await favoritesDataSource.deleteFromFavorites(id: 1);
 
-      expect(favoritesGetResponse, const TypeMatcher<List<ProductDto>>());
-      expect(favoritesAddResponse.length, equals(3));
-      expect(favoritesDeleteResponse.length, equals(2));
-    });
-  });
+        expect(favoritesGetResponse, const TypeMatcher<List<ProductDto>>());
+        expect(favoritesAddResponse.length, equals(3));
+        expect(favoritesDeleteResponse.length, equals(2));
+      });
+    },
+  );
 
   group('Test Repositories', () {
-    test('Auth Repository methods return (String, String) records', () async {
-      final authResponse = await authRepository.authorize();
-      final updateTokenResponse = await authRepository.updateToken();
+    test(
+      'Auth Repository methods return (String, String) records',
+      () async {
+        final authResponse = await authRepository.authorize();
+        final updateTokenResponse = await authRepository.updateToken();
 
-      expect(authResponse, const TypeMatcher<(String, String)>());
-      expect(updateTokenResponse, const TypeMatcher<(String, String)>());
-    });
+        expect(authResponse, const TypeMatcher<(String, String)>());
+        expect(updateTokenResponse, const TypeMatcher<(String, String)>());
+      },
+    );
 
     test('Order Repository returns success ', () async {
       final orderResponse = await orderRepository.createOrder();
@@ -456,7 +372,8 @@ void main() {
 
       productsManager.findProductsByCategory("wrong category");
 
-      final products = productsManager.productsState.value.data ?? [];
+      final products =
+          productsManager.selectedCategoryProductsState.value.data ?? [];
 
       expect(products.isEmpty, isTrue);
     });
@@ -468,7 +385,7 @@ void main() {
 
       final categories = productsManager.categoriesState.value.data ?? [];
 
-      expect(categories.length, equals(1));
+      expect(categories.length, equals(2));
     });
 
     test('Test getCart adds to cartState', () async {

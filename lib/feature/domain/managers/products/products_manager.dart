@@ -23,7 +23,10 @@ class ProductsManager implements IProductsManager {
         _allProductCategoryName = allProductsCategoryName;
 
   @override
-  EntityStateNotifier<List<ProductEntity>> get productsState =>
+  EntityStateNotifier<List<ProductEntity>> get productsState => _productsState;
+
+  @override
+  EntityStateNotifier<List<ProductEntity>> get selectedCategoryProductsState =>
       _selectedCategoryProductsState;
 
   final EntityStateNotifier<List<ProductEntity>>
@@ -35,7 +38,8 @@ class ProductsManager implements IProductsManager {
   final EntityStateNotifier<List<String>> _categoriesState =
       EntityStateNotifier();
 
-  final BehaviorSubject<List<ProductEntity>> _productsState = BehaviorSubject();
+  final EntityStateNotifier<List<ProductEntity>> _productsState =
+      EntityStateNotifier();
 
   @override
   BehaviorSubject<ProductEntity> get selectedProductController =>
@@ -49,7 +53,7 @@ class ProductsManager implements IProductsManager {
     try {
       final products = await _productsRepository.getAllProducts();
 
-      _productsState.add(products);
+      _productsState.content(products);
       getCategories();
     } catch (e, stackTrace) {
       _logger.shout(e.toString(), e, stackTrace);
@@ -60,7 +64,7 @@ class ProductsManager implements IProductsManager {
 
   @override
   void getCategories() {
-    final products = _productsState.valueOrNull;
+    final products = _productsState.value.data;
 
     if (products == null) {
       return;
@@ -81,7 +85,7 @@ class ProductsManager implements IProductsManager {
 
   @override
   void findProductById(int id) {
-    final products = _productsState.valueOrNull;
+    final products = _productsState.value.data;
     if (products == null) {
       return;
     }
@@ -101,7 +105,7 @@ class ProductsManager implements IProductsManager {
 
   @override
   void findProductsByCategory(String category) {
-    final products = _productsState.valueOrNull;
+    final products = _productsState.value.data;
     if (products == null) {
       return;
     }
@@ -123,16 +127,12 @@ class ProductsManager implements IProductsManager {
 
   @override
   void dispose() {
-    _productsState.close();
+    _productsState.dispose();
     _selectedProductController.close();
-    selectedProductController.close();
-    selectedCategoryName.close();
-    selectedCategoryName.close();
+
+    _selectedCategoryName.close();
 
     _categoriesState.dispose();
-    categoriesState.dispose();
-
-    productsState.dispose();
   }
 
   @override

@@ -5,6 +5,14 @@ import 'package:seo_web/feature/domain/entity/products_entity.dart';
 abstract interface class IProductsManager {
   EntityStateNotifier<List<ProductEntity>> get productsState;
 
+  EntityStateNotifier<List<ProductEntity>> get selectedCategoryProductsState;
+
+  EntityStateNotifier<List<String>> get categoriesState;
+
+  BehaviorSubject<ProductEntity> get selectedProductController;
+
+  BehaviorSubject<String> get selectedCategoryName;
+
   Future<void> getAllProducts();
 
   void getCategories();
@@ -12,12 +20,6 @@ abstract interface class IProductsManager {
   void findProductById(int id);
 
   void findProductsByCategory(String category);
-
-  EntityStateNotifier<List<String>> get categoriesState;
-
-  BehaviorSubject<ProductEntity> get selectedProductController;
-
-  BehaviorSubject<String> get selectedCategoryName;
 
   void init();
 

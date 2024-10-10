@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:universal_html/html.dart';
 
@@ -6,6 +7,8 @@ abstract final class SEOHelper {
     String? h1Title,
     String? h1Id,
   }) {
+    if (!kIsWeb) return;
+
     final html.Document document = html.document;
 
     if (h1Title != null && h1Id != null) {
@@ -16,6 +19,8 @@ abstract final class SEOHelper {
   static void addTitle({
     String? title,
   }) {
+    if (!kIsWeb) return;
+
     final html.Document document = html.document;
 
     final head = document.querySelector('head');
@@ -38,6 +43,8 @@ abstract final class SEOHelper {
   static void setLocale({
     String? locale,
   }) {
+    if (!kIsWeb) return;
+
     final html.Document document = html.document;
 
     if (locale != null) {
@@ -46,6 +53,8 @@ abstract final class SEOHelper {
   }
 
   static void setCanonicalLink({String? href}) {
+    if (!kIsWeb) return;
+
     final html.Document document = html.document;
 
     final head = document.querySelector('head');
@@ -65,6 +74,8 @@ abstract final class SEOHelper {
     String? imageLink,
     String? imageAlt,
   }) {
+    if (!kIsWeb) return;
+
     final html.Document document = html.document;
 
     final head = document.querySelector('head');
@@ -84,6 +95,8 @@ abstract final class SEOHelper {
     String? imageAlt,
     String? h1Id,
   }) {
+    if (!kIsWeb) return;
+
     final html.Document document = html.document;
 
     final head = document.querySelector('head');

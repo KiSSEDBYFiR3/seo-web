@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:seo_web/core/common/consts/consts.dart';
+import 'package:seo_web/core/common/errors_bus/errors_bus.dart';
 import 'package:seo_web/core/icons/custom_icons.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/cart/cart_data_source.dart';
 import 'package:seo_web/feature/data/data_source/remote_data_source/favorites/favorites_data_source.dart';
@@ -20,19 +22,23 @@ import 'package:seo_web/feature/data/services/cart/cart_service.dart';
 import 'package:seo_web/feature/data/services/favorites/favorites_service.dart';
 import 'package:seo_web/feature/data/services/order/order_service.dart';
 import 'package:seo_web/feature/data/services/products/products_service.dart';
+import 'package:seo_web/feature/domain/managers/cart/cart_manager.dart';
 import 'package:seo_web/feature/domain/managers/cart/i_cart_manager.dart';
+import 'package:seo_web/feature/domain/managers/favorites/favorites_manager.dart';
 import 'package:seo_web/feature/domain/managers/favorites/i_favorites_manager.dart';
 import 'package:seo_web/feature/domain/managers/products/i_products_manager.dart';
+import 'package:seo_web/feature/domain/managers/products/products_manager.dart';
 import 'package:seo_web/generated/l10n.dart';
 
 import '../test/mocks/data.dart';
 import '../test/mocks/data_sources.mocks.dart';
-import '../test/mocks/managers_mocks.dart';
 import '../test/mocks/mock_di_builder.dart';
 import '../test/mocks/repositories.mocks.dart';
 import '../test/mocks/services.mocks.dart';
 
 void main() {
+  late IErrorsBus errorsBus;
+
   late OrderService orderMock;
   late ProductsService productsMock;
   late CartService cartMock;
@@ -54,15 +60,16 @@ void main() {
   late Widget app;
 
   setUpAll(() async {
-    /// Services init
+    /// Bus init
+    errorsBus = ErrorsBus();
 
+    /// Services init
     orderMock = MockOrderService();
     productsMock = MockProductsService();
     cartMock = MockCartService();
     favoritesMock = MockFavoritesService();
 
     /// Data Sources init
-
     orderDataSource = MockOrderDataSource();
     favoritesDataSource = MockFavoritesDataSource();
     cartDataSource = MockCartDataSource();
@@ -190,16 +197,22 @@ void main() {
     });
 
     /// Managers init
-    cartManager = MockCartManager(
-      repository: cartRepository,
+    cartManager = CartManager(
+      cartRepository: cartRepository,
       orderRepository: orderRepository,
+      errorsBus: errorsBus,
     )..init();
 
-    favoritesManager = MockFavoritesManager(repository: favoritesRepository)
-      ..init();
+    favoritesManager = FavoritesManager(
+      favoritesRepository: favoritesRepository,
+      errorsBus: errorsBus,
+    )..init();
 
-    productsManager = MockProductsManager(repository: productsRepository)
-      ..init();
+    productsManager = ProductsManager(
+      productsRepository: productsRepository,
+      errorsBus: errorsBus,
+      allProductsCategoryName: Consts.allProductsCategoryName,
+    )..init();
 
     app = await MockDiContainer(
       orderMock: orderMock,

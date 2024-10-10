@@ -24,7 +24,6 @@ final class ErrorsBus implements IErrorsBus {
 
   @override
   void dispose() {
-    errorStream.close();
     _errorStream.close();
   }
 }
